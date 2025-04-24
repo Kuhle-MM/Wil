@@ -86,10 +86,13 @@ namespace prjBackendApi
             #region 
             app.MapPost("/register", async (Registration model, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager) =>
             {
-                // Check if email ends with the required domain
-                if (!model.Email.EndsWith("@vcconnect.edu.za", StringComparison.OrdinalIgnoreCase))
+                // List of allowed domains
+                var allowedDomains = new[] { "@vcconnect.edu.za", "@varsitycollege.co.za", "@iie.edu.za" };
+
+                // Check if email does NOT end with any of the allowed domains
+                if (!allowedDomains.Any(domain => model.Email.EndsWith(domain, StringComparison.OrdinalIgnoreCase)))
                 {
-                    return Results.BadRequest(new { Error = "Only emails ending with '@vcconnect.edu.za' are allowed." });
+                    return Results.BadRequest(new { Error = "Only emails ending with '@vcconnect.edu.za', '@varsitycollege.co.za' or '@iie.edu.za' are allowed." });
                 }
 
                 var user = new IdentityUser { UserName = model.Username, Email = model.Email };
