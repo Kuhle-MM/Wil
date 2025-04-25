@@ -63,13 +63,13 @@ class Login : AppCompatActivity() {
         nfcAdapter.disableForegroundDispatch(this)
     }
 
-    override fun onNewIntent(intent: Intent, caller: ComponentCaller) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
-        if (intent != null && NfcAdapter.ACTION_TECH_DISCOVERED == intent.action) {
+        if (NfcAdapter.ACTION_TECH_DISCOVERED == intent.action) {
             val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
 
-            val id = tag?.id?.joinToString("") { byte -> "%02X".format(byte) }
+            val id = tag?.id?.joinToString(":") { byte -> "%02X".format(byte) }
             if (id != null) {
                 val technologies = tag.techList
 
