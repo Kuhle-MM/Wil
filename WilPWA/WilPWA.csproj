@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Lecture\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="WebEssentials.AspNetCore.PWA" Version="1.0.85" />
   </ItemGroup>
 
