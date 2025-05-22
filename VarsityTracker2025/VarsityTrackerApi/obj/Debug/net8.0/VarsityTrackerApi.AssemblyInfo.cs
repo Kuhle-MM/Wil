@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VarsityTrackerApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5cb1accad71b4f34ad86f83bfb62c56bf7eef43e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1eea9c32018554d9a00fa8d963a8d9cee1422d50")]
 [assembly: System.Reflection.AssemblyProductAttribute("VarsityTrackerApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VarsityTrackerApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

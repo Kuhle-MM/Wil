@@ -17,14 +17,12 @@ namespace VarsityTrackerApi.Controllers
         private readonly TableClient _lecturerTable;
         private readonly string _connectionString;
         private readonly TableClient _studentTable;
-        private readonly TableClient _LogTable;
 
         public AccessController(IOptions<AzureTableStorageSettings> storageOptions)
         {
             _connectionString = storageOptions.Value.ConnectionString;
             _lecturerTable = new TableClient(_connectionString, "Lecturers");
             _studentTable = new TableClient(_connectionString, "Students");
-            _LogTable = new TableClient(_connectionString, "FirstLoggedIn");
         }
 
         [HttpPost("create")]
@@ -57,11 +55,11 @@ namespace VarsityTrackerApi.Controllers
                         lastName = user.lastName,
                         qualification = string.Empty,
                         phoneNumber = user.phoneNumber,
-                        lecturerID = string.Empty,
+                        lecturerID = user.email.Substring(0, user.email.IndexOf("@")).ToUpper(),
                         role = "Lecturer"
                     };
 
-                    await _studentTable.AddEntityAsync(lecturer);
+                    await _lecturerTable.AddEntityAsync(lecturer);
                     return Ok($"Lecturer with email: {user.email} created successfully.");
                 }
                 catch (RequestFailedException ex)
@@ -91,7 +89,7 @@ namespace VarsityTrackerApi.Controllers
                         firstName = user.firstName,
                         lastName = user.lastName,
                         phoneNumber = user.phoneNumber,
-                        studentNumber = user.email.Substring(0, 10).ToUpper(),
+                        studentNumber = user.email.Substring(0, user.email.IndexOf("@")).ToUpper(),
                         role = "Student"
                     };
 
@@ -188,13 +186,14 @@ namespace VarsityTrackerApi.Controllers
         {
             await foreach (var existingStudent in _studentTable.QueryAsync<Students>())
             {
-                if (existingStudent.studentNumber == id)
+                if (existingStudent.studentNumber == id.ToUpper())
                 {
                     return Ok($"Email: {existingStudent.studentEmail}" +
                         $"\n\nETAG: {existingStudent.ETag}" +
                         $"\n\nPartition Key: {existingStudent.PartitionKey}" +
                         $"\n\nRow Key: {existingStudent.RowKey}" +
-                        $"\n\nRole: {existingStudent.role}");
+                        $"\n\nRole: {existingStudent.role}" +
+                        $"\n\nID: {existingStudent.studentNumber}");
                 }
             }
             return BadRequest($"Student with id:{id} does not exist");
@@ -205,7 +204,7 @@ namespace VarsityTrackerApi.Controllers
         {
             await foreach (var existingLecturer in _lecturerTable.QueryAsync<Lecturers>())
             {
-                if (existingLecturer.lecturerID == id)
+                if (existingLecturer.lecturerID == id.ToUpper())
                 {
                     return Ok($"Email: {existingLecturer.lecturerID}" +
                         $"\n\nETAG: {existingLecturer.ETag}" +
