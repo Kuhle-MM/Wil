@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Yy+zRZH0fIg=",
+  "dgSpecHash": "6YXpyyZKEkM=",
   "success": true,
-  "projectFilePath": "C:\\Users\\kelly\\source\\repos\\VarsityTracker2025\\VarsityTrackerApi\\VarsityTrackerApi.csproj",
+  "projectFilePath": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\VarsityTrackerApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\kelly\\.nuget\\packages\\azure.core\\1.46.1\\azure.core.1.46.1.nupkg.sha512",
     "C:\\Users\\kelly\\.nuget\\packages\\azure.data.tables\\12.11.0\\azure.data.tables.12.11.0.nupkg.sha512",

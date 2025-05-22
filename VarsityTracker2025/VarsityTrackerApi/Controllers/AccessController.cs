@@ -183,8 +183,8 @@ namespace VarsityTrackerApi.Controllers
             return Ok("User logged in.");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> getUserDetaills(string id)
+        [HttpGet("get_details_students")]
+        public async Task<IActionResult> getStudentDetaills(string id)
         {
             await foreach (var existingStudent in _studentTable.QueryAsync<Students>())
             {
@@ -197,11 +197,28 @@ namespace VarsityTrackerApi.Controllers
                         $"\n\nRole: {existingStudent.role}");
                 }
             }
-            return BadRequest($"{id} does not exist");
+            return BadRequest($"Student with id:{id} does not exist");
         }
 
-        [HttpPut("{status}/{studentNum}")]
-        public async Task<IActionResult> UpdateStudentFirst(string studentNum, [FromBody] Students user)
+        [HttpGet("get_details_lecturer")]
+        public async Task<IActionResult> getLecturerDetaills(string id)
+        {
+            await foreach (var existingLecturer in _lecturerTable.QueryAsync<Lecturers>())
+            {
+                if (existingLecturer.lecturerID == id)
+                {
+                    return Ok($"Email: {existingLecturer.lecturerID}" +
+                        $"\n\nETAG: {existingLecturer.ETag}" +
+                        $"\n\nPartition Key: {existingLecturer.PartitionKey}" +
+                        $"\n\nRow Key: {existingLecturer.RowKey}" +
+                        $"\n\nRole: {existingLecturer.role}");
+                }
+            }
+            return BadRequest($"Lecturer with id:{id} does not exist");
+        }
+
+        [HttpPut("update_student/{studentNum}")]
+        public async Task<IActionResult> UpdateStudent(string studentNum, [FromBody] Students user)
         {
 
             await foreach (var student in _studentTable.QueryAsync<Students>())
@@ -221,64 +238,86 @@ namespace VarsityTrackerApi.Controllers
             return NotFound("Student not found.");
         }
 
-        private static string CreateRandomPassword(int passwordLength)
+        [HttpPut("update_lecturer/{id}")]
+        public async Task<IActionResult> UpdateLecturer(string id, [FromBody] Lecturers user)
         {
-            string allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789!@$?_-";
-            char[] chars = new char[passwordLength];
-            Random rd = new Random();
 
-            for (int i = 0; i < passwordLength; i++)
+            await foreach (var lecturer in _lecturerTable.QueryAsync<Lecturers>())
             {
-                chars[i] = allowedChars[rd.Next(0, allowedChars.Length)];
+                if (lecturer.lecturerID == id)
+                {
+                    // Update properties
+                    lecturer.firstName = user.firstName;
+                    lecturer.lastName = user.lastName;
+                    lecturer.phoneNumber = user.phoneNumber;
+                    lecturer.qualification = user.qualification;
+
+                    await _studentTable.UpdateEntityAsync(lecturer, lecturer.ETag, TableUpdateMode.Replace);
+                    return NoContent(); // 204 Success
+                }
             }
 
-            return new string(chars);
+            return NotFound("Lecturer not found.");
         }
 
-        private static void SendDetails(string email, string password)
-        {
-            try
-            {
+        //private static string CreateRandomPassword(int passwordLength)
+        //{
+        //    string allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789!@$?_-";
+        //    char[] chars = new char[passwordLength];
+        //    Random rd = new Random();
 
-                SmtpClient mySmtpClient = new SmtpClient("pro.turbo-smtp.com");
+        //    for (int i = 0; i < passwordLength; i++)
+        //    {
+        //        chars[i] = allowedChars[rd.Next(0, allowedChars.Length)];
+        //    }
 
-                // set smtp-client with basicAuthentication
-                mySmtpClient.UseDefaultCredentials = false;
-                System.Net.NetworkCredential basicAuthenticationInfo = new
-                   System.Net.NetworkCredential("varsitystudent123@gmail.com", "Varsity2025");
-                mySmtpClient.Credentials = basicAuthenticationInfo;
+        //    return new string(chars);
+        //}
 
-                // add from,to mailaddresses
-                MailAddress from = new MailAddress("varsitystudent123@gmail.com", "VarsityTracker");
-                MailAddress to = new MailAddress(email, "User");
-                MailMessage myMail = new System.Net.Mail.MailMessage(from, to);
+        //private static void SendDetails(string email, string password)
+        //{
+        //    try
+        //    {
 
-                // add ReplyTo
-                MailAddress replyTo = new MailAddress("reply@example.com");
-                myMail.ReplyToList.Add(replyTo);
+        //        SmtpClient mySmtpClient = new SmtpClient("pro.turbo-smtp.com");
 
-                // set subject and encoding
-                myMail.Subject = "Account details";
-                myMail.SubjectEncoding = System.Text.Encoding.UTF8;
+        //        // set smtp-client with basicAuthentication
+        //        mySmtpClient.UseDefaultCredentials = false;
+        //        System.Net.NetworkCredential basicAuthenticationInfo = new
+        //           System.Net.NetworkCredential("varsitystudent123@gmail.com", "Varsity2025");
+        //        mySmtpClient.Credentials = basicAuthenticationInfo;
 
-                // set body-message and encoding
-                myMail.Body = $"<b>Password:{password} </b><br>Email: {email} <b></b> Please use these credentials to log in and ensure password is changed.";
-                myMail.BodyEncoding = System.Text.Encoding.UTF8;
-                // text or html
-                myMail.IsBodyHtml = true;
+        //        // add from,to mailaddresses
+        //        MailAddress from = new MailAddress("varsitystudent123@gmail.com", "VarsityTracker");
+        //        MailAddress to = new MailAddress(email, "User");
+        //        MailMessage myMail = new System.Net.Mail.MailMessage(from, to);
 
-                mySmtpClient.Send(myMail);
-            }
+        //        // add ReplyTo
+        //        MailAddress replyTo = new MailAddress("reply@example.com");
+        //        myMail.ReplyToList.Add(replyTo);
 
-            catch (SmtpException ex)
-            {
-                throw new ApplicationException
-                  ("SmtpException has occured: " + ex.Message);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        //        // set subject and encoding
+        //        myMail.Subject = "Account details";
+        //        myMail.SubjectEncoding = System.Text.Encoding.UTF8;
+
+        //        // set body-message and encoding
+        //        myMail.Body = $"<b>Password:{password} </b><br>Email: {email} <b></b> Please use these credentials to log in and ensure password is changed.";
+        //        myMail.BodyEncoding = System.Text.Encoding.UTF8;
+        //        // text or html
+        //        myMail.IsBodyHtml = true;
+
+        //        mySmtpClient.Send(myMail);
+        //    }
+
+        //    catch (SmtpException ex)
+        //    {
+        //        throw new ApplicationException
+        //          ("SmtpException has occured: " + ex.Message);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
     }
 }

@@ -1,48 +1,6 @@
 [
   {
     "ContainingType": "VarsityTrackerApi.Controllers.AccessController",
-    "Method": "getUserDetaills",
-    "RelativePath": "Access",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "VarsityTrackerApi.Controllers.AccessController",
-    "Method": "UpdateStudentFirst",
-    "RelativePath": "Access/{status}/{studentNum}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "studentNum",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "user",
-        "Type": "VarsityTrackerApi.Models.Students",
-        "IsRequired": true
-      },
-      {
-        "Name": "status",
-        "Type": "",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "VarsityTrackerApi.Controllers.AccessController",
     "Method": "Create_User",
     "RelativePath": "Access/create",
     "HttpMethod": "POST",
@@ -59,6 +17,54 @@
   },
   {
     "ContainingType": "VarsityTrackerApi.Controllers.AccessController",
+    "Method": "getLecturerDetaills",
+    "RelativePath": "Access/get_details_lecturer",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VarsityTrackerApi.Controllers.AccessController",
+    "Method": "getStudentDetaills",
+    "RelativePath": "Access/get_details_students",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VarsityTrackerApi.Controllers.AccessController",
+    "Method": "Login_lecturer",
+    "RelativePath": "Access/login_lecturer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "VarsityTrackerApi.Models.LoginModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VarsityTrackerApi.Controllers.AccessController",
     "Method": "Login_Student",
     "RelativePath": "Access/login_student",
     "HttpMethod": "POST",
@@ -68,6 +74,48 @@
       {
         "Name": "user",
         "Type": "VarsityTrackerApi.Models.LoginModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VarsityTrackerApi.Controllers.AccessController",
+    "Method": "UpdateLecturer",
+    "RelativePath": "Access/update_lecturer/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "user",
+        "Type": "VarsityTrackerApi.Models.Lecturers",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VarsityTrackerApi.Controllers.AccessController",
+    "Method": "UpdateStudent",
+    "RelativePath": "Access/update_student/{studentNum}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentNum",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "user",
+        "Type": "VarsityTrackerApi.Models.Students",
         "IsRequired": true
       }
     ],
