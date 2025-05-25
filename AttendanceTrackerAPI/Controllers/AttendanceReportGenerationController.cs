@@ -1,90 +1,213 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AttendanceTrackerAPI.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace AttendanceTrackerAPI.Controllers
 {
 
-    
-
     [Route("api/[controller]")]
     [ApiController]
     public class AttendanceReportGenerationController : ControllerBase
     {
 
-        private static List<Student> studentsArray = new();
-        private static List<AttendanceRecord> attendanceRecords = new();
+        private static List<Student> attendanceRecord = new();
 
-
-        //// GET: api/<AttendanceReportGenerationController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        //// GET api/<AttendanceReportGenerationController>/5
-        //[HttpGet("{id}")]
-        //public string GetStudent()
-        //{
-        //    return null;
-        //}
-
-        // POST api/<AttendanceReportGenerationController>
-        [HttpPost]
-        public IActionResult Post([FromBody]string studentCardId)
+        private static List<Student> studentsArray = new()
+    {
+        new Student
         {
-                // Add default student
-                var student = new Student
-                {
-                    StudentId = 1,
-                    Name = "Default",
-                    Surname = "Student",
-                    StudentCardId = "C7:86:FD:4E",
-                    Module = "Software Engineering",
-                    RegistrationDate = DateOnly.FromDateTime(DateTime.Today),
-                    Qualification = "BSc Computer Science",
-                    Email = "default@student.edu"
-                };
+            StudentId = 1,
+            Name = "Alice",
+            Surname = "Nguyen",
+            StudentCardId = "C1:23:AA:4F",
+            Module = "Data Structures",
+            RegistrationDate = DateOnly.FromDateTime(DateTime.Today),
+            Qualification = "BSc Computer Science",
+            Email = "alice.nguyen@student.edu"
+        },
+        new Student
+        {
+            StudentId = 2,
+            Name = "Brian",
+            Surname = "Mokoena",
+            StudentCardId = "D4:56:BE:2C",
+            Module = "Operating Systems",
+            RegistrationDate = DateOnly.FromDateTime(DateTime.Today),
+            Qualification = "BSc Information Systems",
+            Email = "brian.mokoena@student.edu"
+        },
+        new Student
+        {
+            StudentId = 3,
+            Name = "Chloe",
+            Surname = "Smith",
+            StudentCardId = "E3:99:CE:9A",
+            Module = "Software Engineering",
+            RegistrationDate = DateOnly.FromDateTime(DateTime.Today),
+            Qualification = "BSc Computer Science",
+            Email = "chloe.smith@student.edu"
+        },
+        new Student
+        {
+            StudentId = 4,
+            Name = "David",
+            Surname = "Oluwaseun",
+            StudentCardId = "A8:77:DC:1B",
+            Module = "Artificial Intelligence",
+            RegistrationDate = DateOnly.FromDateTime(DateTime.Today),
+            Qualification = "BSc Data Science",
+            Email = "david.oluwaseun@student.edu"
+        },
+        new Student
+        {
+            StudentId = 5,
+            Name = "Emma",
+            Surname = "Pieterse",
+            StudentCardId = "B5:34:EF:3D",
+            Module = "Cybersecurity",
+            RegistrationDate = DateOnly.FromDateTime(DateTime.Today),
+            Qualification = "BSc IT",
+            Email = "emma.pieterse@student.edu"
+        }
+    };
 
-                studentsArray.Add(student);
+        [HttpGet("RetrieveStudent")]
+        public IActionResult RetrieveStudent(string studentCardId)
+        {
+            try
+            {
+                var student = new Student();
+
 
                 student = studentsArray.FirstOrDefault(s => s.StudentCardId == studentCardId);
 
-            if (student == null)
+                if (student == null)
+                {
+                    return NotFound("Student could not be found");
+                }
+
+                return Ok(student);
+            }
+            catch(Exception ex)
             {
-                return NotFound("Student Could Not Be Found");
+                return StatusCode(StatusCodes.Status500InternalServerError, new
+                {
+                    message = "An error occurred while fetching users from the database.",
+                    error = ex.Message
+                });
+            }
+            
+        }
+
+        [HttpGet("GetListStudents")]
+        public IActionResult GetListStudents()
+        {
+            try
+            {
+                var student = attendanceRecord.ToList();
+
+                if (student == null)
+                {
+                    return NotFound("Student could not be found");
+                }
+
+                return Ok(student);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new
+                {
+                    message = "An error occurred while fetching users from the database.",
+                    error = ex.Message
+                });
             }
 
-            var attendanceRecord = new AttendanceRecord
-            {
-                recordId = attendanceRecords.Count + 1,
-                StudentId = student.StudentId,
-                Student = student,
-                LessonDate = DateTime.Today,
-                CheckInTime = DateTime.Now
-            };
-
-            attendanceRecords.Add(attendanceRecord);
-
-            return Ok(attendanceRecords);
+            
         }
 
-        [HttpGet("report")]
-        public List<AttendanceRecord> GetAttendanceReport()
+        [HttpPut("AddStudentToList")]
+        public IActionResult AddStudentToList(string studentCardId)
         {
-            return attendanceRecords;
+            var student = new Student();
+
+            student = studentsArray.FirstOrDefault(s => s.StudentCardId == studentCardId);
+
+            if (student == null)
+            {
+                return NotFound(new { message = "Student not found." });
+            }
+
+            //replace to be database
+            if (!attendanceRecord.Contains(student))
+            {
+                attendanceRecord.Add(student);
+            }else
+            {
+                return Conflict(new { message = "Student is already on the list" });
+            }
+
+                // add save to database
+
+
+
+                return Ok("Student Successfully added");
         }
-        //// PUT api/<AttendanceReportGenerationController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody]string value)
+
+        [HttpDelete("DeleteList")]
+        public IActionResult DeleteAttendanceRecord(string lectureCardId)
+        {
+
+            // check if this is the lecture responsible for the lecture
+
+            // delete the table
+            attendanceRecord.Clear();
+
+
+            return Ok();
+        }
+
+        //[HttpPost]
+        //public IActionResult AddStudentToRecord(string studentCardId)
         //{
+
+        //    return Ok(student);
         //}
 
-        //// DELETE api/<AttendanceReportGenerationController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
+        //[HttpPost]
+        //public IActionResult Post(string studentCardId)
         //{
+        //    // Add default student
+        //    var student = new Student();
+                
+
+        //    student = studentsArray.FirstOrDefault(s => s.StudentCardId == studentCardId);
+
+        //    if (student == null)
+        //    {
+        //        return NotFound("Student Could Not Be Found");
+        //    }
+
+        //    var attendanceRecord = new AttendanceRecord
+        //    {
+        //        recordId = AttendanceReportGenerationController.attendanceRecord.Count + 1,
+        //        StudentId = student.StudentId,
+        //        Student = student,
+        //        LessonDate = DateTime.Today,
+        //        CheckInTime = DateTime.Now
+        //    };
+
+        //    AttendanceReportGenerationController.attendanceRecord.Add(attendanceRecord);
+
+        //    return base.Ok(AttendanceReportGenerationController.attendanceRecord);
         //}
+
+        //[HttpGet("report")]
+        //public List<AttendanceRecord> GetAttendanceReport()
+        //{
+        //    return attendanceRecord;
+        //}
+   
     }
 }

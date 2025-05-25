@@ -1,4 +1,4 @@
-﻿namespace AttendanceTrackerAPI
+﻿namespace AttendanceTrackerAPI.Models
 {
     public class Student
     {
@@ -12,9 +12,6 @@
         public string Qualification { get; set; }
         public string Email { get; set; }
 
-        public List<Student> StudentsArray { get; set; } = new();
-
-        public List<AttendanceRecord> AttendanceRecords { get; set; } = new();
     }
 
 }

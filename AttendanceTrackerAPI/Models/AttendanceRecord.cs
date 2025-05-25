@@ -1,4 +1,4 @@
-﻿namespace AttendanceTrackerAPI
+﻿namespace AttendanceTrackerAPI.Models
 {
     public class AttendanceRecord
     {
