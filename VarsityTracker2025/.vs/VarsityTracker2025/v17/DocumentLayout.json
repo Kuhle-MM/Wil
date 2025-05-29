@@ -11,32 +11,12 @@
       "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\lecturers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\lecturers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\azuretablestoragesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\azuretablestoragesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\loginmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -47,8 +27,28 @@
       "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\lecturers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\lecturers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\modules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\modules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\azuretablestoragesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\azuretablestoragesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -79,15 +79,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\appsettings.json",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\appsettings.json",
               "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\appsettings.json",
               "RelativeToolTip": "VarsityTrackerApi\\appsettings.json",
-              "ViewState": "AgIAAAMAAAAAAAAAAADwvwkAAAA6AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-05-19T11:42:52.042Z"
+              "WhenOpened": "2025-05-19T11:42:52.042Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -97,26 +98,27 @@
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Controllers\\AccessController.cs",
               "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\AccessController.cs",
               "RelativeToolTip": "VarsityTrackerApi\\Controllers\\AccessController.cs",
-              "ViewState": "AgIAAEcAAAAAAAAAAAAgwFYAAAA8AAAAAAAAAA==",
+              "ViewState": "AgIAACEBAAAAAAAAAADwvzsBAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-19T11:07:33.959Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Program.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Program.cs",
               "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Program.cs",
               "RelativeToolTip": "VarsityTrackerApi\\Program.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAgwAsAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T12:52:32.567Z"
+              "WhenOpened": "2025-05-19T12:52:32.567Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 10,
               "Title": "UserModel.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\UserModel.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\UserModel.cs",
@@ -128,7 +130,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 11,
               "Title": "WeatherForecastController.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\WeatherForecastController.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Controllers\\WeatherForecastController.cs",
@@ -140,7 +142,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "AzureTableStorageSettings.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\AzureTableStorageSettings.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\AzureTableStorageSettings.cs",
@@ -148,36 +150,38 @@
               "RelativeToolTip": "VarsityTrackerApi\\Models\\AzureTableStorageSettings.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T13:35:42.783Z"
+              "WhenOpened": "2025-05-19T13:35:42.783Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 7,
               "Title": "Modules.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Modules.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\Modules.cs",
               "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Modules.cs",
               "RelativeToolTip": "VarsityTrackerApi\\Models\\Modules.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwQAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T09:09:58.434Z"
+              "WhenOpened": "2025-05-19T09:09:58.434Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Students.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Students.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\Students.cs",
               "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Students.cs",
               "RelativeToolTip": "VarsityTrackerApi\\Models\\Students.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAADwvw8AAAApAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-19T09:08:22.876Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "Lecturers.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Lecturers.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\Lecturers.cs",
@@ -185,11 +189,12 @@
               "RelativeToolTip": "VarsityTrackerApi\\Models\\Lecturers.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAADwvw4AAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T09:08:11.118Z"
+              "WhenOpened": "2025-05-19T09:08:11.118Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 5,
               "Title": "Admin.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Admin.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\Admin.cs",
@@ -197,19 +202,21 @@
               "RelativeToolTip": "VarsityTrackerApi\\Models\\Admin.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAwBMAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T11:36:11.907Z"
+              "WhenOpened": "2025-05-19T11:36:11.907Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 4,
               "Title": "LoginModel.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\LoginModel.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\LoginModel.cs",
               "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\LoginModel.cs",
               "RelativeToolTip": "VarsityTrackerApi\\Models\\LoginModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwUAAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T11:05:29.82Z"
+              "WhenOpened": "2025-05-19T11:05:29.82Z",
+              "EditorCaption": ""
             }
           ]
         },

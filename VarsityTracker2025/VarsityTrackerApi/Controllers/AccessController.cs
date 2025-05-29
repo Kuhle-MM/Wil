@@ -273,50 +273,46 @@ namespace VarsityTrackerApi.Controllers
         //    return new string(chars);
         //}
 
-        //private static void SendDetails(string email, string password)
-        //{
-        //    try
-        //    {
+        private static void SendDetails(string email, string password)
+        {
+            try
+            {
 
-        //        SmtpClient mySmtpClient = new SmtpClient("pro.turbo-smtp.com");
+                SmtpClient mySmtpClient = new SmtpClient("pro.turbo-smtp.com");
 
-        //        // set smtp-client with basicAuthentication
-        //        mySmtpClient.UseDefaultCredentials = false;
-        //        System.Net.NetworkCredential basicAuthenticationInfo = new
-        //           System.Net.NetworkCredential("varsitystudent123@gmail.com", "Varsity2025");
-        //        mySmtpClient.Credentials = basicAuthenticationInfo;
+                // set smtp-client with basicAuthentication
+                mySmtpClient.UseDefaultCredentials = false;
+                System.Net.NetworkCredential basicAuthenticationInfo = new
+                   System.Net.NetworkCredential("varsitystudent123@gmail.com", "Varsity2025");
+                mySmtpClient.Credentials = basicAuthenticationInfo;
 
-        //        // add from,to mailaddresses
-        //        MailAddress from = new MailAddress("varsitystudent123@gmail.com", "VarsityTracker");
-        //        MailAddress to = new MailAddress(email, "User");
-        //        MailMessage myMail = new System.Net.Mail.MailMessage(from, to);
+                // add from,to mailaddresses
+                MailAddress from = new MailAddress("varsitystudent123@gmail.com", "VarsityTracker");
+                MailAddress to = new MailAddress(email, "User");
+                MailMessage myMail = new System.Net.Mail.MailMessage(from, to);
 
-        //        // add ReplyTo
-        //        MailAddress replyTo = new MailAddress("reply@example.com");
-        //        myMail.ReplyToList.Add(replyTo);
+                // set subject and encoding
+                myMail.Subject = "Account details";
+                myMail.SubjectEncoding = System.Text.Encoding.UTF8;
 
-        //        // set subject and encoding
-        //        myMail.Subject = "Account details";
-        //        myMail.SubjectEncoding = System.Text.Encoding.UTF8;
+                // set body-message and encoding
+                myMail.Body = $"<b>Password:{password} </b><br>Email: {email} <b></b> Please use these credentials to log in and ensure password is changed.";
+                myMail.BodyEncoding = System.Text.Encoding.UTF8;
+                // text or html
+                myMail.IsBodyHtml = true;
 
-        //        // set body-message and encoding
-        //        myMail.Body = $"<b>Password:{password} </b><br>Email: {email} <b></b> Please use these credentials to log in and ensure password is changed.";
-        //        myMail.BodyEncoding = System.Text.Encoding.UTF8;
-        //        // text or html
-        //        myMail.IsBodyHtml = true;
+                mySmtpClient.Send(myMail);
+            }
 
-        //        mySmtpClient.Send(myMail);
-        //    }
-
-        //    catch (SmtpException ex)
-        //    {
-        //        throw new ApplicationException
-        //          ("SmtpException has occured: " + ex.Message);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
+            catch (SmtpException ex)
+            {
+                throw new ApplicationException
+                  ("SmtpException has occured: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

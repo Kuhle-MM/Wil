@@ -11,6 +11,10 @@
       "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -25,10 +29,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\azuretablestoragesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -78,7 +78,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\appsettings.json",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\appsettings.json",
@@ -96,14 +96,14 @@
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Controllers\\AccessController.cs",
               "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\AccessController.cs",
               "RelativeToolTip": "VarsityTrackerApi\\Controllers\\AccessController.cs",
-              "ViewState": "AgIAADsAAAAAAAAAAAAgwFYAAAA8AAAAAAAAAA==",
+              "ViewState": "AgIAABcBAAAAAAAAAADwvywBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-19T11:07:33.959Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Program.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Program.cs",
@@ -115,7 +115,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "UserModel.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\UserModel.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\UserModel.cs",
@@ -163,7 +163,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 2,
               "Title": "Students.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Students.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\Students.cs",
@@ -175,7 +175,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Lecturers.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Lecturers.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\Lecturers.cs",
