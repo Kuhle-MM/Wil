@@ -101,8 +101,8 @@ namespace AttendanceTrackerAPI.Controllers
             
         }
 
-        [HttpGet("GetListStudents")]
-        public IActionResult GetListStudents()
+        [HttpGet("GetListAttendingStudents")]
+        public IActionResult GetListAttendingStudents()
         {
             try
             {
@@ -124,8 +124,9 @@ namespace AttendanceTrackerAPI.Controllers
                 });
             }
 
-            
         }
+
+        
 
         [HttpPut("AddStudentToList")]
         public IActionResult AddStudentToList(string studentCardId)
@@ -159,7 +160,7 @@ namespace AttendanceTrackerAPI.Controllers
         public IActionResult DeleteAttendanceRecord(string lectureCardId)
         {
 
-            // check if this is the lecture responsible for the lecture
+            // check if this is the lecturer responsible for the lecture
 
             // delete the table
             attendanceRecord.Clear();
@@ -168,46 +169,6 @@ namespace AttendanceTrackerAPI.Controllers
             return Ok();
         }
 
-        //[HttpPost]
-        //public IActionResult AddStudentToRecord(string studentCardId)
-        //{
-
-        //    return Ok(student);
-        //}
-
-        //[HttpPost]
-        //public IActionResult Post(string studentCardId)
-        //{
-        //    // Add default student
-        //    var student = new Student();
-                
-
-        //    student = studentsArray.FirstOrDefault(s => s.StudentCardId == studentCardId);
-
-        //    if (student == null)
-        //    {
-        //        return NotFound("Student Could Not Be Found");
-        //    }
-
-        //    var attendanceRecord = new AttendanceRecord
-        //    {
-        //        recordId = AttendanceReportGenerationController.attendanceRecord.Count + 1,
-        //        StudentId = student.StudentId,
-        //        Student = student,
-        //        LessonDate = DateTime.Today,
-        //        CheckInTime = DateTime.Now
-        //    };
-
-        //    AttendanceReportGenerationController.attendanceRecord.Add(attendanceRecord);
-
-        //    return base.Ok(AttendanceReportGenerationController.attendanceRecord);
-        //}
-
-        //[HttpGet("report")]
-        //public List<AttendanceRecord> GetAttendanceReport()
-        //{
-        //    return attendanceRecord;
-        //}
    
     }
 }
