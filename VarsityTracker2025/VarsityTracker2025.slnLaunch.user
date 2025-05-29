@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "VarsityTrackerApi\\VarsityTrackerApi.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "WilPWA\\WilPWA.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

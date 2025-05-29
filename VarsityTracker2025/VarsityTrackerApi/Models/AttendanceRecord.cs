@@ -8,9 +8,9 @@ namespace VarsityTrackerApi.Models
     {
         public string PartitionKey { get; set; } // e.g., "AttendanceReport"
         public string RowKey { get; set; } // e.g., StudentNumber_Date
-        public string StudentNumber { get; set; }
-        public string StudentEmail { get; set; }
-        public string Status { get; set; }
+        public string? StudentNumber { get; set; }
+        public string? StudentEmail { get; set; }
+        public string? Status { get; set; }
         public DateTime? ClockInTime { get; set; }
         public DateTime? ClockOutTime { get; set; }
         public TimeSpan? TotalDuration => ClockOutTime - ClockInTime;

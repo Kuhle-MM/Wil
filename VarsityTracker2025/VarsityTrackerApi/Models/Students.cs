@@ -7,7 +7,7 @@ namespace VarsityTrackerApi.Models
     public class Students : ITableEntity
     {
         [Key]
-        public string studentNumber { get; set; }
+        public string? studentNumber { get; set; }
         public string? studentEmail { get; set; }
         public string? phoneNumber { get; set; }
         public string StudentCardId { get; set; }

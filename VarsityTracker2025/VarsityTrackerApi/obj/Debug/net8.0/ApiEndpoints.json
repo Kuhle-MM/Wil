@@ -122,6 +122,54 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "VarsityTrackerApi.Controllers.StudentClockingController",
+    "Method": "ClockIn",
+    "RelativePath": "api/StudentClocking/clockin/{studentNumber}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentNumber",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VarsityTrackerApi.Controllers.StudentClockingController",
+    "Method": "ClockOut",
+    "RelativePath": "api/StudentClocking/clockout/{studentNumber}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentNumber",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VarsityTrackerApi.Controllers.StudentClockingController",
+    "Method": "GetAttendanceReport",
+    "RelativePath": "api/StudentClocking/report/{studentNumber}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "studentNumber",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "VarsityTrackerApi.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",

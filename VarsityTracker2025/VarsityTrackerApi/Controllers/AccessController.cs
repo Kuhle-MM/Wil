@@ -90,7 +90,8 @@ namespace VarsityTrackerApi.Controllers
                         lastName = user.lastName,
                         phoneNumber = user.phoneNumber,
                         studentNumber = user.email.Substring(0, user.email.IndexOf("@")).ToUpper(),
-                        role = "Student"
+                        role = "Student",
+                        StudentCardId = user.card
                     };
 
                     await _studentTable.AddEntityAsync(student);
