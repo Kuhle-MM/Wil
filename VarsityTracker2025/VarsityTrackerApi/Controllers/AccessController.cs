@@ -55,7 +55,7 @@ namespace VarsityTrackerApi.Controllers
                         lastName = user.lastName,
                         qualification = string.Empty,
                         phoneNumber = user.phoneNumber,
-                        lecturerID = user.email.Substring(0, user.email.IndexOf("@")).ToUpper(),
+                        lecturerID = user.email.Substring(0, user.email.IndexOf("@")).ToLower(),
                         role = "Lecturer"
                     };
 
@@ -110,23 +110,24 @@ namespace VarsityTrackerApi.Controllers
         [HttpPost("login_student")]
         public async Task<IActionResult> Login_Student(LoginModel user)
         {
+            if (string.IsNullOrWhiteSpace(user.email) || string.IsNullOrWhiteSpace(user.password))
+                return BadRequest("Email and password are required.");
+
             Students foundStudent = null;
 
-            // Search for the student by email
-            await foreach (var s in _studentTable.QueryAsync<Students>())
+            var query = _studentTable.QueryAsync<Students>(filter: $"PartitionKey eq 'Students'");
+            await foreach (var s in query)
             {
-                if (s.studentEmail == user.email)
+                if (string.Equals(s.studentEmail, user.email, StringComparison.OrdinalIgnoreCase))
                 {
                     foundStudent = s;
                     break;
                 }
             }
 
-            // Email not found
             if (foundStudent == null)
                 return NotFound("User not found.");
 
-            // Check password
             bool passwordValid;
             try
             {
@@ -140,30 +141,30 @@ namespace VarsityTrackerApi.Controllers
             if (!passwordValid)
                 return BadRequest("Incorrect password.");
 
-            // Login successful
-            return Ok("User logged in.");
+            return Ok(new { message = "User logged in." });
         }
 
         [HttpPost("login_lecturer")]
-        public async Task<IActionResult> Login_lecturer(LoginModel user)
+        public async Task<IActionResult> Login_Lecturer(LoginModel user)
         {
+            if (string.IsNullOrWhiteSpace(user.email) || string.IsNullOrWhiteSpace(user.password))
+                return BadRequest("Email and password are required.");
+
             Lecturers foundLecturer = null;
 
-            // Search for the student by email
-            await foreach (var s in _lecturerTable.QueryAsync<Lecturers>())
+            var query = _lecturerTable.QueryAsync<Lecturers>(filter: $"PartitionKey eq 'Lecturers'");
+            await foreach (var l in query)
             {
-                if (s.lecturerEmail == user.email)
+                if (string.Equals(l.lecturerEmail, user.email, StringComparison.OrdinalIgnoreCase))
                 {
-                    foundLecturer = s;
+                    foundLecturer = l;
                     break;
                 }
             }
 
-            // Email not found
             if (foundLecturer == null)
                 return NotFound("User not found.");
 
-            // Check password
             bool passwordValid;
             try
             {
@@ -177,8 +178,7 @@ namespace VarsityTrackerApi.Controllers
             if (!passwordValid)
                 return BadRequest("Incorrect password.");
 
-            // Login successful
-            return Ok("User logged in.");
+            return Ok(new { message = "User logged in." });
         }
 
         [HttpGet("get_details_students")]
