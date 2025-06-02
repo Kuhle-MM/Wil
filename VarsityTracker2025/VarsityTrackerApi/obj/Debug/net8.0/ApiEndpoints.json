@@ -49,7 +49,7 @@
   },
   {
     "ContainingType": "VarsityTrackerApi.Controllers.AccessController",
-    "Method": "Login_lecturer",
+    "Method": "Login_Lecturer",
     "RelativePath": "Access/login_lecturer",
     "HttpMethod": "POST",
     "IsController": true,

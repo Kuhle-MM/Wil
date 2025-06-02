@@ -486,10 +486,6 @@
           "phoneNumber": {
             "type": "string",
             "nullable": true
-          },
-          "card": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false

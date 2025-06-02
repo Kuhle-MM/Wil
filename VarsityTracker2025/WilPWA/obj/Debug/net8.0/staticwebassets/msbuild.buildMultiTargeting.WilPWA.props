@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\WilPWA.props" />
-</Project>
