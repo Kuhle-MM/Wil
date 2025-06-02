@@ -15,32 +15,15 @@ namespace WilPWA.Controllers
 
         public IActionResult Dashboard()
         {
-            var role = HttpContext.Session.GetString("Role");
-            if (role != "Student")
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
             return View();
         }
-        public IActionResult Report()
+        public IActionResult ReportList()
         {
-            var role = HttpContext.Session.GetString("Role");
-            if (role != "Student")
-            {
-                return RedirectToAction("Index", "Home");
-            }
 
             return View();
         }
         public IActionResult SetCalendar()
         {
-            var role = HttpContext.Session.GetString("Role");
-            if (role != "Student")
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
             return View();
         }
 
@@ -48,12 +31,6 @@ namespace WilPWA.Controllers
         // Action to display the VirtualCard page (simulated)
         public async Task<IActionResult> VirtualCard(string studentNumber, string RowKey)
         {
-            var role = HttpContext.Session.GetString("Role");
-            if (role != "Student")
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
 
             studentNumber = "ST10284732";
             RowKey = "5475bf10-d1ea-4935-aa2d-6a1d2f734cc3";

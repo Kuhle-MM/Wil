@@ -38,24 +38,56 @@ namespace WilPWA.Controllers
                 (success, message, returnedRole) = await _accountServices.LoginLecturerAsync(model.email, model.password);
             }
 
+            if (!success && message.Contains("User not found"))
+            {
+                // Try Admin login
+                (success, message, returnedRole) = await _accountServices.LoginAdminAsync(model.email, model.password);
+            }
+
             if (!success)
             {
                 ModelState.AddModelError(string.Empty, message);
                 return View(model);
             }
-
-            // Store session values
-            HttpContext.Session.SetString("Role", returnedRole);
-            HttpContext.Session.SetString("Email", model.email);
-
+            
             // Redirect to role-specific dashboard
             if (returnedRole == "Student")
+            {
+                LoggedInUser.UserID = model.email.Substring(0, model.email.IndexOf("@")).ToUpper();
+                LoggedInUser.Email = model.email;
+                LoggedInUser.Role = "Student";
+
                 return RedirectToAction("Dashboard", "Student");
+            }
+                
             else if (returnedRole == "Lecturer")
+            {
+                LoggedInUser.UserID = model.email.Substring(0, model.email.IndexOf("@")).ToUpper();
+                LoggedInUser.Email = model.email;
+                LoggedInUser.Role = "Lecturer"; 
+
                 return RedirectToAction("Dashboard", "Lecturer");
+            }
+            else if (returnedRole == "Admin")
+            {
+                LoggedInUser.UserID = model.email.Substring(0, model.email.IndexOf("@")).ToUpper();
+                LoggedInUser.Email = model.email;
+                LoggedInUser.Role = "Admin";
+
+                return RedirectToAction("Dashboard", "Admin");
+            }
 
             // Fallback
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Logout()
+        {
+            LoggedInUser.Email = "";
+            LoggedInUser.UserID = "";
+            LoggedInUser.Role = "";
+
+            return RedirectToAction("Login", "Account");
         }
     }
 }

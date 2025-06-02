@@ -1,122 +1,174 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\",
+  "WorkspaceRootPath": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\controllers\\lecturercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\controllers\\lecturercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\controllers\\studentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\controllers\\studentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\varsitytrackerapi\\controllers\\accesscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\controllers\\accesscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\services\\accountservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\services\\accountservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\views\\lecturer\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\lecturer\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\views\\student\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\student\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\varsitytrackerapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\loginmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\loginmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\lecturers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\lecturers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\models\\azuretablestoragesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\models\\azuretablestoragesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\views\\student\\virtualcard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\student\\virtualcard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\services\\studentservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\services\\studentservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\services\\studentservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\controllers\\studentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\controllers\\studentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\models\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\models\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\models\\lecturers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\models\\lecturers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\wilpwa\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\varsitytrackerapi\\controllers\\clockingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\varsitytrackerapi\\controllers\\clockingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\controllers\\clockingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\attendancerecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\models\\attendancerecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\models\\attendancerecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\attendancerecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\attendancerecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\varsitytrackerapi\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\models\\report.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\models\\report.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\varsitytrackerapi\\controllers\\accesscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\controllers\\accesscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\views\\student\\reportlist.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\student\\reportlist.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\views\\lecturer\\report.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\lecturer\\report.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\views\\student\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\student\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\models\\azuretablestoragesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\models\\azuretablestoragesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\controllers\\lecturercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\controllers\\lecturercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\views\\admin\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\admin\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\views\\admin\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\admin\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\services\\accountservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\services\\accountservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\students.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\loginmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\loginmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\lecturers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\lecturers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\views\\student\\setcalendar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\student\\setcalendar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\views\\lecturer\\progress.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\lecturer\\progress.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\views\\lecturer\\card.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\lecturer\\card.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\views\\lecturer\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\lecturer\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\views\\student\\virtualcard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\student\\virtualcard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\models\\loggedinuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\models\\loggedinuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\views\\account\\accessdenied.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\account\\accessdenied.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\varsitytrackerapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\models\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\models\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\models\\lecturers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\models\\lecturers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\varsitytrackerapi\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\modules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\modules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\modules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\documents\\github\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -126,97 +178,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 12,
+          "SelectedChildIndex": 3,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:129:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AccountServices.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Services\\AccountServices.cs",
-              "RelativeDocumentMoniker": "WilPWA\\Services\\AccountServices.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Services\\AccountServices.cs",
-              "RelativeToolTip": "WilPWA\\Services\\AccountServices.cs",
-              "ViewState": "AgIAACAAAAAAAAAAAAAIwCgAAABiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T10:15:56.723Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "AccessController.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\AccessController.cs",
-              "RelativeDocumentMoniker": "VarsityTrackerApi\\Controllers\\AccessController.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\AccessController.cs",
-              "RelativeToolTip": "VarsityTrackerApi\\Controllers\\AccessController.cs",
-              "ViewState": "AgIAAGAAAAAAAAAAAAAowJgAAAAVAAAAAAAAAA==",
+              "Title": "AttendanceRecord.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\AttendanceRecord.cs",
+              "RelativeDocumentMoniker": "WilPWA\\Models\\AttendanceRecord.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\AttendanceRecord.cs",
+              "RelativeToolTip": "WilPWA\\Models\\AttendanceRecord.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T11:07:33.959Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Program.cs",
-              "RelativeDocumentMoniker": "WilPWA\\Program.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Program.cs",
-              "RelativeToolTip": "WilPWA\\Program.cs",
-              "ViewState": "AgIAACYAAAAAAAAAAAAiwDQAAABFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T08:55:44.974Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AccountController.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\AccountController.cs",
-              "RelativeDocumentMoniker": "WilPWA\\Controllers\\AccountController.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "WilPWA\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAiwDIAAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T10:00:16.23Z",
+              "WhenOpened": "2025-06-02T09:07:26.22Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "StudentController.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\StudentController.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\StudentController.cs",
               "RelativeDocumentMoniker": "WilPWA\\Controllers\\StudentController.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\StudentController.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\StudentController.cs",
               "RelativeToolTip": "WilPWA\\Controllers\\StudentController.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAUwBEAAAA6AAAAAAAAAA==",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwAwAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-29T08:29:25.162Z",
               "EditorCaption": ""
@@ -224,127 +213,140 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "LecturerController.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\LecturerController.cs",
-              "RelativeDocumentMoniker": "WilPWA\\Controllers\\LecturerController.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\LecturerController.cs",
-              "RelativeToolTip": "WilPWA\\Controllers\\LecturerController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAA6AAAAAAAAAA==",
+              "Title": "StudentServices.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Services\\StudentServices.cs",
+              "RelativeDocumentMoniker": "WilPWA\\Services\\StudentServices.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Services\\StudentServices.cs",
+              "RelativeToolTip": "WilPWA\\Services\\StudentServices.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAowDYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-31T12:09:46.294Z",
+              "WhenOpened": "2025-05-29T08:31:51.632Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Login.cshtml",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Account\\Login.cshtml",
-              "RelativeDocumentMoniker": "WilPWA\\Views\\Account\\Login.cshtml",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Account\\Login.cshtml",
-              "RelativeToolTip": "WilPWA\\Views\\Account\\Login.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAUwAkAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-31T11:16:50.949Z",
+              "DocumentIndex": 2,
+              "Title": "ClockingController.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\ClockingController.cs",
+              "RelativeDocumentMoniker": "VarsityTrackerApi\\Controllers\\ClockingController.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\ClockingController.cs",
+              "RelativeToolTip": "VarsityTrackerApi\\Controllers\\ClockingController.cs",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAgwFYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-29T06:50:14.187Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 4,
+              "Title": "AttendanceRecord.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\AttendanceRecord.cs",
+              "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\AttendanceRecord.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\AttendanceRecord.cs",
+              "RelativeToolTip": "VarsityTrackerApi\\Models\\AttendanceRecord.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAsAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-29T06:46:00.369Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "Dashboard.cshtml",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Lecturer\\Dashboard.cshtml",
-              "RelativeDocumentMoniker": "WilPWA\\Views\\Lecturer\\Dashboard.cshtml",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Lecturer\\Dashboard.cshtml",
-              "RelativeToolTip": "WilPWA\\Views\\Lecturer\\Dashboard.cshtml",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABEAAABOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-31T12:09:09.343Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Dashboard.cshtml",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Student\\Dashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Student\\Dashboard.cshtml",
               "RelativeDocumentMoniker": "WilPWA\\Views\\Student\\Dashboard.cshtml",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Student\\Dashboard.cshtml",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Student\\Dashboard.cshtml",
               "RelativeToolTip": "WilPWA\\Views\\Student\\Dashboard.cshtml",
-              "ViewState": "AgIAADMAAAAAAAAAAAAAAAEAAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAAFIAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-05-31T12:10:51.487Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\appsettings.json",
-              "RelativeDocumentMoniker": "VarsityTrackerApi\\appsettings.json",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\appsettings.json",
-              "RelativeToolTip": "VarsityTrackerApi\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-05-19T11:42:52.042Z",
+              "DocumentIndex": 6,
+              "Title": "AccessController.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\AccessController.cs",
+              "RelativeDocumentMoniker": "VarsityTrackerApi\\Controllers\\AccessController.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\AccessController.cs",
+              "RelativeToolTip": "VarsityTrackerApi\\Controllers\\AccessController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T11:07:33.959Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "LoginModel.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\LoginModel.cs",
-              "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\LoginModel.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\LoginModel.cs",
-              "RelativeToolTip": "VarsityTrackerApi\\Models\\LoginModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T11:05:29.82Z",
+              "DocumentIndex": 8,
+              "Title": "Report.cshtml",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Lecturer\\Report.cshtml",
+              "RelativeDocumentMoniker": "WilPWA\\Views\\Lecturer\\Report.cshtml",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Lecturer\\Report.cshtml",
+              "RelativeToolTip": "WilPWA\\Views\\Lecturer\\Report.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-02T08:07:26.229Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Lecturers.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Lecturers.cs",
-              "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\Lecturers.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Lecturers.cs",
-              "RelativeToolTip": "VarsityTrackerApi\\Models\\Lecturers.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAA8wBkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T09:08:11.118Z",
+              "DocumentIndex": 7,
+              "Title": "ReportList.cshtml",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Student\\ReportList.cshtml",
+              "RelativeDocumentMoniker": "WilPWA\\Views\\Student\\ReportList.cshtml",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Student\\ReportList.cshtml",
+              "RelativeToolTip": "WilPWA\\Views\\Student\\ReportList.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-02T08:08:27.592Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 12,
               "Title": "Students.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Students.cs",
-              "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\Students.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Students.cs",
-              "RelativeToolTip": "VarsityTrackerApi\\Models\\Students.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAA8wBoAAAAAAAAAAAAAAA==",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\Students.cs",
+              "RelativeDocumentMoniker": "WilPWA\\Models\\Students.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\Students.cs",
+              "RelativeToolTip": "WilPWA\\Models\\Students.cs",
+              "ViewState": "AgIAAAEAAABgZmZmZiYgwAgAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T09:08:22.876Z",
+              "WhenOpened": "2025-05-29T08:25:08.125Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\appsettings.json",
-              "RelativeDocumentMoniker": "WilPWA\\appsettings.json",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\appsettings.json",
-              "RelativeToolTip": "WilPWA\\appsettings.json",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAUwAkAAADeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-05-31T10:33:47.659Z",
+              "DocumentIndex": 5,
+              "Title": "Report.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\Report.cs",
+              "RelativeDocumentMoniker": "WilPWA\\Models\\Report.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\Report.cs",
+              "RelativeToolTip": "WilPWA\\Models\\Report.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-02T08:56:22.798Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 16,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Admin\\Create.cshtml",
+              "RelativeDocumentMoniker": "WilPWA\\Views\\Admin\\Create.cshtml",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Admin\\Create.cshtml",
+              "RelativeToolTip": "WilPWA\\Views\\Admin\\Create.cshtml",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAADcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-02T08:34:09.996Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "AzureTableStorageSettings.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Models\\AzureTableStorageSettings.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\AzureTableStorageSettings.cs",
               "RelativeDocumentMoniker": "WilPWA\\Models\\AzureTableStorageSettings.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Models\\AzureTableStorageSettings.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\AzureTableStorageSettings.cs",
               "RelativeToolTip": "WilPWA\\Models\\AzureTableStorageSettings.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -353,11 +355,320 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "UserModel.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\UserModel.cs",
+              "RelativeDocumentMoniker": "WilPWA\\Models\\UserModel.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\UserModel.cs",
+              "RelativeToolTip": "WilPWA\\Models\\UserModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-29T10:02:40.222Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "LecturerController.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\LecturerController.cs",
+              "RelativeDocumentMoniker": "WilPWA\\Controllers\\LecturerController.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\LecturerController.cs",
+              "RelativeToolTip": "WilPWA\\Controllers\\LecturerController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-31T12:09:46.294Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "WilPWA\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "WilPWA\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-29T09:59:58.489Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "WilPWA\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "WilPWA\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAAFkAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-29T10:00:16.23Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Dashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Admin\\Dashboard.cshtml",
+              "RelativeDocumentMoniker": "WilPWA\\Views\\Admin\\Dashboard.cshtml",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Admin\\Dashboard.cshtml",
+              "RelativeToolTip": "WilPWA\\Views\\Admin\\Dashboard.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-02T08:28:27.729Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "WilPWA\\Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "WilPWA\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-02T08:29:16.594Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "WilPWA\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "WilPWA\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAABYAAAAAAAAAAAAAACcAAAB+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-02T08:40:29.342Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 20,
+              "Title": "UserModel.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\UserModel.cs",
+              "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\UserModel.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\UserModel.cs",
+              "RelativeToolTip": "VarsityTrackerApi\\Models\\UserModel.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAAAgAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-02T08:31:47.834Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Admin.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Admin.cs",
+              "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\Admin.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Admin.cs",
+              "RelativeToolTip": "VarsityTrackerApi\\Models\\Admin.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAAwA4AAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T11:36:11.907Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Program.cs",
+              "RelativeDocumentMoniker": "WilPWA\\Program.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Program.cs",
+              "RelativeToolTip": "WilPWA\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-29T08:55:44.974Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "Students.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Students.cs",
+              "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\Students.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Students.cs",
+              "RelativeToolTip": "VarsityTrackerApi\\Models\\Students.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T09:08:22.876Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "LoginModel.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\LoginModel.cs",
+              "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\LoginModel.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\LoginModel.cs",
+              "RelativeToolTip": "VarsityTrackerApi\\Models\\LoginModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T11:05:29.82Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
               "Title": "Lecturers.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Models\\Lecturers.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Lecturers.cs",
+              "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\Lecturers.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Lecturers.cs",
+              "RelativeToolTip": "VarsityTrackerApi\\Models\\Lecturers.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAQwAoAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T09:08:11.118Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "AccountServices.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Services\\AccountServices.cs",
+              "RelativeDocumentMoniker": "WilPWA\\Services\\AccountServices.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Services\\AccountServices.cs",
+              "RelativeToolTip": "WilPWA\\Services\\AccountServices.cs",
+              "ViewState": "AgIAACsAAAAAAAAAAAAAAEcAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-29T10:15:56.723Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "SetCalendar.cshtml",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Student\\SetCalendar.cshtml",
+              "RelativeDocumentMoniker": "WilPWA\\Views\\Student\\SetCalendar.cshtml",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Student\\SetCalendar.cshtml",
+              "RelativeToolTip": "WilPWA\\Views\\Student\\SetCalendar.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-02T08:08:51.506Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "Dashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Lecturer\\Dashboard.cshtml",
+              "RelativeDocumentMoniker": "WilPWA\\Views\\Lecturer\\Dashboard.cshtml",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Lecturer\\Dashboard.cshtml",
+              "RelativeToolTip": "WilPWA\\Views\\Lecturer\\Dashboard.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-31T12:09:09.343Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "VirtualCard.cshtml",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Student\\VirtualCard.cshtml",
+              "RelativeDocumentMoniker": "WilPWA\\Views\\Student\\VirtualCard.cshtml",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Student\\VirtualCard.cshtml",
+              "RelativeToolTip": "WilPWA\\Views\\Student\\VirtualCard.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-29T08:28:17.009Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "Card.cshtml",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Lecturer\\Card.cshtml",
+              "RelativeDocumentMoniker": "WilPWA\\Views\\Lecturer\\Card.cshtml",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Lecturer\\Card.cshtml",
+              "RelativeToolTip": "WilPWA\\Views\\Lecturer\\Card.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-02T08:06:56.23Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "Progress.cshtml",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Lecturer\\Progress.cshtml",
+              "RelativeDocumentMoniker": "WilPWA\\Views\\Lecturer\\Progress.cshtml",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Lecturer\\Progress.cshtml",
+              "RelativeToolTip": "WilPWA\\Views\\Lecturer\\Progress.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-02T08:07:24.514Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "AccessDenied.cshtml",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Account\\AccessDenied.cshtml",
+              "RelativeDocumentMoniker": "WilPWA\\Views\\Account\\AccessDenied.cshtml",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Account\\AccessDenied.cshtml",
+              "RelativeToolTip": "WilPWA\\Views\\Account\\AccessDenied.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-02T07:48:25.669Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "LoggedInUser.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\LoggedInUser.cs",
+              "RelativeDocumentMoniker": "WilPWA\\Models\\LoggedInUser.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\LoggedInUser.cs",
+              "RelativeToolTip": "WilPWA\\Models\\LoggedInUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-02T07:53:07.448Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "WilPWA\\Views\\Account\\Login.cshtml",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "WilPWA\\Views\\Account\\Login.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAUwAkAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-31T11:16:50.949Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\appsettings.json",
+              "RelativeDocumentMoniker": "VarsityTrackerApi\\appsettings.json",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\appsettings.json",
+              "RelativeToolTip": "VarsityTrackerApi\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-05-19T11:42:52.042Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\appsettings.json",
+              "RelativeDocumentMoniker": "WilPWA\\appsettings.json",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\appsettings.json",
+              "RelativeToolTip": "WilPWA\\appsettings.json",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAUwAkAAADeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-05-31T10:33:47.659Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "Lecturers.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\Lecturers.cs",
               "RelativeDocumentMoniker": "WilPWA\\Models\\Lecturers.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Models\\Lecturers.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\Lecturers.cs",
               "RelativeToolTip": "WilPWA\\Models\\Lecturers.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAA3wBgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -365,35 +676,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "VirtualCard.cshtml",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Student\\VirtualCard.cshtml",
-              "RelativeDocumentMoniker": "WilPWA\\Views\\Student\\VirtualCard.cshtml",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Views\\Student\\VirtualCard.cshtml",
-              "RelativeToolTip": "WilPWA\\Views\\Student\\VirtualCard.cshtml",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAuwBMAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-29T08:28:17.009Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "StudentServices.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Services\\StudentServices.cs",
-              "RelativeDocumentMoniker": "WilPWA\\Services\\StudentServices.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Services\\StudentServices.cs",
-              "RelativeToolTip": "WilPWA\\Services\\StudentServices.cs",
-              "ViewState": "AgIAACYAAAAAAAAAAAAgwA4AAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T08:31:51.632Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 38,
               "Title": "PasswordHelper.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\PasswordHelper.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\PasswordHelper.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\PasswordHelper.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\PasswordHelper.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\PasswordHelper.cs",
               "RelativeToolTip": "VarsityTrackerApi\\Models\\PasswordHelper.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -401,23 +688,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "UserModel.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Models\\UserModel.cs",
-              "RelativeDocumentMoniker": "WilPWA\\Models\\UserModel.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Models\\UserModel.cs",
-              "RelativeToolTip": "WilPWA\\Models\\UserModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T10:02:40.222Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 37,
               "Title": "PasswordHelper.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Models\\PasswordHelper.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\PasswordHelper.cs",
               "RelativeDocumentMoniker": "WilPWA\\Models\\PasswordHelper.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Models\\PasswordHelper.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Models\\PasswordHelper.cs",
               "RelativeToolTip": "WilPWA\\Models\\PasswordHelper.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -425,71 +700,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "UserModel.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\UserModel.cs",
-              "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\UserModel.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\UserModel.cs",
-              "RelativeToolTip": "VarsityTrackerApi\\Models\\UserModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwsAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T11:12:07.895Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "HomeController.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "WilPWA\\Controllers\\HomeController.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "WilPWA\\Controllers\\HomeController.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T09:59:58.489Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "Students.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Models\\Students.cs",
-              "RelativeDocumentMoniker": "WilPWA\\Models\\Students.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\WilPWA\\Models\\Students.cs",
-              "RelativeToolTip": "WilPWA\\Models\\Students.cs",
-              "ViewState": "AgIAAAEAAABgZmZmZiYgwAgAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T08:25:08.125Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
-              "Title": "ClockingController.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\ClockingController.cs",
-              "RelativeDocumentMoniker": "VarsityTrackerApi\\Controllers\\ClockingController.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\ClockingController.cs",
-              "RelativeToolTip": "VarsityTrackerApi\\Controllers\\ClockingController.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAA+wCUAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T06:50:14.187Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "AttendanceRecord.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\AttendanceRecord.cs",
-              "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\AttendanceRecord.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\AttendanceRecord.cs",
-              "RelativeToolTip": "VarsityTrackerApi\\Models\\AttendanceRecord.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T06:46:00.369Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 40,
               "Title": "WeatherForecastController.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\WeatherForecastController.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\WeatherForecastController.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Controllers\\WeatherForecastController.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\WeatherForecastController.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\WeatherForecastController.cs",
               "RelativeToolTip": "VarsityTrackerApi\\Controllers\\WeatherForecastController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -497,27 +712,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 41,
               "Title": "Modules.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Modules.cs",
+              "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Modules.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\Modules.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Modules.cs",
+              "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Modules.cs",
               "RelativeToolTip": "VarsityTrackerApi\\Models\\Modules.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-19T09:09:58.434Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 28,
-              "Title": "Admin.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Admin.cs",
-              "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\Admin.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\Admin.cs",
-              "RelativeToolTip": "VarsityTrackerApi\\Models\\Admin.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAwBMAAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T11:36:11.907Z"
             }
           ]
         },

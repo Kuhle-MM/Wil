@@ -3,25 +3,40 @@
 @{
     ViewData["Title"] = "ReportList";
 }
+@if (LoggedInUser.Role == "Student")
+{
+    <h1>Student Report List</h1>
 
-<h1>Student Report List</h1>
-
-
-<table class="table">
-    <thead>
+    @if (Model.Any() == null)
+    {
         <tr>
-            <th></th>
+            <td colspan="6" class="no-claims">You have no Reports listed.</td>
         </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+    }
+    else
+    {
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    }
 }
-    </tbody>
-</table>
+else
+{
+    <h1>You do not have access to this page.</h1>
+}

@@ -53,5 +53,24 @@ namespace WilPWA.Services
                 return (false, error, null);
             }
         }
+
+        public async Task<(bool Success, string Message, string Role)> LoginAdminAsync(string email, string password)
+        {
+            var loginModel = new LoginModel { email = email, password = password };
+            var response = await _httpClient.PostAsJsonAsync("Access/login_admin", loginModel);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(json);
+                var message = doc.RootElement.GetProperty("message").GetString();
+                return (true, message, "Admin");
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                return (false, error, null);
+            }
+        }
     }
 }

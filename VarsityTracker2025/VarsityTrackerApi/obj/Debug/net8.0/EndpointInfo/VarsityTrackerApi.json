@@ -98,6 +98,37 @@
         }
       }
     },
+    "/Access/login_admin": {
+      "post": {
+        "tags": [
+          "Access"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/Access/get_details_students": {
       "get": {
         "tags": [
@@ -345,10 +376,6 @@
             "type": "string",
             "nullable": true
           },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true
-          },
           "firstName": {
             "type": "string",
             "nullable": true
@@ -410,10 +437,6 @@
             "nullable": true
           },
           "studentEmail": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumber": {
             "type": "string",
             "nullable": true
           },
@@ -480,10 +503,6 @@
             "nullable": true
           },
           "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumber": {
             "type": "string",
             "nullable": true
           }
