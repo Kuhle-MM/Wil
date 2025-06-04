@@ -49,6 +49,22 @@
   },
   {
     "ContainingType": "VarsityTrackerApi.Controllers.AccessController",
+    "Method": "Login_Admin",
+    "RelativePath": "Access/login_admin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "VarsityTrackerApi.Models.LoginModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VarsityTrackerApi.Controllers.AccessController",
     "Method": "Login_Lecturer",
     "RelativePath": "Access/login_lecturer",
     "HttpMethod": "POST",

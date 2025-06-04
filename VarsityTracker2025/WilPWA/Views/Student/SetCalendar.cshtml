@@ -2,8 +2,16 @@
     ViewData["Title"] = "SetCalendar";
 }
 
-<h1>Set Calendar</h1>
+@if (LoggedInUser.Role == "Student")
+{
 
-<button>Save changes</button>
-<br/>
-<button>Discard changes</button>
+    <h1>Set Calendar</h1>
+
+    <button>Save changes</button>
+    <br />
+    <button>Discard changes</button>
+}
+else
+{
+    <h1>You do not have access to this page.</h1>
+}

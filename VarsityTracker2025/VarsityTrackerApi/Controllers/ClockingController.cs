@@ -10,12 +10,19 @@ namespace VarsityTrackerApi.Controllers
     public class StudentClockingController : ControllerBase
     {
         private readonly TableClient _studentTable;
+        private readonly TableClient _attendanceTable;
 
         public StudentClockingController(IOptions<AzureTableStorageSettings> storageOptions)
         {
             var connectionString = storageOptions.Value.ConnectionString;
+
+            // Student data stored in "Students" table
             _studentTable = new TableClient(connectionString, "Students");
             _studentTable.CreateIfNotExists();
+
+            // Attendance records stored in separate "Attendances" table
+            _attendanceTable = new TableClient(connectionString, "Attendances");
+            _attendanceTable.CreateIfNotExists();
         }
 
         [HttpPost("clockin/{studentNumber}")]
@@ -34,7 +41,7 @@ namespace VarsityTrackerApi.Controllers
             var today = DateTime.UtcNow.Date;
 
             // Prevent multiple clock-ins for the same day
-            await foreach (var record in _studentTable.QueryAsync<AttendanceRecord>(r =>
+            await foreach (var record in _attendanceTable.QueryAsync<AttendanceRecord>(r =>
                 r.PartitionKey == "Attendance" &&
                 r.StudentNumber == studentNumber &&
                 r.ClockInTime >= today))
@@ -53,21 +60,22 @@ namespace VarsityTrackerApi.Controllers
                 Status = "Present"
             };
 
-            await _studentTable.AddEntityAsync(attendance);
+            await _attendanceTable.AddEntityAsync(attendance);
             return Ok("Clock-in recorded.");
         }
+
 
         [HttpPost("clockout/{studentNumber}")]
         public async Task<IActionResult> ClockOut(string studentNumber)
         {
             var today = DateTime.UtcNow.Date;
+
             AttendanceRecord recordToUpdate = null;
 
-            await foreach (var record in _studentTable.QueryAsync<AttendanceRecord>(r =>
+            await foreach (var record in _attendanceTable.QueryAsync<AttendanceRecord>(r =>
                 r.PartitionKey == "Attendance" &&
                 r.StudentNumber == studentNumber &&
-                r.ClockInTime >= today &&
-                r.ClockOutTime == null))
+                r.ClockInTime >= today))
             {
                 recordToUpdate = record;
                 break;
@@ -77,7 +85,8 @@ namespace VarsityTrackerApi.Controllers
                 return NotFound("No active clock-in found for today.");
 
             recordToUpdate.ClockOutTime = DateTime.UtcNow;
-            await _studentTable.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
+
+            await _attendanceTable.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
 
             return Ok("Clock-out recorded.");
         }
@@ -87,7 +96,7 @@ namespace VarsityTrackerApi.Controllers
         {
             var report = new List<AttendanceRecord>();
 
-            await foreach (var record in _studentTable.QueryAsync<AttendanceRecord>(r =>
+            await foreach (var record in _attendanceTable.QueryAsync<AttendanceRecord>(r =>
                 r.PartitionKey == "Attendance" &&
                 r.StudentNumber == studentNumber))
             {

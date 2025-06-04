@@ -2,7 +2,7 @@
 {
     public class Report
     {
-        String studentNumber { get; set; }
-        String status { get; set; }
+        public string studentNumber { get; set; }
+        public string status { get; set; }
     }
 }

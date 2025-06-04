@@ -9,7 +9,6 @@ namespace VarsityTrackerApi.Models
         [Key]
         public string studentNumber { get; set; }
         public string? studentEmail { get; set; }
-        public string? phoneNumber { get; set; }
         public string StudentCardId { get; set; }
         public string? firstName { get; set; }
         public string? lastName { get; set; }
