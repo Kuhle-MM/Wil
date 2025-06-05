@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\varsitytrackerapi\\controllers\\clockingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\controllers\\clockingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\services\\studentservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\services\\studentservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\controllers\\studentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|solutionrelative:wilpwa\\controllers\\studentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\varsitytrackerapi\\controllers\\clockingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\controllers\\clockingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}|WilPWA\\WilPWA.csproj|c:\\users\\kelly\\onedrive\\desktop\\wil\\varsitytracker2025\\wilpwa\\models\\attendancerecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -178,7 +178,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -194,12 +194,11 @@
               "RelativeToolTip": "WilPWA\\Models\\AttendanceRecord.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-02T09:07:26.22Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-02T09:07:26.22Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "StudentController.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Controllers\\StudentController.cs",
               "RelativeDocumentMoniker": "WilPWA\\Controllers\\StudentController.cs",
@@ -207,31 +206,30 @@
               "RelativeToolTip": "WilPWA\\Controllers\\StudentController.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAxwAwAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T08:29:25.162Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-29T08:29:25.162Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "StudentServices.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Services\\StudentServices.cs",
               "RelativeDocumentMoniker": "WilPWA\\Services\\StudentServices.cs",
               "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\Services\\StudentServices.cs",
               "RelativeToolTip": "WilPWA\\Services\\StudentServices.cs",
-              "ViewState": "AgIAACMAAAAAAAAAAAAowDYAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAADYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-29T08:31:51.632Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "ClockingController.cs",
               "DocumentMoniker": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\ClockingController.cs",
               "RelativeDocumentMoniker": "VarsityTrackerApi\\Controllers\\ClockingController.cs",
               "ToolTip": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\ClockingController.cs",
               "RelativeToolTip": "VarsityTrackerApi\\Controllers\\ClockingController.cs",
-              "ViewState": "AgIAAEwAAAAAAAAAAAAgwFYAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwUAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-29T06:50:14.187Z",
               "EditorCaption": ""
@@ -246,8 +244,7 @@
               "RelativeToolTip": "VarsityTrackerApi\\Models\\AttendanceRecord.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAAAsAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T06:46:00.369Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-29T06:46:00.369Z"
             },
             {
               "$type": "Document",
@@ -259,8 +256,7 @@
               "RelativeToolTip": "WilPWA\\Views\\Student\\Dashboard.cshtml",
               "ViewState": "AgIAACoAAAAAAAAAAAAAAFIAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-31T12:10:51.487Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-31T12:10:51.487Z"
             },
             {
               "$type": "Document",
@@ -272,8 +268,7 @@
               "RelativeToolTip": "VarsityTrackerApi\\Controllers\\AccessController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T11:07:33.959Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-19T11:07:33.959Z"
             },
             {
               "$type": "Document",
@@ -285,8 +280,7 @@
               "RelativeToolTip": "WilPWA\\Views\\Lecturer\\Report.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-02T08:07:26.229Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-02T08:07:26.229Z"
             },
             {
               "$type": "Document",
@@ -298,8 +292,7 @@
               "RelativeToolTip": "WilPWA\\Views\\Student\\ReportList.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-02T08:08:27.592Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-02T08:08:27.592Z"
             },
             {
               "$type": "Document",
@@ -311,8 +304,7 @@
               "RelativeToolTip": "WilPWA\\Models\\Students.cs",
               "ViewState": "AgIAAAEAAABgZmZmZiYgwAgAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T08:25:08.125Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-29T08:25:08.125Z"
             },
             {
               "$type": "Document",
@@ -324,8 +316,7 @@
               "RelativeToolTip": "WilPWA\\Models\\Report.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-02T08:56:22.798Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-02T08:56:22.798Z"
             },
             {
               "$type": "Document",
@@ -337,8 +328,7 @@
               "RelativeToolTip": "WilPWA\\Views\\Admin\\Create.cshtml",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAADcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-02T08:34:09.996Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-02T08:34:09.996Z"
             },
             {
               "$type": "Document",
@@ -350,8 +340,7 @@
               "RelativeToolTip": "WilPWA\\Models\\AzureTableStorageSettings.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-31T10:31:15.127Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-31T10:31:15.127Z"
             },
             {
               "$type": "Document",
@@ -363,8 +352,7 @@
               "RelativeToolTip": "WilPWA\\Models\\UserModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T10:02:40.222Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-29T10:02:40.222Z"
             },
             {
               "$type": "Document",
@@ -376,8 +364,7 @@
               "RelativeToolTip": "WilPWA\\Controllers\\LecturerController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-31T12:09:46.294Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-31T12:09:46.294Z"
             },
             {
               "$type": "Document",
@@ -389,8 +376,7 @@
               "RelativeToolTip": "WilPWA\\Controllers\\HomeController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T09:59:58.489Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-29T09:59:58.489Z"
             },
             {
               "$type": "Document",
@@ -402,8 +388,7 @@
               "RelativeToolTip": "WilPWA\\Controllers\\AccountController.cs",
               "ViewState": "AgIAADwAAAAAAAAAAAAAAFkAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T10:00:16.23Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-29T10:00:16.23Z"
             },
             {
               "$type": "Document",
@@ -415,8 +400,7 @@
               "RelativeToolTip": "WilPWA\\Views\\Admin\\Dashboard.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAEMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-02T08:28:27.729Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-02T08:28:27.729Z"
             },
             {
               "$type": "Document",
@@ -428,8 +412,7 @@
               "RelativeToolTip": "WilPWA\\Controllers\\AdminController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-02T08:29:16.594Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-02T08:29:16.594Z"
             },
             {
               "$type": "Document",
@@ -441,8 +424,7 @@
               "RelativeToolTip": "WilPWA\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAABYAAAAAAAAAAAAAACcAAAB+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-02T08:40:29.342Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-02T08:40:29.342Z"
             },
             {
               "$type": "Document",
@@ -454,8 +436,7 @@
               "RelativeToolTip": "VarsityTrackerApi\\Models\\UserModel.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAAAAAgAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-02T08:31:47.834Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-02T08:31:47.834Z"
             },
             {
               "$type": "Document",
@@ -467,8 +448,7 @@
               "RelativeToolTip": "VarsityTrackerApi\\Models\\Admin.cs",
               "ViewState": "AgIAAAQAAAAAAAAAAAAAwA4AAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T11:36:11.907Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-19T11:36:11.907Z"
             },
             {
               "$type": "Document",
@@ -480,8 +460,7 @@
               "RelativeToolTip": "WilPWA\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T08:55:44.974Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-29T08:55:44.974Z"
             },
             {
               "$type": "Document",
@@ -493,8 +472,7 @@
               "RelativeToolTip": "VarsityTrackerApi\\Models\\Students.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T09:08:22.876Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-19T09:08:22.876Z"
             },
             {
               "$type": "Document",
@@ -506,8 +484,7 @@
               "RelativeToolTip": "VarsityTrackerApi\\Models\\LoginModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T11:05:29.82Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-19T11:05:29.82Z"
             },
             {
               "$type": "Document",
@@ -519,8 +496,7 @@
               "RelativeToolTip": "VarsityTrackerApi\\Models\\Lecturers.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAQwAoAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T09:08:11.118Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-19T09:08:11.118Z"
             },
             {
               "$type": "Document",
@@ -532,8 +508,7 @@
               "RelativeToolTip": "WilPWA\\Services\\AccountServices.cs",
               "ViewState": "AgIAACsAAAAAAAAAAAAAAEcAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T10:15:56.723Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-29T10:15:56.723Z"
             },
             {
               "$type": "Document",
@@ -545,8 +520,7 @@
               "RelativeToolTip": "WilPWA\\Views\\Student\\SetCalendar.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-02T08:08:51.506Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-02T08:08:51.506Z"
             },
             {
               "$type": "Document",
@@ -558,8 +532,7 @@
               "RelativeToolTip": "WilPWA\\Views\\Lecturer\\Dashboard.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-31T12:09:09.343Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-31T12:09:09.343Z"
             },
             {
               "$type": "Document",
@@ -571,8 +544,7 @@
               "RelativeToolTip": "WilPWA\\Views\\Student\\VirtualCard.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-29T08:28:17.009Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-29T08:28:17.009Z"
             },
             {
               "$type": "Document",
@@ -584,8 +556,7 @@
               "RelativeToolTip": "WilPWA\\Views\\Lecturer\\Card.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-02T08:06:56.23Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-02T08:06:56.23Z"
             },
             {
               "$type": "Document",
@@ -597,8 +568,7 @@
               "RelativeToolTip": "WilPWA\\Views\\Lecturer\\Progress.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-02T08:07:24.514Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-02T08:07:24.514Z"
             },
             {
               "$type": "Document",
@@ -610,8 +580,7 @@
               "RelativeToolTip": "WilPWA\\Views\\Account\\AccessDenied.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAABVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-02T07:48:25.669Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-02T07:48:25.669Z"
             },
             {
               "$type": "Document",
@@ -623,8 +592,7 @@
               "RelativeToolTip": "WilPWA\\Models\\LoggedInUser.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-02T07:53:07.448Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-02T07:53:07.448Z"
             },
             {
               "$type": "Document",
