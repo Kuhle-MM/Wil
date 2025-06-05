@@ -17,97 +17,97 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = WilPWA
 build_property.RootNamespace = WilPWA
-build_property.ProjectDir = C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\WilPWA\
+build_property.ProjectDir = C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\WilPWA\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\WilPWA
+build_property.MSBuildProjectDirectory = C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\WilPWA
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Account/AccessDenied.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Account/AccessDenied.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxBY2Nlc3NEZW5pZWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Account/Login.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Account/Signup.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Account/Signup.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxTaWdudXAuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Admin/Create.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Admin/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Admin/Dashboard.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Admin/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Home/Index.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Home/Privacy.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Lecturer/Card.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Lecturer/Card.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVjdHVyZXJcQ2FyZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Lecturer/Dashboard.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Lecturer/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVjdHVyZXJcRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Lecturer/Progress.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Lecturer/Progress.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVjdHVyZXJcUHJvZ3Jlc3MuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Lecturer/Report.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Lecturer/Report.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVjdHVyZXJcUmVwb3J0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Shared/Error.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Student/Attendance.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Student/Attendance.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxBdHRlbmRhbmNlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Student/Dashboard.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Student/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxEYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Student/ReportList.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Student/ReportList.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxSZXBvcnRMaXN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Student/SetCalendar.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Student/SetCalendar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxTZXRDYWxlbmRhci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Student/VirtualCard.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Student/VirtualCard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxWaXJ0dWFsQ2FyZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/_ViewImports.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/_ViewStart.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kelly/OneDrive/Desktop/Wil/VarsityTracker2025/WilPWA/Views/Shared/_Layout.cshtml]
+[C:/Users/lab_services_student/Documents/GitHub/Wil/VarsityTracker2025/WilPWA/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-g1r1t3fmww
