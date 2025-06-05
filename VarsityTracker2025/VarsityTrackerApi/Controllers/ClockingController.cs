@@ -114,70 +114,70 @@ namespace VarsityTrackerApi.Controllers
             return Ok(report);
         }
 
-        [HttpPost("clockin/{lecturerID}")]
-        public async Task<IActionResult> ClockInLecturer(string lecturerID)
-        {
-            Lecturers lecturer = null;
-            await foreach (var s in _lecturerTable.QueryAsync<Lecturers>(s => s.lecturerID == lecturerID.ToUpper()))
-            {
-                lecturer = s;
-                break;
-            }
+        //[HttpPost("clockin/{lecturerID}")]
+        //public async Task<IActionResult> ClockInLecturer(string lecturerID)
+        //{
+        //    Lecturers lecturer = null;
+        //    await foreach (var s in _lecturerTable.QueryAsync<Lecturers>(s => s.lecturerID == lecturerID.ToUpper()))
+        //    {
+        //        lecturer = s;
+        //        break;
+        //    }
 
-            if (lecturer == null)
-                return NotFound("Student not found.");
+        //    if (lecturer == null)
+        //        return NotFound("Student not found.");
 
-            var today = DateTime.UtcNow.Date;
+        //    var today = DateTime.UtcNow.Date;
 
-            // Prevent multiple clock-ins for the same day
-            await foreach (var record in _attendanceTable.QueryAsync<AttendanceRecord>(r =>
-                r.PartitionKey == "Attendance" &&
-                r.StudentNumber == lecturerID &&
-                r.ClockInTime >= today))
-            {
-                return BadRequest("Student already clocked in today.");
-            }
+        //    // Prevent multiple clock-ins for the same day
+        //    await foreach (var record in _attendanceTable.QueryAsync<AttendanceRecord>(r =>
+        //        r.PartitionKey == "Attendance" &&
+        //        r.StudentNumber == lecturerID &&
+        //        r.ClockInTime >= today))
+        //    {
+        //        return BadRequest("Student already clocked in today.");
+        //    }
 
-            var attendance = new AttendanceRecord
-            {
-                PartitionKey = "Attendance",
-                RowKey = Guid.NewGuid().ToString(),
-                StudentNumber = lecturer.lecturerID,
-                StudentEmail = lecturer.lecturerEmail,
-                ClockInTime = DateTime.UtcNow,
-                ClockOutTime = null,
-                Status = "Present"
-            };
+        //    var attendance = new AttendanceRecord
+        //    {
+        //        PartitionKey = "Attendance",
+        //        RowKey = Guid.NewGuid().ToString(),
+        //        StudentNumber = lecturer.lecturerID,
+        //        StudentEmail = lecturer.lecturerEmail,
+        //        ClockInTime = DateTime.UtcNow,
+        //        ClockOutTime = null,
+        //        Status = "Present"
+        //    };
 
-            await _attendanceTable.AddEntityAsync(attendance);
-            return Ok("Clock-in recorded.");
-        }
+        //    await _attendanceTable.AddEntityAsync(attendance);
+        //    return Ok("Clock-in recorded.");
+        //}
 
 
-        [HttpPost("clockout/{lecturerID}")]
-        public async Task<IActionResult> ClockOutLecturer(string lecturerID)
-        {
-            var today = DateTime.UtcNow.Date;
+        //[HttpPost("clockout/{lecturerID}")]
+        //public async Task<IActionResult> ClockOutLecturer(string lecturerID)
+        //{
+        //    var today = DateTime.UtcNow.Date;
 
-            AttendanceRecord recordToUpdate = null;
+        //    AttendanceRecord recordToUpdate = null;
 
-            await foreach (var record in _attendanceTable.QueryAsync<AttendanceRecord>(r =>
-                r.PartitionKey == "Attendance" &&
-                r.StudentNumber == lecturerID &&
-                r.ClockInTime >= today))
-            {
-                recordToUpdate = record;
-                break;
-            }
+        //    await foreach (var record in _attendanceTable.QueryAsync<AttendanceRecord>(r =>
+        //        r.PartitionKey == "Attendance" &&
+        //        r.StudentNumber == lecturerID &&
+        //        r.ClockInTime >= today))
+        //    {
+        //        recordToUpdate = record;
+        //        break;
+        //    }
 
-            if (recordToUpdate == null)
-                return NotFound("No active clock-in found for today.");
+        //    if (recordToUpdate == null)
+        //        return NotFound("No active clock-in found for today.");
 
-            recordToUpdate.ClockOutTime = DateTime.UtcNow;
+        //    recordToUpdate.ClockOutTime = DateTime.UtcNow;
 
-            await _attendanceTable.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
+        //    await _attendanceTable.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
 
-            return Ok("Clock-out recorded.");
-        }
+        //    return Ok("Clock-out recorded.");
+        //}
     }
 }
