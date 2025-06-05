@@ -11,6 +11,7 @@ namespace VarsityTrackerApi.Controllers
     {
         private readonly TableClient _studentTable;
         private readonly TableClient _attendanceTable;
+        private readonly TableClient _lecturerTable;
 
         public StudentClockingController(IOptions<AzureTableStorageSettings> storageOptions)
         {
@@ -19,6 +20,10 @@ namespace VarsityTrackerApi.Controllers
             // Student data stored in "Students" table
             _studentTable = new TableClient(connectionString, "Students");
             _studentTable.CreateIfNotExists();
+
+            // Attendance records stored in separate "Attendances" table
+            _lecturerTable = new TableClient(connectionString, "Lecturers");
+            _lecturerTable.CreateIfNotExists();
 
             // Attendance records stored in separate "Attendances" table
             _attendanceTable = new TableClient(connectionString, "Attendances");
@@ -107,6 +112,72 @@ namespace VarsityTrackerApi.Controllers
                 return NotFound("No attendance records found for this student.");
 
             return Ok(report);
+        }
+
+        [HttpPost("clockin/{lecturerID}")]
+        public async Task<IActionResult> ClockInLecturer(string lecturerID)
+        {
+            Lecturers lecturer = null;
+            await foreach (var s in _lecturerTable.QueryAsync<Lecturers>(s => s.lecturerID == lecturerID.ToUpper()))
+            {
+                lecturer = s;
+                break;
+            }
+
+            if (lecturer == null)
+                return NotFound("Student not found.");
+
+            var today = DateTime.UtcNow.Date;
+
+            // Prevent multiple clock-ins for the same day
+            await foreach (var record in _attendanceTable.QueryAsync<AttendanceRecord>(r =>
+                r.PartitionKey == "Attendance" &&
+                r.StudentNumber == lecturerID &&
+                r.ClockInTime >= today))
+            {
+                return BadRequest("Student already clocked in today.");
+            }
+
+            var attendance = new AttendanceRecord
+            {
+                PartitionKey = "Attendance",
+                RowKey = Guid.NewGuid().ToString(),
+                StudentNumber = lecturer.lecturerID,
+                StudentEmail = lecturer.lecturerEmail,
+                ClockInTime = DateTime.UtcNow,
+                ClockOutTime = null,
+                Status = "Present"
+            };
+
+            await _attendanceTable.AddEntityAsync(attendance);
+            return Ok("Clock-in recorded.");
+        }
+
+
+        [HttpPost("clockout/{lecturerID}")]
+        public async Task<IActionResult> ClockOutLecturer(string lecturerID)
+        {
+            var today = DateTime.UtcNow.Date;
+
+            AttendanceRecord recordToUpdate = null;
+
+            await foreach (var record in _attendanceTable.QueryAsync<AttendanceRecord>(r =>
+                r.PartitionKey == "Attendance" &&
+                r.StudentNumber == lecturerID &&
+                r.ClockInTime >= today))
+            {
+                recordToUpdate = record;
+                break;
+            }
+
+            if (recordToUpdate == null)
+                return NotFound("No active clock-in found for today.");
+
+            recordToUpdate.ClockOutTime = DateTime.UtcNow;
+
+            await _attendanceTable.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
+
+            return Ok("Clock-out recorded.");
         }
     }
 }
