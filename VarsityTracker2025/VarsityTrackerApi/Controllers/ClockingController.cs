@@ -114,6 +114,17 @@ namespace VarsityTrackerApi.Controllers
             return Ok(report);
         }
 
+        [HttpGet("report/getAll")]
+        public async Task<List<AttendanceRecord>> GetAllUsersAsync()
+        {
+            var attendance = new List<AttendanceRecord>();
+            await foreach (var newAttendance in _attendanceTable.QueryAsync<AttendanceRecord>())
+            {
+                attendance.Add(newAttendance);
+            }
+            return attendance;
+        }
+
         [HttpPost("lecturer/clockin/{lecturerID}")]
         public async Task<IActionResult> ClockInLecturer(string lecturerID)
         {

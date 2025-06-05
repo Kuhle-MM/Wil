@@ -8,20 +8,21 @@ namespace WilPWA.Controllers
     {
 
         private readonly AccountServices _accountServices;
-
-        public StudentController(AccountServices accountServices)
+        private readonly StudentServices _studentServices;
+        public StudentController(AccountServices accountServices, StudentServices studentServices)
         {
             _accountServices = accountServices;
+            _studentServices = studentServices;
         }
 
         public IActionResult Dashboard()
         {
             return View();
         }
-        public IActionResult ReportList()
+        public async Task<IActionResult> ReportList()
         {
-
-            return View();
+            var records = await _studentServices.GetAttendanceRecordsAsync();
+            return View(records);
         }
         public IActionResult SetCalendar()
         {

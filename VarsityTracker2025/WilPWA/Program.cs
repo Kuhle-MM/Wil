@@ -28,6 +28,10 @@ namespace WilPWA
             {
                 client.BaseAddress = new Uri("https://localhost:7276/");
             });
+            builder.Services.AddHttpClient<StudentServices>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7276/");
+            });
 
             var app = builder.Build();
 

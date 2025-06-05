@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WilPWA.Models.Report>
+﻿@model IEnumerable<WilPWA.Models.AttendanceRecord>
 
 @{
     ViewData["Title"] = "ReportList";
@@ -18,18 +18,20 @@
     <table class="table">
         <thead>
             <tr>
-                <th></th>
+                <th>Student Number</th>
+                <th>Clocked In</th>
+                <th>Clocked Out</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-            {
+                @foreach (var item in Model.Where(c => c.StudentNumber == LoggedInUser.UserID))
+                {
                 <tr>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.StudentNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ClockInTime)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ClockOutTime)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Status)</td>                    
                 </tr>
             }
         </tbody>
