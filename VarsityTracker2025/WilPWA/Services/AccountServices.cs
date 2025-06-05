@@ -104,5 +104,37 @@ namespace WilPWA.Services
                 return (false, error);
             }
         }
+
+        public async Task<(bool Success, string Message)> ClockInLecturerAsync(string LecturerID)
+        {
+            var response = await _httpClient.PostAsync($"api/StudentClocking/lecturer/clockin/{LecturerID}", null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var message = await response.Content.ReadAsStringAsync();
+                return (true, message);
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                return (false, error);
+            }
+        }
+
+        public async Task<(bool Success, string Message)> ClockOutLecturerAsync(string LecturerID)
+        {
+            var response = await _httpClient.PostAsync($"api/StudentClocking/lecturer/clockout/{LecturerID}", null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var message = await response.Content.ReadAsStringAsync();
+                return (true, message);
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                return (false, error);
+            }
+        }
     }
 }

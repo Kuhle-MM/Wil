@@ -171,6 +171,38 @@
   },
   {
     "ContainingType": "VarsityTrackerApi.Controllers.StudentClockingController",
+    "Method": "ClockInLecturer",
+    "RelativePath": "api/StudentClocking/lecturer/clockin/{lecturerID}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "lecturerID",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VarsityTrackerApi.Controllers.StudentClockingController",
+    "Method": "ClockOutLecturer",
+    "RelativePath": "api/StudentClocking/lecturer/clockout/{lecturerID}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "lecturerID",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VarsityTrackerApi.Controllers.StudentClockingController",
     "Method": "GetAttendanceReport",
     "RelativePath": "api/StudentClocking/report/{studentNumber}",
     "HttpMethod": "GET",

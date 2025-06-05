@@ -319,6 +319,50 @@
         }
       }
     },
+    "/api/StudentClocking/lecturer/clockin/{lecturerID}": {
+      "post": {
+        "tags": [
+          "StudentClocking"
+        ],
+        "parameters": [
+          {
+            "name": "lecturerID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/StudentClocking/lecturer/clockout/{lecturerID}": {
+      "post": {
+        "tags": [
+          "StudentClocking"
+        ],
+        "parameters": [
+          {
+            "name": "lecturerID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/WeatherForecast": {
       "get": {
         "tags": [
