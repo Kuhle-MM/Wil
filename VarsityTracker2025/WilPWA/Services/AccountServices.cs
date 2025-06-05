@@ -72,5 +72,37 @@ namespace WilPWA.Services
                 return (false, error, null);
             }
         }
+
+        public async Task<(bool Success, string Message)> ClockInAsync(string studentNumber)
+        {
+            var response = await _httpClient.PostAsync($"api/StudentClocking/clockin/{studentNumber}", null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var message = await response.Content.ReadAsStringAsync();
+                return (true, message);
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                return (false, error);
+            }
+        }
+
+        public async Task<(bool Success, string Message)> ClockOutAsync(string studentNumber)
+        {
+            var response = await _httpClient.PostAsync($"api/StudentClocking/clockout/{studentNumber}", null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var message = await response.Content.ReadAsStringAsync();
+                return (true, message);
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                return (false, error);
+            }
+        }
     }
 }
