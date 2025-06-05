@@ -1,4 +1,14 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function updateColor(select) {
+    select.className = 'status-dropdown'; // Reset first
+    const value = select.value.toLowerCase();
+    if (value === 'present') {
+        select.classList.add('present');
+    } else if (value === 'absent') {
+        select.classList.add('absent');
+    } else {
+        select.classList.add('pending');
+    }
+}
 
-// Write your JavaScript code.
+// Set initial status color on page load
+document.querySelectorAll('.status-dropdown').forEach(updateColor);
