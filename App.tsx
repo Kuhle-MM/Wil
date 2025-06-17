@@ -1,46 +1,46 @@
+// App.tsx
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+
+const StackNav = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from './types';
 
+const Stack = createNativeStackNavigator<RootTabParamList>();
+
 type LoginScreenNavigationProp = BottomTabNavigationProp<RootTabParamList, 'Login'>;
-
-type Props = {
-  navigation: LoginScreenNavigationProp;
-};
+type MainScreenRouteProp = RouteProp<RootTabParamList, 'Main'>;
 
 
-const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
+// Login Screen with role selection
+const LoginScreen: React.FC = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootTabParamList>>();
 
-const LoginScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.centeredContainer}>
       <Text style={styles.logo}>tapify</Text>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Main')}>
-        <Text style={styles.buttonText}>login</Text>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Main', { role: 'student' })}>
+        <Text style={styles.buttonText}>Login as Student</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>register</Text>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Main', { role: 'lecturer' })}>
+        <Text style={styles.buttonText}>Login as Lecturer</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-const StudentCardScreen = () => (
-  <View style={styles.centeredContainer}>
-    <View style={styles.card}><Text style={styles.cardText}>student card</Text></View>
-    <Text style={styles.linkText}>activate card</Text>
-  </View>
-);
 
-const DashboardScreen = () => (
-  <ScrollView contentContainerStyle={styles.scrollContainer}>
+// Placeholder student screens
+const StudentDashboard = () => (
+  <View style={styles.scrollContainer}>
     <Text style={styles.header}>Dashboard</Text>
     <Text style={styles.sectionTitle}>Today’s modules</Text>
     <View style={styles.card}><Text>today’s modules</Text></View>
@@ -48,20 +48,27 @@ const DashboardScreen = () => (
     <View style={styles.card}><Text>weekly attendance progress</Text></View>
     <TouchableOpacity style={styles.smallButton}><Text>report overview</Text></TouchableOpacity>
     <TouchableOpacity style={styles.smallButton}><Text>get calendar</Text></TouchableOpacity>
-  </ScrollView>
+  </View>
 );
 
-const ReportScreen = () => (
-  <ScrollView contentContainerStyle={styles.scrollContainer}>
+const StudentCard = () => (
+  <View style={styles.centeredContainer}>
+    <View style={styles.card}><Text style={styles.cardText}>student card</Text></View>
+    <Text>activate card</Text>
+  </View>
+);
+
+const StudentReport  = () => (
+  <View style={styles.scrollContainer}>
     <Text style={styles.header}>Report</Text>
     <Text style={styles.subHeader}>MONTH ▼</Text>
     <View style={styles.reportRow}><Text>Day, Date</Text><Text>Module</Text><Text>Status</Text></View>
     <View style={styles.reportRow}><Text>Day, Date</Text><Text>Module</Text><Text>Status</Text></View>
     <View style={styles.reportRow}><Text>Day, Date</Text><Text>Module</Text><Text>Status</Text></View>
-  </ScrollView>
+  </View>
 );
 
-const CalendarScreen = () => (
+const StudentCalendar = () => (
   <View style={styles.centeredContainer}>
     <Text style={styles.header}>Calendar</Text>
     <View style={styles.card}><Text style={styles.cardText}>calendar</Text></View>
@@ -70,22 +77,81 @@ const CalendarScreen = () => (
   </View>
 );
 
-const MainTabs = () => (
-  <Tab.Navigator screenOptions={{ headerShown: false }}>
-    <Tab.Screen name="Home" component={DashboardScreen} />
-    <Tab.Screen name="Card" component={StudentCardScreen} />
-    <Tab.Screen name="Report" component={ReportScreen} />
-    <Tab.Screen name="Calendar" component={CalendarScreen} />
-  </Tab.Navigator>
+
+// Lecturer-specific screens
+const LecturerDashboard = () => (
+  <View style={styles.scrollContainer}>
+    <Text style={styles.header}>Dashboard</Text>
+    <Text style={styles.sectionTitle}>Set Today’s Modules</Text>
+    <TouchableOpacity style={styles.card}><Text style={styles.cardText}>tap to generate</Text></TouchableOpacity>
+  </View>
 );
+
+const LecturerCard  = () => (
+  <View style={styles.centeredContainer}>
+    <View style={styles.card}><Text style={styles.cardText}>lecturer card</Text></View>
+    <Text>activate card</Text>
+  </View>
+);
+
+const LecturerReport = () => (
+  <View style={styles.scrollContainer}>
+    <Text style={styles.header}>Reports</Text>
+    <Text style={styles.subHeader}>MONTH ▼</Text>
+    {[1, 2, 3].map((i) => (
+      <View key={i} style={styles.reportRow}>
+        <Text>Day, Date</Text>
+        <Text>Module</Text>
+        <Text>Status</Text>
+      </View>
+    ))}
+    <TouchableOpacity style={styles.smallButton}><Text>Reason for override</Text></TouchableOpacity>
+  </View>
+);
+
+const LecturerCalendar = () => (
+  <View style={styles.centeredContainer}>
+    <Text style={styles.header}>Calendar</Text>
+    <View style={styles.card}><Text style={styles.cardText}>calendar</Text></View>
+    <TouchableOpacity style={styles.smallButton}><Text>save changes</Text></TouchableOpacity>
+    <TouchableOpacity style={styles.smallButton}><Text>discard changes</Text></TouchableOpacity>
+  </View>
+);
+
+const MainTabs: React.FC = () => {
+  const route = useRoute<RouteProp<RootTabParamList, 'Main'>>();
+  const { role } = route.params;
+//const role = route?.params?.role ?? 'lecturer'; // fallback to 'lecturer'
+
+
+  return (
+    <Tab.Navigator screenOptions={{ headerShown: false }}>
+      {role === 'student' ? (
+        <>
+          <Tab.Screen name="Dashboard" component={StudentDashboard} />
+          <Tab.Screen name="Card" component={StudentCard} />
+          <Tab.Screen name="Report" component={StudentReport} />
+          <Tab.Screen name="Calendar" component={StudentCalendar} />
+        </>
+      ) : (
+        <>
+          <Tab.Screen name="Dashboard" component={LecturerDashboard} />
+          <Tab.Screen name="LecturerCard" component={LecturerCard} />
+          <Tab.Screen name="Report" component={LecturerReport} />
+          <Tab.Screen name="Calendar" component={LecturerCalendar} />
+        </>
+      )}
+    </Tab.Navigator>
+  );
+};
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Main" component={MainTabs} />
-      </Stack.Navigator>
+      <StackNav.Navigator screenOptions={{ headerShown: false }}>
+        <StackNav.Screen name="Login" component={LoginScreen} />
+        <StackNav.Screen name="Main" component={MainTabs} />
+      </StackNav.Navigator>
     </NavigationContainer>
   );
 }
@@ -149,11 +215,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-  },
-  linkText: {
-    fontSize: 16,
-    color: 'blue',
-    marginTop: 12,
   },
   reportRow: {
     flexDirection: 'row',
