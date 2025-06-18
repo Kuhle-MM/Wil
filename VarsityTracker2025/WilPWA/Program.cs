@@ -1,3 +1,7 @@
+using WilPWA.Models;
+using WilPWA.Services;
+using static WilPWA.Services.AccountServices;
+
 namespace WilPWA
 {
     public class Program
@@ -9,13 +13,32 @@ namespace WilPWA
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddProgressiveWebApp();
+
+            // Add Session support
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession();
+
+            builder.Services.AddScoped<StudentServices>();
+
+            // Register AccountServices
+            builder.Services.AddScoped<AccountServices>();
+
+            // Register HttpClient with base API URL
+            builder.Services.AddHttpClient<AccountServices>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7276/");
+            });
+            builder.Services.AddHttpClient<StudentServices>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7276/");
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -23,6 +46,9 @@ namespace WilPWA
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            // Add session middleware before authorization
+            app.UseSession();
 
             app.UseAuthorization();
 

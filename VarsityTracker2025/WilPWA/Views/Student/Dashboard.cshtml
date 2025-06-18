@@ -5,74 +5,80 @@
 <!-- Custom Styles -->
 <style>
     body {
-        background-image: url('/images/dashboard-bg.jpg');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        font-family: 'Segoe UI', sans-serif;
+    background-image: url('/images/dashboard-bg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', sans-serif;
     }
 
     .dashboard-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 30px;
-        justify-content: center;
-        padding: 50px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    padding: 50px 20px;
     }
 
     .dashboard-card {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 20px;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        width: 300px;
-        overflow: hidden;
-        text-align: center;
-        transition: transform 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease;
     }
 
     .dashboard-card:hover {
-        transform: scale(1.05);
+    transform: scale(1.05);
     }
 
     .dashboard-card img {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
     }
 
     .dashboard-card h3 {
-        margin: 15px 0 10px;
+    margin: 15px 0 10px;
     }
 
     .dashboard-card p {
-        padding: 0 20px 20px;
-        color: #444;
+    padding: 0 20px 20px;
+    color: #444;
     }
 </style>
+@if(LoggedInUser.Role == "Student")
+{
+    <h1 style="text-align:center; color:white; text-shadow: 1px 1px 5px black;">Welcome to Student Dashboard</h1>
 
-<h1 style="text-align:center; color:white; text-shadow: 1px 1px 5px black;">Welcome to Student Dashboard</h1>
+    <div class="dashboard-container">
 
-<div class="dashboard-container">
+        <div class="dashboard-card">
+            <img src="/images/modules.jpg" alt="Modules">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Modules">Modules</a>
+            @* <h3>Today's Modules</h3> *@
+            <p>Stay up to date with your current learning modules.</p>
+        </div>
 
-    <div class="dashboard-card">
-        <img src="/images/modules.jpg" alt="Modules">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Modules">Modules</a>
-        @* <h3>Today's Modules</h3> *@
-        <p>Stay up to date with your current learning modules.</p>
+        <div class="dashboard-card">
+            <img src="/images/attendance.jpg" alt="Attendance">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Attendance">Attendance</a>
+            @* <h3>Attendance</h3> *@
+            <p>Check your attendance stats and stay on track.</p>
+        </div>
+
+        <div class="dashboard-card">
+            <img src="/images/reports.jpg" alt="Reports">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="ReportList">Report</a>
+            @*  <h3>Activities</h3> *@
+            <p>Join exciting activities to boost your learning experience!</p>
+        </div>
+
     </div>
-
-    <div class="dashboard-card">
-        <img src="/images/attendance.jpg" alt="Attendance">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Attendance">Attendance</a>
-        @* <h3>Attendance</h3> *@
-        <p>Check your attendance stats and stay on track.</p>
-    </div>
-
-    <div class="dashboard-card">
-        <img src="/images/reports.jpg" alt="Reports">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="ReportList">Report</a>
-       @*  <h3>Activities</h3> *@
-        <p>Join exciting activities to boost your learning experience!</p>
-    </div>
-
-</div>
+}
+else
+{
+    <h1>You do not have access to this page.</h1>
+}

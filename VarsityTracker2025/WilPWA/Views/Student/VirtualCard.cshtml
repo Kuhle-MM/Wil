@@ -1,0 +1,33 @@
+﻿@model WilPWA.Models.Students
+
+
+
+@if (LoggedInUser.Role == "Student")
+{
+    <h1>@ViewData["Title"]</h1>
+
+    <div class="virtual-card">
+        <h2>Virtual Card Details</h2>
+        <p><strong>Student Number:</strong> @Model.studentNumber</p>
+        <p><strong>Name:</strong> @Model.firstName @Model.lastName</p>
+        <p><strong>Email:</strong> @Model.studentEmail</p>
+        <p><strong>Qualification:</strong> @Model.qualification</p>
+        <p><strong>Phone Number:</strong> @Model.phoneNumber</p>
+    </div>
+
+    <form method="post" action="@Url.Action("ClockIn", "Student")">
+        <input type="hidden" name="studentNumber" value="@Model.studentNumber" />
+        <button type="submit" class="btn btn-primary">Clock In</button>
+    </form>
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-success mt-3">
+            @ViewBag.Message
+        </div>
+    }
+}
+else
+{
+    <h1>You do not have access to this page.</h1>
+}
