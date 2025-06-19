@@ -1,9 +1,9 @@
 // App.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, TextInput } from 'react-native';
 
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -13,13 +13,18 @@ const StackNav = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from './types';
+import AuthScreen from './AuthScreen';
+import AuthScreenLec from './AuthScreenLect.tsx';
+import LecturersDashboard from './LecturerDashboard.tsx';
+import StudentsDashboard from './StudentDashboard';
+import StudentsCalandar from './StudentsCalendar';
+import StudentsReports from './StudentsReports'
+import AuthScreenLect from './AuthScreenLect.tsx';
 
 const Stack = createNativeStackNavigator<RootTabParamList>();
 
 type LoginScreenNavigationProp = BottomTabNavigationProp<RootTabParamList, 'Login'>;
 type MainScreenRouteProp = RouteProp<RootTabParamList, 'Main'>;
-
-
 // Login Screen with role selection
 const LoginScreen: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootTabParamList>>();
@@ -27,18 +32,17 @@ const LoginScreen: React.FC = () => {
   return (
     <View style={styles.centeredContainer}>
       <Text style={styles.logo}>tapify</Text>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Main', { role: 'student' })}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Auth', { role: 'student' })}>
         <Text style={styles.buttonText}>Login as Student</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Main', { role: 'lecturer' })}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AuthLecturer', { role: 'lecturer' })}>
         <Text style={styles.buttonText}>Login as Lecturer</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-
-// Placeholder student screens
+/* // Placeholder student screens
 const StudentDashboard = () => (
   <View style={styles.scrollContainer}>
     <Text style={styles.header}>Dashboard</Text>
@@ -49,7 +53,7 @@ const StudentDashboard = () => (
     <TouchableOpacity style={styles.smallButton}><Text>report overview</Text></TouchableOpacity>
     <TouchableOpacity style={styles.smallButton}><Text>get calendar</Text></TouchableOpacity>
   </View>
-);
+); */
 
 const StudentCard = () => (
   <View style={styles.centeredContainer}>
@@ -58,7 +62,7 @@ const StudentCard = () => (
   </View>
 );
 
-const StudentReport  = () => (
+/* const StudentReport  = () => (
   <View style={styles.scrollContainer}>
     <Text style={styles.header}>Report</Text>
     <Text style={styles.subHeader}>MONTH ▼</Text>
@@ -66,7 +70,7 @@ const StudentReport  = () => (
     <View style={styles.reportRow}><Text>Day, Date</Text><Text>Module</Text><Text>Status</Text></View>
     <View style={styles.reportRow}><Text>Day, Date</Text><Text>Module</Text><Text>Status</Text></View>
   </View>
-);
+); */
 
 const StudentCalendar = () => (
   <View style={styles.centeredContainer}>
@@ -118,19 +122,21 @@ const LecturerCalendar = () => (
   </View>
 );
 
+type MainTabsProps = {
+  route: RouteProp<RootTabParamList, 'Main'>;
+};
+
 const MainTabs: React.FC = () => {
   const route = useRoute<RouteProp<RootTabParamList, 'Main'>>();
   const { role } = route.params;
-//const role = route?.params?.role ?? 'lecturer'; // fallback to 'lecturer'
-
 
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
       {role === 'student' ? (
         <>
-          <Tab.Screen name="Dashboard" component={StudentDashboard} />
+          <Tab.Screen name="Dashboard" component={StudentsDashboard} />
           <Tab.Screen name="Card" component={StudentCard} />
-          <Tab.Screen name="Report" component={StudentReport} />
+          <Tab.Screen name="Report" component={StudentsReports} />
           <Tab.Screen name="Calendar" component={StudentCalendar} />
         </>
       ) : (
@@ -150,12 +156,16 @@ export default function App() {
     <NavigationContainer>
       <StackNav.Navigator screenOptions={{ headerShown: false }}>
         <StackNav.Screen name="Login" component={LoginScreen} />
-        <StackNav.Screen name="Main" component={MainTabs} />
+        <StackNav.Screen name="Auth" component={AuthScreen} /> 
+        <StackNav.Screen name="AuthLecturer" component={AuthScreenLect} />
+        <StackNav.Screen name="Main" component={StudentsDashboard} />
+        <StackNav.Screen name="Calendar" component={StudentsCalandar} />
+        <StackNav.Screen name="Report" component={StudentsReports} />        
+        <StackNav.Screen name="MainLecturer" component={LecturersDashboard} />
       </StackNav.Navigator>
     </NavigationContainer>
   );
 }
-
 const styles = StyleSheet.create({
   centeredContainer: {
     flex: 1,
@@ -222,5 +232,29 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+  },
+  
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  roleSelector: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 12,
+  },
+  roleButton: {
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 8,
+    width: '48%',
+    alignItems: 'center',
+  },
+  roleSelected: {
+    backgroundColor: '#cce5ff',
+    borderColor: '#007bff',
   },
 });
