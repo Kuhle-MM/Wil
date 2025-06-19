@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VarsityTrackerApi", "VarsityTrackerApi\VarsityTrackerApi.csproj", "{A00E2B42-846C-4F8B-9B52-044493DF5E9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WilPWA", "WilPWA\WilPWA.csproj", "{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A00E2B42-846C-4F8B-9B52-044493DF5E9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A00E2B42-846C-4F8B-9B52-044493DF5E9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A00E2B42-846C-4F8B-9B52-044493DF5E9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A00E2B42-846C-4F8B-9B52-044493DF5E9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CC0FC2D-CC53-6D5D-88E0-18B9D8343D34}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F1892635-3DEC-42A4-AFE7-61ACA3CB4E02}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,43 @@
+﻿﻿@{
+    ViewData["Title"] = "Welcome";
+}
+
+<div class="welcome-wrapper">
+    <header class="header">
+        <div class="logo">Tapify</div>
+        <div class="burger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <nav class="nav-links" id="navMenu">
+            <a asp-controller="Account" asp-action="Login">Login</a>
+            <a asp-controller="Account" asp-action="Register">Register</a>
+        </nav>
+    </header>
+
+    <div class="background-pattern">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+
+    <main class="welcome-content">
+        <div class="app-name-box">Tapify</div>
+        <a class="btn btn-login" asp-controller="Account" asp-action="Login">login</a>
+        <a class="btn btn-register" asp-controller="Account" asp-action="Register">register</a>
+    </main>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('open');
+        }
+    </script>
+}
