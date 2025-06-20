@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WilPWA")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dedd911c8382e820c619b2a65f1989f7a685211f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b2dce891e596345040405ede87dc64bd80d256e5")]
 [assembly: System.Reflection.AssemblyProductAttribute("WilPWA")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WilPWA")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

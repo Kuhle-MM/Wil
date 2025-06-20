@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "Hk8KcVzTCOc=",
+  "dgSpecHash": "e2h5SmBYOxU=",
   "success": true,
-  "projectFilePath": "C:\\Users\\kelly\\OneDrive\\Desktop\\Wil\\VarsityTracker2025\\WilPWA\\WilPWA.csproj",
+  "projectFilePath": "C:\\Users\\lab_services_student\\Source\\Repos\\Wil\\VarsityTracker2025\\WilPWA\\WilPWA.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\kelly\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
-    "C:\\Users\\kelly\\.nuget\\packages\\webessentials.aspnetcore.pwa\\1.0.85\\webessentials.aspnetcore.pwa.1.0.85.nupkg.sha512"
+    "C:\\Users\\lab_services_student\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\lab_services_student\\.nuget\\packages\\webessentials.aspnetcore.pwa\\1.0.85\\webessentials.aspnetcore.pwa.1.0.85.nupkg.sha512"
   ],
   "logs": []
 }

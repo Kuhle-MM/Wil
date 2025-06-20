@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\lab_services_student\\Source\\Repos\\Wil\\QrCodeAPI\\wwwroot\\image\\TempLogo.jpg",
+      "PackagePath": "staticwebassets\\image\\TempLogo.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.QrCodeAPI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.QrCodeAPI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.QrCodeAPI.props",
+      "PackagePath": "build\\QrCodeAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.QrCodeAPI.props",
+      "PackagePath": "buildMultiTargeting\\QrCodeAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.QrCodeAPI.props",
+      "PackagePath": "buildTransitive\\QrCodeAPI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

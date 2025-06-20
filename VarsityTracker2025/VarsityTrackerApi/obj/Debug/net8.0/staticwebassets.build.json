@@ -1,12 +1,20 @@
 {
   "Version": 1,
-  "Hash": "IA6bWkG1ZxnKjI522WgOw0o8nNZizORwpytXG7/Edaw=",
+  "Hash": "zhV1xCI47jmT0i4Z0572pvBE8MxcMJZm+f1XQq32350=",
   "Source": "VarsityTrackerApi",
   "BasePath": "_content/VarsityTrackerApi",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "VarsityTrackerApi\\wwwroot",
+      "Source": "VarsityTrackerApi",
+      "ContentRoot": "C:\\Users\\lab_services_student\\Source\\Repos\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\wwwroot\\",
+      "BasePath": "_content/VarsityTrackerApi",
+      "Pattern": "**"
+    }
+  ],
   "Assets": [],
   "Endpoints": []
 }

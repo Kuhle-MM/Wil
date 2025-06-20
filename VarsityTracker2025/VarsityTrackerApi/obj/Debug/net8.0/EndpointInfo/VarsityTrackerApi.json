@@ -222,6 +222,125 @@
         }
       }
     },
+    "/api/StudentClocking/clockin/{studentNumber}": {
+      "post": {
+        "tags": [
+          "StudentClocking"
+        ],
+        "parameters": [
+          {
+            "name": "studentNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/StudentClocking/clockout/{studentNumber}": {
+      "post": {
+        "tags": [
+          "StudentClocking"
+        ],
+        "parameters": [
+          {
+            "name": "studentNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/StudentClocking/report/{studentNumber}": {
+      "get": {
+        "tags": [
+          "StudentClocking"
+        ],
+        "parameters": [
+          {
+            "name": "studentNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/GenerateQRCode": {
+      "get": {
+        "tags": [
+          "VarsityTrackerApi"
+        ],
+        "operationId": "GetQrCode",
+        "parameters": [
+          {
+            "name": "text",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/DecodeQRCode": {
+      "post": {
+        "tags": [
+          "VarsityTrackerApi"
+        ],
+        "operationId": "DecodeQRCode",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QRCodeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/WeatherForecast": {
       "get": {
         "tags": [
@@ -336,6 +455,16 @@
         },
         "additionalProperties": false
       },
+      "QRCodeRequest": {
+        "type": "object",
+        "properties": {
+          "base64Image": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Students": {
         "type": "object",
         "properties": {
@@ -351,11 +480,19 @@
             "type": "string",
             "nullable": true
           },
+          "studentCardId": {
+            "type": "string",
+            "nullable": true
+          },
           "firstName": {
             "type": "string",
             "nullable": true
           },
           "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "qualification": {
             "type": "string",
             "nullable": true
           },

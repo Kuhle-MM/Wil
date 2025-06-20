@@ -1,0 +1,125 @@
+{
+  "Version": 1,
+  "Hash": "/gLt5nOpNPepbvm57VUEm61n8JaOKsFbW0PZ5iOVaro=",
+  "Source": "QrCodeAPI",
+  "BasePath": "_content/QrCodeAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "QrCodeAPI\\wwwroot",
+      "Source": "QrCodeAPI",
+      "ContentRoot": "C:\\Users\\lab_services_student\\Source\\Repos\\Wil\\QrCodeAPI\\wwwroot\\",
+      "BasePath": "_content/QrCodeAPI",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\lab_services_student\\Source\\Repos\\Wil\\QrCodeAPI\\wwwroot\\image\\TempLogo.jpg",
+      "SourceId": "QrCodeAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\lab_services_student\\Source\\Repos\\Wil\\QrCodeAPI\\wwwroot\\",
+      "BasePath": "_content/QrCodeAPI",
+      "RelativePath": "image/TempLogo#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "adtjj3ac26",
+      "Integrity": "bpogRqi7pzwZVBC3AR+EbDQRtrPxiAWIakm0Cfh/dRM=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\image\\TempLogo.jpg"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "image/TempLogo.adtjj3ac26.jpg",
+      "AssetFile": "C:\\Users\\lab_services_student\\Source\\Repos\\Wil\\QrCodeAPI\\wwwroot\\image\\TempLogo.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "19376"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"bpogRqi7pzwZVBC3AR+EbDQRtrPxiAWIakm0Cfh/dRM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 05 Jun 2025 07:26:40 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "adtjj3ac26"
+        },
+        {
+          "Name": "label",
+          "Value": "image/TempLogo.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-bpogRqi7pzwZVBC3AR+EbDQRtrPxiAWIakm0Cfh/dRM="
+        }
+      ]
+    },
+    {
+      "Route": "image/TempLogo.jpg",
+      "AssetFile": "C:\\Users\\lab_services_student\\Source\\Repos\\Wil\\QrCodeAPI\\wwwroot\\image\\TempLogo.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "19376"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"bpogRqi7pzwZVBC3AR+EbDQRtrPxiAWIakm0Cfh/dRM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 05 Jun 2025 07:26:40 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-bpogRqi7pzwZVBC3AR+EbDQRtrPxiAWIakm0Cfh/dRM="
+        }
+      ]
+    }
+  ]
+}
