@@ -98,6 +98,37 @@
         }
       }
     },
+    "/Access/login_admin": {
+      "post": {
+        "tags": [
+          "Access"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/Access/get_details_students": {
       "get": {
         "tags": [
@@ -288,6 +319,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "/GenerateQRCode": {
       "get": {
         "tags": [
@@ -298,6 +330,55 @@
           {
             "name": "text",
             "in": "query",
+=======
+    "/api/StudentClocking/report/getAll": {
+      "get": {
+        "tags": [
+          "StudentClocking"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AttendanceRecord"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AttendanceRecord"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AttendanceRecord"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/StudentClocking/lecturer/clockin/{lecturerID}": {
+      "post": {
+        "tags": [
+          "StudentClocking"
+        ],
+        "parameters": [
+          {
+            "name": "lecturerID",
+            "in": "path",
+>>>>>>> 85ce11a64b22daffd16273efcb3889e6b55c2c55
             "required": true,
             "schema": {
               "type": "string"
@@ -306,6 +387,7 @@
         ],
         "responses": {
           "200": {
+<<<<<<< HEAD
             "description": "OK",
             "content": {
               "text/plain": {
@@ -314,10 +396,14 @@
                 }
               }
             }
+=======
+            "description": "OK"
+>>>>>>> 85ce11a64b22daffd16273efcb3889e6b55c2c55
           }
         }
       }
     },
+<<<<<<< HEAD
     "/DecodeQRCode": {
       "post": {
         "tags": [
@@ -334,6 +420,23 @@
           },
           "required": true
         },
+=======
+    "/api/StudentClocking/lecturer/clockout/{lecturerID}": {
+      "post": {
+        "tags": [
+          "StudentClocking"
+        ],
+        "parameters": [
+          {
+            "name": "lecturerID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+>>>>>>> 85ce11a64b22daffd16273efcb3889e6b55c2c55
         "responses": {
           "200": {
             "description": "OK"
@@ -383,6 +486,56 @@
   },
   "components": {
     "schemas": {
+      "AttendanceRecord": {
+        "type": "object",
+        "properties": {
+          "partitionKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "rowKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "studentNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "studentEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "clockInTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "clockOutTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "totalDuration": {
+            "type": "string",
+            "format": "date-span",
+            "nullable": true,
+            "readOnly": true
+          },
+          "eTag": {
+            "$ref": "#/components/schemas/ETag"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ETag": {
         "type": "object",
         "additionalProperties": false
@@ -395,10 +548,6 @@
             "nullable": true
           },
           "lecturerEmail": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumber": {
             "type": "string",
             "nullable": true
           },
@@ -476,7 +625,7 @@
             "type": "string",
             "nullable": true
           },
-          "phoneNumber": {
+          "studentCardId": {
             "type": "string",
             "nullable": true
           },
@@ -543,10 +692,6 @@
             "nullable": true
           },
           "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumber": {
             "type": "string",
             "nullable": true
           }

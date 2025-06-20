@@ -1,0 +1,41 @@
+﻿@{
+
+    ViewData["Title"] = "Dashboard";
+
+}
+
+@if (LoggedInUser.Role == "Lecturer")
+
+{
+<h1 style="text-align:center; color:white; text-shadow: 1px 1px 5px black;">Welcome to the Lecture Dashboard</h1>
+
+<div class="dashboard-container">
+    <div class="dashboard-card">
+        <img src="/images/lecturer1.jpg" alt="Set module">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Lecturer" asp-action="Card">Set Module</a>
+        <p>View and manage your lecture cards and schedules.</p>
+    </div>
+
+    <div class="dashboard-card">
+        <img src="/images/reportlect.jpg" alt="Check student progress">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Lecturer" asp-action="Progress">Check student progress</a>
+        <p>Monitor your teaching progress and milestones.</p>
+    </div>
+        <div class="dashboard-card">
+            <img src="/images/reportlect.jpg" alt="Check student progress">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Lecturer" asp-action="Attendance">Clock-In</a>
+            <p>Clock in and out</p>
+        </div>
+    <div class="dashboard-card">
+        <img src="/images/studenttracking.jpg" alt="Report">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Lecturer" asp-action="Report">Report</a>
+        <p>Access reports and analytics for your lectures.</p>
+    </div>
+
+</div>
+
+}
+else
+{
+    <h1>You do not have access to this page.</h1>
+}

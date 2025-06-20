@@ -1,0 +1,41 @@
+﻿﻿@if (UserAttendance.ClockInTime == null)
+{
+    <div class="wrapper">
+        <h1>Clock In</h1>
+
+        @if (!string.IsNullOrEmpty(ViewBag.Success as string))
+        {
+            <div class="alert alert-success">@ViewBag.Success</div>
+        }
+
+        @if (!string.IsNullOrEmpty(ViewBag.Error as string))
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+        <form method="post" asp-action="ClockIn" asp-controller="Lecturer">
+            <button type="submit">Clock In</button>
+        </form>
+    </div>
+}
+
+else
+{
+    <div class="wrapper">
+        <h1>Clock Out</h1>
+
+        @if (!string.IsNullOrEmpty(ViewBag.Success as string))
+        {
+            <div class="alert alert-success">@ViewBag.Success</div>
+        }
+
+        @if (!string.IsNullOrEmpty(ViewBag.Error as string))
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+        <form method="post" asp-action="ClockOut" asp-controller="Lecturer">
+            <button type="submit">Clock Out</button>
+        </form>
+    </div>
+}

@@ -87,6 +87,7 @@ C:\Users\kelly\OneDrive\Desktop\Wil\Wil\VarsityTracker2025\VarsityTrackerApi\obj
 C:\Users\kelly\OneDrive\Desktop\Wil\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.pdb
 C:\Users\kelly\OneDrive\Desktop\Wil\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.genruntimeconfig.cache
 C:\Users\kelly\OneDrive\Desktop\Wil\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\ref\VarsityTrackerApi.dll
+<<<<<<< HEAD
 C:\Users\lab_services_student\Source\Repos\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\lab_services_student\Source\Repos\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\appsettings.json
 C:\Users\lab_services_student\Source\Repos\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.staticwebassets.endpoints.json
@@ -141,3 +142,140 @@ C:\Users\lab_services_student\Source\Repos\Wil\VarsityTracker2025\VarsityTracker
 C:\Users\lab_services_student\Source\Repos\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.genruntimeconfig.cache
 C:\Users\lab_services_student\Source\Repos\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\ref\VarsityTrackerApi.dll
 C:\Users\lab_services_student\Source\Repos\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.staticwebassets.runtime.json
+=======
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\appsettings.json
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.staticwebassets.endpoints.json
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.exe
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.deps.json
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.runtimeconfig.json
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.pdb
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Azure.Core.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Azure.Data.Tables.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\BCrypt.Net-Next.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\System.ClientModel.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\System.Memory.Data.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.csproj.AssemblyReference.cache
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.AssemblyInfoInputs.cache
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.AssemblyInfo.cs
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.csproj.CoreCompileInputs.cache
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.sourcelink.json
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\scopedcss\bundle\VarsityTrackerApi.styles.css
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.VarsityTrackerApi.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.VarsityTrackerApi.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.build.VarsityTrackerApi.props
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.VarsityTrackerApi.props
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.VarsityTrackerApi.props
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.pack.json
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityT.1D2A8CD8.Up2Date
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\refint\VarsityTrackerApi.dll
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.pdb
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.genruntimeconfig.cache
+C:\Users\lab_services_student\Documents\GitHub\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\ref\VarsityTrackerApi.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\appsettings.json
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.staticwebassets.endpoints.json
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.exe
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.deps.json
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.runtimeconfig.json
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.pdb
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Azure.Core.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Azure.Data.Tables.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\BCrypt.Net-Next.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\System.ClientModel.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\System.Memory.Data.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.csproj.AssemblyReference.cache
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.AssemblyInfoInputs.cache
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.AssemblyInfo.cs
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.csproj.CoreCompileInputs.cache
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.sourcelink.json
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\scopedcss\bundle\VarsityTrackerApi.styles.css
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.VarsityTrackerApi.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.VarsityTrackerApi.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.build.VarsityTrackerApi.props
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.VarsityTrackerApi.props
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.VarsityTrackerApi.props
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.pack.json
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityT.1D2A8CD8.Up2Date
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\refint\VarsityTrackerApi.dll
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.pdb
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.genruntimeconfig.cache
+C:\Users\kelly\OneDrive\Desktop\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\ref\VarsityTrackerApi.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\appsettings.json
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.staticwebassets.endpoints.json
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.exe
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.deps.json
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.runtimeconfig.json
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\VarsityTrackerApi.pdb
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Azure.Core.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Azure.Data.Tables.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\BCrypt.Net-Next.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\System.ClientModel.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\bin\Debug\net8.0\System.Memory.Data.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.csproj.AssemblyReference.cache
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.AssemblyInfoInputs.cache
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.AssemblyInfo.cs
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.csproj.CoreCompileInputs.cache
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.sourcelink.json
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\scopedcss\bundle\VarsityTrackerApi.styles.css
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.VarsityTrackerApi.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.VarsityTrackerApi.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.build.VarsityTrackerApi.props
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.VarsityTrackerApi.props
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.VarsityTrackerApi.props
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.pack.json
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityT.1D2A8CD8.Up2Date
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\refint\VarsityTrackerApi.dll
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.pdb
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\VarsityTrackerApi.genruntimeconfig.cache
+C:\Users\kelly\OneDrive\Desktop\Wil Files\New folder\Wil\VarsityTracker2025\VarsityTrackerApi\obj\Debug\net8.0\ref\VarsityTrackerApi.dll
+>>>>>>> 85ce11a64b22daffd16273efcb3889e6b55c2c55

@@ -49,7 +49,23 @@
   },
   {
     "ContainingType": "VarsityTrackerApi.Controllers.AccessController",
-    "Method": "Login_lecturer",
+    "Method": "Login_Admin",
+    "RelativePath": "Access/login_admin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "VarsityTrackerApi.Models.LoginModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VarsityTrackerApi.Controllers.AccessController",
+    "Method": "Login_Lecturer",
     "RelativePath": "Access/login_lecturer",
     "HttpMethod": "POST",
     "IsController": true,
@@ -155,6 +171,41 @@
   },
   {
     "ContainingType": "VarsityTrackerApi.Controllers.StudentClockingController",
+<<<<<<< HEAD
+=======
+    "Method": "ClockInLecturer",
+    "RelativePath": "api/StudentClocking/lecturer/clockin/{lecturerID}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "lecturerID",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VarsityTrackerApi.Controllers.StudentClockingController",
+    "Method": "ClockOutLecturer",
+    "RelativePath": "api/StudentClocking/lecturer/clockout/{lecturerID}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "lecturerID",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "VarsityTrackerApi.Controllers.StudentClockingController",
+>>>>>>> 85ce11a64b22daffd16273efcb3889e6b55c2c55
     "Method": "GetAttendanceReport",
     "RelativePath": "api/StudentClocking/report/{studentNumber}",
     "HttpMethod": "GET",
@@ -170,6 +221,7 @@
     "ReturnTypes": []
   },
   {
+<<<<<<< HEAD
     "ContainingType": "VarsityTrackerApi.Program\u002B\u003C\u003Ec",
     "Method": "\u003CMain\u003Eb__0_1",
     "RelativePath": "DecodeQRCode",
@@ -216,6 +268,26 @@
       }
     ],
     "EndpointName": "GetQrCode"
+=======
+    "ContainingType": "VarsityTrackerApi.Controllers.StudentClockingController",
+    "Method": "GetAllUsersAsync",
+    "RelativePath": "api/StudentClocking/report/getAll",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[VarsityTrackerApi.Models.AttendanceRecord, VarsityTrackerApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+>>>>>>> 85ce11a64b22daffd16273efcb3889e6b55c2c55
   },
   {
     "ContainingType": "VarsityTrackerApi.Controllers.WeatherForecastController",

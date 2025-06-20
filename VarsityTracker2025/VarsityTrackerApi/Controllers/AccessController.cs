@@ -17,12 +17,14 @@ namespace VarsityTrackerApi.Controllers
         private readonly TableClient _lecturerTable;
         private readonly string _connectionString;
         private readonly TableClient _studentTable;
+        private readonly TableClient _adminTable;
 
         public AccessController(IOptions<AzureTableStorageSettings> storageOptions)
         {
             _connectionString = storageOptions.Value.ConnectionString;
             _lecturerTable = new TableClient(_connectionString, "Lecturers");
             _studentTable = new TableClient(_connectionString, "Students");
+            _adminTable = new TableClient(_connectionString, "Admins");
         }
 
         [HttpPost("create")]
@@ -54,8 +56,7 @@ namespace VarsityTrackerApi.Controllers
                         firstName = user.firstName,
                         lastName = user.lastName,
                         qualification = string.Empty,
-                        phoneNumber = user.phoneNumber,
-                        lecturerID = user.email.Substring(0, user.email.IndexOf("@")).ToUpper(),
+                        lecturerID = user.email.Substring(0, user.email.IndexOf("@")).ToLower(),
                         role = "Lecturer"
                     };
 
@@ -88,8 +89,8 @@ namespace VarsityTrackerApi.Controllers
                         password = PasswordHelper.HashPassword(user.password),
                         firstName = user.firstName,
                         lastName = user.lastName,
-                        phoneNumber = user.phoneNumber,
                         studentNumber = user.email.Substring(0, user.email.IndexOf("@")).ToUpper(),
+                        StudentCardId = user.email.Substring(0, user.email.IndexOf("@")).ToUpper(),
                         role = "Student"
                     };
 
@@ -101,32 +102,65 @@ namespace VarsityTrackerApi.Controllers
                     return StatusCode(500, $"Error saving Student: {ex.Message}");
                 }
             }
+            else if(role == "admin"){
+                try
+                {
+                    // Check if a student with the same email already exists
+                    await foreach (var existingAdmin in _adminTable.QueryAsync<Admin>())
+                    {
+                        if (existingAdmin.adminEmail == user.email)
+                        {
+                            return BadRequest($"{user.email} already exists in the system.");
+                        }
+                    }
+
+                    var admin = new Admin
+                    {
+                        PartitionKey = "Admins",
+                        RowKey = Guid.NewGuid().ToString(),
+                        adminEmail = user.email.ToLower(),
+                        password = PasswordHelper.HashPassword(user.password),
+                        firstName = user.firstName,
+                        lastName = user.lastName,
+                        adminID = user.email.Substring(0, user.email.IndexOf("@")).ToUpper(),
+                        role = "Admin"
+                    };
+
+                    await _adminTable.AddEntityAsync(admin);
+                    return Ok($"Admin with email: {user.email} created successfully.");
+                }
+                catch (RequestFailedException ex)
+                {
+                    return StatusCode(500, $"Error saving Admin: {ex.Message}");
+                }
+            }
             else
             {
-                return BadRequest("Invalid role. Must be either 'Student' or 'Lecturer'.");
+                return BadRequest("Invalid role. Must be either 'Admin', 'Student' or 'Lecturer'.");
             }
         }
 
         [HttpPost("login_student")]
         public async Task<IActionResult> Login_Student(LoginModel user)
         {
+            if (string.IsNullOrWhiteSpace(user.email) || string.IsNullOrWhiteSpace(user.password))
+                return BadRequest("Email and password are required.");
+
             Students foundStudent = null;
 
-            // Search for the student by email
-            await foreach (var s in _studentTable.QueryAsync<Students>())
+            var query = _studentTable.QueryAsync<Students>(filter: $"PartitionKey eq 'Students'");
+            await foreach (var s in query)
             {
-                if (s.studentEmail == user.email)
+                if (string.Equals(s.studentEmail, user.email, StringComparison.OrdinalIgnoreCase))
                 {
                     foundStudent = s;
                     break;
                 }
             }
 
-            // Email not found
             if (foundStudent == null)
                 return NotFound("User not found.");
 
-            // Check password
             bool passwordValid;
             try
             {
@@ -140,30 +174,30 @@ namespace VarsityTrackerApi.Controllers
             if (!passwordValid)
                 return BadRequest("Incorrect password.");
 
-            // Login successful
-            return Ok("User logged in.");
+            return Ok(new { message = "User logged in." });
         }
 
         [HttpPost("login_lecturer")]
-        public async Task<IActionResult> Login_lecturer(LoginModel user)
+        public async Task<IActionResult> Login_Lecturer(LoginModel user)
         {
+            if (string.IsNullOrWhiteSpace(user.email) || string.IsNullOrWhiteSpace(user.password))
+                return BadRequest("Email and password are required.");
+
             Lecturers foundLecturer = null;
 
-            // Search for the student by email
-            await foreach (var s in _lecturerTable.QueryAsync<Lecturers>())
+            var query = _lecturerTable.QueryAsync<Lecturers>(filter: $"PartitionKey eq 'Lecturers'");
+            await foreach (var l in query)
             {
-                if (s.lecturerEmail == user.email)
+                if (string.Equals(l.lecturerEmail, user.email, StringComparison.OrdinalIgnoreCase))
                 {
-                    foundLecturer = s;
+                    foundLecturer = l;
                     break;
                 }
             }
 
-            // Email not found
             if (foundLecturer == null)
                 return NotFound("User not found.");
 
-            // Check password
             bool passwordValid;
             try
             {
@@ -177,8 +211,43 @@ namespace VarsityTrackerApi.Controllers
             if (!passwordValid)
                 return BadRequest("Incorrect password.");
 
-            // Login successful
-            return Ok("User logged in.");
+            return Ok(new { message = "User logged in." });
+        }
+        [HttpPost("login_admin")]
+        public async Task<IActionResult> Login_Admin(LoginModel user)
+        {
+            if (string.IsNullOrWhiteSpace(user.email) || string.IsNullOrWhiteSpace(user.password))
+                return BadRequest("Email and password are required.");
+
+            Admin foundAdmin = null;
+
+            var query = _adminTable.QueryAsync<Admin>(filter: $"PartitionKey eq 'Admins'");
+            await foreach (var s in query)
+            {
+                if (string.Equals(s.adminEmail, user.email, StringComparison.OrdinalIgnoreCase))
+                {
+                    foundAdmin = s;
+                    break;
+                }
+            }
+
+            if (foundAdmin == null)
+                return NotFound("User not found.");
+
+            bool passwordValid;
+            try
+            {
+                passwordValid = PasswordHelper.VerifyPassword(user.password, foundAdmin.password);
+            }
+            catch
+            {
+                return BadRequest("Stored password format is invalid.");
+            }
+
+            if (!passwordValid)
+                return BadRequest("Incorrect password.");
+
+            return Ok(new { message = "User logged in." });
         }
 
         [HttpGet("get_details_students")]
@@ -227,7 +296,6 @@ namespace VarsityTrackerApi.Controllers
                     // Update properties
                     student.firstName = user.firstName;
                     student.lastName = user.lastName;
-                    student.phoneNumber = user.phoneNumber;
 
                     await _studentTable.UpdateEntityAsync(student, student.ETag, TableUpdateMode.Replace);
                     return NoContent(); // 204 Success
@@ -248,7 +316,6 @@ namespace VarsityTrackerApi.Controllers
                     // Update properties
                     lecturer.firstName = user.firstName;
                     lecturer.lastName = user.lastName;
-                    lecturer.phoneNumber = user.phoneNumber;
                     lecturer.qualification = user.qualification;
 
                     await _studentTable.UpdateEntityAsync(lecturer, lecturer.ETag, TableUpdateMode.Replace);

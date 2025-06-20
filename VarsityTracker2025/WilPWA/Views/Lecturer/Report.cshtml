@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Report Page";
+}
+@if(LoggedInUser.Role == "Lecturer")
+{
+<div class="student-list">
+    <h2>📋 Student Status List</h2>
+
+    <table class="student-table">
+        <thead>
+            <tr>
+                <th style="text-align: left;">Name</th>
+                <th style="text-align: left;">Surname</th>
+                <th style="text-align: left;">Student Number</th>
+                <th style="text-align: right;">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: left;">Aliziwe</td>
+                <td style="text-align: left;">Qeqe</td>
+                <td style="text-align: left;">ST10382076</td>
+                <td style="text-align: right;">
+                    <select class="status-dropdown pending" onchange="updateColor(this)">
+                        <option disabled selected>Pending</option>
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Aphiwe</td>
+                <td style="text-align: left;">Mhotwana</td>
+                <td style="text-align: left;">ST10085670</td>
+                <td style="text-align: right;">
+                    <select class="status-dropdown pending" onchange="updateColor(this)">
+                        <option disabled selected>Pending</option>
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Kuhle</td>
+                <td style="text-align: left;">Mlinganiso</td>
+                <td style="text-align: left;">ST10259861</td>
+                <td style="text-align: right;">
+                    <select class="status-dropdown pending" onchange="updateColor(this)">
+                        <option disabled selected>Pending</option>
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Hlumelo</td>
+                <td style="text-align: left;">Ntwanambi</td>
+                <td style="text-align: left;">ST10383786</td>
+                <td style="text-align: right;">
+                    <select class="status-dropdown pending" onchange="updateColor(this)">
+                        <option disabled selected>Pending</option>
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+}
+else
+{
+    <h1>You do not have access to this page.</h1>
+}

@@ -1,0 +1,122 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\lab_services_student\\source\\repos\\Wil\\VarsityTracker2025\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\source\\repos\\wil\\varsitytracker2025\\varsitytrackerapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\source\\repos\\wil\\varsitytracker2025\\varsitytrackerapi\\qrcode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\qrcode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\source\\repos\\wil\\varsitytracker2025\\varsitytrackerapi\\controllers\\clockingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\controllers\\clockingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\lab_services_student\\source\\repos\\Wil\\QrCodeAPI\\DecodeRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|c:\\users\\lab_services_student\\source\\repos\\wil\\varsitytracker2025\\varsitytrackerapi\\models\\qrcoderequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A00E2B42-846C-4F8B-9B52-044493DF5E9F}|VarsityTrackerApi\\VarsityTrackerApi.csproj|solutionrelative:varsitytrackerapi\\models\\qrcoderequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DecodeRequest.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\source\\repos\\Wil\\QrCodeAPI\\DecodeRequest.cs",
+              "RelativeDocumentMoniker": "..\\QrCodeAPI\\DecodeRequest.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\source\\repos\\Wil\\QrCodeAPI\\DecodeRequest.cs",
+              "RelativeToolTip": "..\\QrCodeAPI\\DecodeRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-18T11:33:34.621Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ClockingController.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\source\\repos\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\ClockingController.cs",
+              "RelativeDocumentMoniker": "VarsityTrackerApi\\Controllers\\ClockingController.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\source\\repos\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Controllers\\ClockingController.cs",
+              "RelativeToolTip": "VarsityTrackerApi\\Controllers\\ClockingController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-05T09:24:30.279Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "QRCodeRequest.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\source\\repos\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\QRCodeRequest.cs",
+              "RelativeDocumentMoniker": "VarsityTrackerApi\\Models\\QRCodeRequest.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\source\\repos\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Models\\QRCodeRequest.cs",
+              "RelativeToolTip": "VarsityTrackerApi\\Models\\QRCodeRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-05T09:12:56.159Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "QrCode.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\source\\repos\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\QrCode.cs",
+              "RelativeDocumentMoniker": "VarsityTrackerApi\\QrCode.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\source\\repos\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\QrCode.cs",
+              "RelativeToolTip": "VarsityTrackerApi\\QrCode.cs",
+              "ViewState": "AgIAAGAAAAAAAAAAAAAmwAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-05T09:11:43.731Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\source\\repos\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Program.cs",
+              "RelativeDocumentMoniker": "VarsityTrackerApi\\Program.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\source\\repos\\Wil\\VarsityTracker2025\\VarsityTrackerApi\\Program.cs",
+              "RelativeToolTip": "VarsityTrackerApi\\Program.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAuwC4AAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-05T09:10:24.281Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 249,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
