@@ -30,20 +30,20 @@ namespace AttendanceTrackerAPI.Controllers
         new Student
         {
             StudentId = 2,
-            Name = "Brian",
-            Surname = "Mokoena",
-            StudentCardId = "D4:56:BE:2C",
+            Name = "Kuhle",
+            Surname = "Mlinganiso",
+            StudentCardId = "97:16:4A:4F",
             Module = "Operating Systems",
             RegistrationDate = DateOnly.FromDateTime(DateTime.Today),
             Qualification = "BSc Information Systems",
-            Email = "brian.mokoena@student.edu"
+            Email = "Kuhle.Mlinganiso@student.edu"
         },
         new Student
         {
             StudentId = 3,
             Name = "Chloe",
             Surname = "Smith",
-            StudentCardId = "E3:99:CE:9A",
+            StudentCardId = "05:8B:7A:E3:CA:92:00",
             Module = "Software Engineering",
             RegistrationDate = DateOnly.FromDateTime(DateTime.Today),
             Qualification = "BSc Computer Science",
@@ -74,7 +74,7 @@ namespace AttendanceTrackerAPI.Controllers
     };
 
         [HttpGet("RetrieveStudent")]
-        public IActionResult RetrieveStudent(string studentCardId)
+        public IActionResult RetrieveStudent([FromQuery] string studentCardId)
         {
             try
             {
@@ -126,10 +126,45 @@ namespace AttendanceTrackerAPI.Controllers
 
         }
 
-        
+        //[HttpPost("StartLessonPeriod")]
+        //public IActionResult StartLessonPeriod(Lecturer lecturer, Module module)
+        //{
+
+        //    //setting the start Time
+        //    startTime = DateTime.UtcNow;
+
+
+        //    return
+        //}
+
+
+        [HttpGet("CheckIfStudentExists")]
+        public IActionResult CheckIfStudentExists([FromQuery] string studentCardId)
+        {
+
+            try
+            {
+
+                var student = studentsArray.FirstOrDefault(s => s.StudentCardId == studentCardId);//Replace the Array with the database
+                
+                bool exists = student != null;
+
+                return Ok(new { exists });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new
+                {
+                    message = "An error occurred while fetching users from the database.",
+                    error = ex.Message
+                });
+            }
+
+        }
+
 
         [HttpPut("AddStudentToList")]
-        public IActionResult AddStudentToList(string studentCardId)
+        public IActionResult AddStudentToList([FromBody] string studentCardId)
         {
             var student = new Student();
 
