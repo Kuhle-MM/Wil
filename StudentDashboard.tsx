@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import { useRoute, CommonActions, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
@@ -28,11 +29,36 @@ const StudentDashboard: React.FC = () => {
         <View style={styles.card}><Text>weekly attendance progress</Text></View>
         <TouchableOpacity style={styles.smallButton} onPress={handleReport}><Text>report overview</Text></TouchableOpacity>
         <TouchableOpacity style={styles.smallButton}  onPress={handleCalandar}><Text>get calendar</Text></TouchableOpacity>
+        {/* <TouchableOpacity onPress={handleLogout} style={styles.button}>
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity> */}
       </View>
   );
 };
 
 export default StudentDashboard;
+
+/* const navigation = useNavigation();
+
+const handleLogout = async () => {
+  try {
+    await AsyncStorage.removeItem('userSession');
+
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'Auth',
+            params: { role: 'student' }, 
+          },
+        ],
+      })
+    );
+  } catch (e) {
+    console.error('Logout failed', e);
+  }
+}; */
 
 const styles = StyleSheet.create({
   centeredContainer: {
