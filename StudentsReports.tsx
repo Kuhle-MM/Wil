@@ -1,81 +1,105 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, FlatList } from 'react-native';
+
+type AttendanceRecord = {
+  rowKey: string;
+  date: string;
+  day: string;
+  module: string;
+  status: string;
+};
+
+const getStudentId = async (): Promise<string | null> => {
+  try {
+    const session = await AsyncStorage.getItem('userSession');
+    if (session) {
+      const { studentNumber } = JSON.parse(session);
+      return studentNumber.toUpperCase();
+    }
+  } catch (e) {
+    console.error('Failed to load student ID from storage', e);
+  }
+  return null;
+};
 
 const StudentsReports: React.FC = () => {
-  
+  const [data, setData] = useState<AttendanceRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchReport = async () => {
+      try {
+        const studentNumber = await getStudentId();
+        console.log('Student ID from storage:', studentNumber);
+        if (!studentNumber) {
+          throw new Error('Student ID not found. Please log in again.');
+        }
+
+        const response = await fetch(
+          `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/report/${studentNumber}`
+        );
+
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(text || 'Failed to fetch attendance report.');
+        }
+
+        const result = await response.json();
+        setData(result);
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred.';
+        Alert.alert('Error', errorMessage);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReport();
+  }, []);
+
+  const renderItem = ({ item }: { item: AttendanceRecord }) => (
+    <View style={styles.reportRow}>
+      <Text>{item.day}, {item.date}</Text>
+      <Text>{item.module}</Text>
+      <Text>{item.status}</Text>
+    </View>
+  );
+
   return (
     <View style={styles.scrollContainer}>
-    <Text style={styles.header}>Report</Text>
-    <Text style={styles.subHeader}>MONTH ▼</Text>
-    <View style={styles.reportRow}><Text>Day, Date</Text><Text>Module</Text><Text>Status</Text></View>
-    <View style={styles.reportRow}><Text>Day, Date</Text><Text>Module</Text><Text>Status</Text></View>
-    <View style={styles.reportRow}><Text>Day, Date</Text><Text>Module</Text><Text>Status</Text></View>
-  </View>
+      <Text style={styles.header}>Report</Text>
+      <Text style={styles.subHeader}>MONTH ▼</Text>
+
+      {loading ? (
+        <ActivityIndicator size="large" color="#4287f5" />
+      ) : (
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.rowKey}
+          renderItem={renderItem}
+        />
+      )}
+    </View>
   );
 };
 
 export default StudentsReports;
 
-
 const styles = StyleSheet.create({
-  centeredContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-  },
   scrollContainer: {
+    flex: 1,
     padding: 16,
     backgroundColor: '#fff',
-  },
-  logo: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    marginBottom: 40,
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   subHeader: {
-    fontSize: 18,
-    marginVertical: 8,
-  },
-  sectionTitle: {
     fontSize: 16,
-    marginVertical: 8,
-    fontWeight: '500',
-  },
-  card: {
-    width: '100%',
-    padding: 20,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 12,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  cardText: {
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#ccc',
-    padding: 12,
-    width: 200,
-    borderRadius: 8,
-    marginVertical: 8,
-    alignItems: 'center',
-  },
-  smallButton: {
-    backgroundColor: '#ddd',
-    padding: 10,
-    borderRadius: 6,
-    marginVertical: 6,
-    alignItems: 'center',
-  },
-  buttonText: {
-    fontSize: 16,
+    marginBottom: 8,
   },
   reportRow: {
     flexDirection: 'row',
@@ -83,29 +107,5 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-  },
-  
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
-  },
-  roleSelector: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 12,
-  },
-  roleButton: {
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 8,
-    width: '48%',
-    alignItems: 'center',
-  },
-  roleSelected: {
-    backgroundColor: '#cce5ff',
-    borderColor: '#007bff',
   },
 });
