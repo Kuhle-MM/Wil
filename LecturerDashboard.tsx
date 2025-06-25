@@ -13,7 +13,7 @@ const LecturerDashboard: React.FC = () => {
     const route = useRoute<AuthRouteProp>();
     const { role } = route.params;
     const handleReport = async () => {
-    navigation.navigate('Report');  
+    navigation.navigate('ReportLecturer');  
     };
     const handleCalandar = async () => {
     navigation.navigate('Calendar');  
@@ -24,6 +24,7 @@ const LecturerDashboard: React.FC = () => {
         <Text style={styles.header}>Dashboard</Text>
         <Text style={styles.sectionTitle}>Set Today’s Modules</Text>
         <TouchableOpacity style={styles.card}><Text style={styles.cardText}>tap to generate</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.smallButton} onPress={handleReport}><Text>report overview</Text></TouchableOpacity>
       </View>
   );
 };

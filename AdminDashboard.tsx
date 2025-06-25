@@ -1,64 +1,41 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useRoute, CommonActions, useNavigation, RouteProp } from '@react-navigation/native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SvgUri } from 'react-native-svg';
 
 
-type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
+type AuthRouteProp = RouteProp<RootTabParamList, 'AuthAdmin'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
-const StudentDashboard: React.FC = () => {
+const AdminDashboard: React.FC = () => {
   const navigation = useNavigation<AuthNavProp>();
     const route = useRoute<AuthRouteProp>();
     const { role } = route.params;
-    const handleReport = async () => {
-    navigation.navigate('Report');  
-    };
-    const handleCalandar = async () => {
-    navigation.navigate('Calendar');  
+    const createUser = async () => {
+    navigation.navigate('CreateUser', { role });  
     };
     
   return (
-    <View style={styles.scrollContainer}>
-        <Text style={styles.header}>Dashboard</Text>
-        <Text style={styles.sectionTitle}>Today’s modules</Text>
-        <View style={styles.card}><Text>today’s modules</Text></View>
-        <Text style={styles.sectionTitle}>Weekly attendance progress</Text>
-        <View style={styles.card}><Text>weekly attendance progress</Text></View>
-        <TouchableOpacity style={styles.smallButton} onPress={handleReport}><Text>report overview</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.smallButton}  onPress={handleCalandar}><Text>get calendar</Text></TouchableOpacity>
-        {/* <TouchableOpacity onPress={handleLogout} style={styles.button}>
-          <Text style={styles.buttonText}>Logout</Text>
-        </TouchableOpacity> */}
-      </View>
-  );
+  <View style={styles.scrollContainer}>
+    <Text style={styles.header}>Dashboard</Text>
+
+    <TouchableOpacity style={styles.smallButton} onPress={createUser}>
+      <Text>Create User</Text>
+    </TouchableOpacity>
+
+    <Text style={styles.header}>QR Code</Text>
+
+    <SvgUri
+      width="200"
+      height="200"
+      uri="https://varsitytracker2025.blob.core.windows.net/qrcodes/jdjones.svg"
+    />
+  </View>
+);
 };
-
-export default StudentDashboard;
-
-/* const navigation = useNavigation();
-
-const handleLogout = async () => {
-  try {
-    await AsyncStorage.removeItem('userSession');
-
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'Auth',
-            params: { role: 'student' }, 
-          },
-        ],
-      })
-    );
-  } catch (e) {
-    console.error('Logout failed', e);
-  }
-}; */
+export default AdminDashboard;
 
 const styles = StyleSheet.create({
   centeredContainer: {

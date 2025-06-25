@@ -5,10 +5,10 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
+type AuthRouteProp = RouteProp<RootTabParamList, 'AuthAdmin'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
-const AuthScreen: React.FC = () => {
+const AuthScreenAdm: React.FC = () => {
   const navigation = useNavigation<AuthNavProp>();
   const route = useRoute<AuthRouteProp>();
   const { role } = route.params;
@@ -17,7 +17,7 @@ const AuthScreen: React.FC = () => {
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
-  const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Access/login_student';
+  const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Access/login_admin';
 
   try {
     const response = await fetch(endpoint, {
@@ -49,7 +49,7 @@ const AuthScreen: React.FC = () => {
     }));
 
     Alert.alert('Success', json.message);
-    navigation.navigate('Main', { role });
+    navigation.navigate('MainAdmin', { role });
   } catch (error) {
     console.error(error);
     Alert.alert('Error', 'Could not connect to the server.');
@@ -82,7 +82,7 @@ const AuthScreen: React.FC = () => {
   );
 };
 
-export default AuthScreen;
+export default AuthScreenAdm;
 
 const styles = StyleSheet.create({
   container: {

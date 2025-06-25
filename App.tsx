@@ -20,6 +20,10 @@ import StudentsDashboard from './StudentDashboard';
 import StudentsCalandar from './StudentsCalendar';
 import StudentsReports from './StudentsReports'
 import AuthScreenLect from './AuthScreenLect.tsx';
+import LecturersReports from './LecturerReports.tsx';
+import AuthScreenAdm from './AuthScreenAdm.tsx';
+import CreateUser from './CreateUser.tsx';
+import AdminsDashboard from './AdminDashboard.tsx';
 
 const Stack = createNativeStackNavigator<RootTabParamList>();
 
@@ -31,29 +35,19 @@ const LoginScreen: React.FC = () => {
 
   return (
     <View style={styles.centeredContainer}>
-      <Text style={styles.logo}>tapify</Text>
+      <Text style={styles.logo}>Tapify</Text>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Auth', { role: 'student' })}>
         <Text style={styles.buttonText}>Login as Student</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AuthLecturer', { role: 'lecturer' })}>
         <Text style={styles.buttonText}>Login as Lecturer</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AuthAdmin', { role: 'admin' })}>
+        <Text style={styles.buttonText}>Login as Admin</Text>
+      </TouchableOpacity>
     </View>
   );
 };
-
-/* // Placeholder student screens
-const StudentDashboard = () => (
-  <View style={styles.scrollContainer}>
-    <Text style={styles.header}>Dashboard</Text>
-    <Text style={styles.sectionTitle}>Today’s modules</Text>
-    <View style={styles.card}><Text>today’s modules</Text></View>
-    <Text style={styles.sectionTitle}>Weekly attendance progress</Text>
-    <View style={styles.card}><Text>weekly attendance progress</Text></View>
-    <TouchableOpacity style={styles.smallButton}><Text>report overview</Text></TouchableOpacity>
-    <TouchableOpacity style={styles.smallButton}><Text>get calendar</Text></TouchableOpacity>
-  </View>
-); */
 
 const StudentCard = () => (
   <View style={styles.centeredContainer}>
@@ -61,16 +55,6 @@ const StudentCard = () => (
     <Text>activate card</Text>
   </View>
 );
-
-/* const StudentReport  = () => (
-  <View style={styles.scrollContainer}>
-    <Text style={styles.header}>Report</Text>
-    <Text style={styles.subHeader}>MONTH ▼</Text>
-    <View style={styles.reportRow}><Text>Day, Date</Text><Text>Module</Text><Text>Status</Text></View>
-    <View style={styles.reportRow}><Text>Day, Date</Text><Text>Module</Text><Text>Status</Text></View>
-    <View style={styles.reportRow}><Text>Day, Date</Text><Text>Module</Text><Text>Status</Text></View>
-  </View>
-); */
 
 const StudentCalendar = () => (
   <View style={styles.centeredContainer}>
@@ -95,21 +79,6 @@ const LecturerCard  = () => (
   <View style={styles.centeredContainer}>
     <View style={styles.card}><Text style={styles.cardText}>lecturer card</Text></View>
     <Text>activate card</Text>
-  </View>
-);
-
-const LecturerReport = () => (
-  <View style={styles.scrollContainer}>
-    <Text style={styles.header}>Reports</Text>
-    <Text style={styles.subHeader}>MONTH ▼</Text>
-    {[1, 2, 3].map((i) => (
-      <View key={i} style={styles.reportRow}>
-        <Text>Day, Date</Text>
-        <Text>Module</Text>
-        <Text>Status</Text>
-      </View>
-    ))}
-    <TouchableOpacity style={styles.smallButton}><Text>Reason for override</Text></TouchableOpacity>
   </View>
 );
 
@@ -143,7 +112,7 @@ const MainTabs: React.FC = () => {
         <>
           <Tab.Screen name="Dashboard" component={LecturerDashboard} />
           <Tab.Screen name="LecturerCard" component={LecturerCard} />
-          <Tab.Screen name="Report" component={LecturerReport} />
+          <Tab.Screen name="Report" component={LecturersReports} />
           <Tab.Screen name="Calendar" component={LecturerCalendar} />
         </>
       )}
@@ -156,12 +125,16 @@ export default function App() {
     <NavigationContainer>
       <StackNav.Navigator screenOptions={{ headerShown: false }}>
         <StackNav.Screen name="Login" component={LoginScreen} />
+        <StackNav.Screen name="CreateUser" component={CreateUser} />
         <StackNav.Screen name="Auth" component={AuthScreen} /> 
         <StackNav.Screen name="AuthLecturer" component={AuthScreenLect} />
+        <StackNav.Screen name="AuthAdmin" component={AuthScreenAdm} />
         <StackNav.Screen name="Main" component={StudentsDashboard} />
         <StackNav.Screen name="Calendar" component={StudentsCalandar} />
         <StackNav.Screen name="Report" component={StudentsReports} />        
         <StackNav.Screen name="MainLecturer" component={LecturersDashboard} />
+        <StackNav.Screen name="MainAdmin" component={AdminsDashboard} />
+        <StackNav.Screen name="ReportLecturer" component={LecturersReports} />
       </StackNav.Navigator>
     </NavigationContainer>
   );
