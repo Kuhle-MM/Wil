@@ -1,8 +1,12 @@
 ﻿using Azure;
 using Azure.Data.Tables;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using QRCoder;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Net.Http;
 using System.Net.Mail;
 using System.Text;
@@ -18,6 +22,8 @@ namespace VarsityTrackerApi.Controllers
         private readonly string _connectionString;
         private readonly TableClient _studentTable;
         private readonly TableClient _adminTable;
+        private readonly BlobServiceClient _blobServiceClient;
+        private readonly string _containerName = "qrcodes";
 
         public AccessController(IOptions<AzureTableStorageSettings> storageOptions)
         {
@@ -25,6 +31,7 @@ namespace VarsityTrackerApi.Controllers
             _lecturerTable = new TableClient(_connectionString, "Lecturers");
             _studentTable = new TableClient(_connectionString, "Students");
             _adminTable = new TableClient(_connectionString, "Admins");
+            _blobServiceClient = new BlobServiceClient(_connectionString);
         }
 
         [HttpPost("create")]
@@ -34,9 +41,10 @@ namespace VarsityTrackerApi.Controllers
                 return BadRequest("User cannot be null.");
 
             string role = user.role?.Trim().ToLower();
-
+            
             if (role == "lecturer")
             {
+                
                 try
                 {
                     await foreach (var existingLecturer in _lecturerTable.QueryAsync<Lecturers>())
@@ -46,6 +54,14 @@ namespace VarsityTrackerApi.Controllers
                             return BadRequest($"{user.email} already exists in the system.");
                         }
                     }
+                    // Generate filename from email
+                    var filename = user.email.Split('@')[0].ToLower();
+
+                    // Generate SVG QR stream
+                    var qrCodeStream = GenerateQrSvgStream(filename);
+
+                    // Upload and get blob URL
+                    string qrCodeUrl = await UploadAsync(qrCodeStream, filename);
 
                     var lecturer = new Lecturers
                     {
@@ -57,7 +73,9 @@ namespace VarsityTrackerApi.Controllers
                         lastName = user.lastName,
                         qualification = string.Empty,
                         lecturerID = user.email.Substring(0, user.email.IndexOf("@")).ToLower(),
-                        role = "Lecturer"
+                        role = "Lecturer",
+                        qrCode = qrCodeUrl
+
                     };
 
                     await _lecturerTable.AddEntityAsync(lecturer);
@@ -80,7 +98,14 @@ namespace VarsityTrackerApi.Controllers
                             return BadRequest($"{user.email} already exists in the system.");
                         }
                     }
+                    // Generate filename from email
+                    var filename = user.email.Split('@')[0].ToLower();
 
+                    // Generate SVG QR stream
+                    var qrCodeStream = GenerateQrSvgStream(filename);
+
+                    // Upload and get blob URL
+                    string qrCodeUrl = await UploadAsync(qrCodeStream, filename);
                     var student = new Students
                     {
                         PartitionKey = "Students",
@@ -91,9 +116,9 @@ namespace VarsityTrackerApi.Controllers
                         lastName = user.lastName,
                         studentNumber = user.email.Substring(0, user.email.IndexOf("@")).ToUpper(),
                         StudentCardId = user.email.Substring(0, user.email.IndexOf("@")).ToUpper(),
-                        role = "Student"
+                        role = "Student",
+                        qrCode = qrCodeUrl
                     };
-
                     await _studentTable.AddEntityAsync(student);
                     return Ok($"Student with email: {user.email} created successfully.");
                 }
@@ -113,7 +138,14 @@ namespace VarsityTrackerApi.Controllers
                             return BadRequest($"{user.email} already exists in the system.");
                         }
                     }
+                    // Generate filename from email
+                    var filename = user.email.Split('@')[0].ToLower();
 
+                    // Generate SVG QR stream
+                    var qrCodeStream = GenerateQrSvgStream(filename);
+
+                    // Upload and get blob URL
+                    string qrCodeUrl = await UploadAsync(qrCodeStream, filename);
                     var admin = new Admin
                     {
                         PartitionKey = "Admins",
@@ -123,7 +155,8 @@ namespace VarsityTrackerApi.Controllers
                         firstName = user.firstName,
                         lastName = user.lastName,
                         adminID = user.email.Substring(0, user.email.IndexOf("@")).ToUpper(),
-                        role = "Admin"
+                        role = "Admin",
+                        qrCode = qrCodeUrl
                     };
 
                     await _adminTable.AddEntityAsync(admin);
@@ -242,13 +275,14 @@ namespace VarsityTrackerApi.Controllers
             }
             catch
             {
-                return BadRequest("Stored password format is invalid.");
+                return BadRequest(new {success = false, message = "Stored password format is invalid." });
             }
 
             if (!passwordValid)
-                return BadRequest("Incorrect password.");
+                return BadRequest(new { success = false, message = "Incorrect password." }
+            );
 
-            return Ok(new { message = "User logged in." });
+            return Ok(new { success = true, message = "User logged in." });
         }
 
         [HttpGet("get_details_students")]
@@ -326,7 +360,26 @@ namespace VarsityTrackerApi.Controllers
 
             return NotFound("Lecturer not found.");
         }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<string> UploadAsync(Stream fileStream, string filename)
+        {
+            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+            await containerClient.CreateIfNotExistsAsync();
+            var blobClient = containerClient.GetBlobClient($"{filename}.svg");
+            await blobClient.UploadAsync(fileStream, overwrite: true);
+            return blobClient.Uri.ToString(); 
+        }
+        private Stream GenerateQrSvgStream(string content)
+        {
+            using var qrGenerator = new QRCodeGenerator();
+            using var qrCodeData = qrGenerator.CreateQrCode(content, QRCodeGenerator.ECCLevel.Q);
+            var svgQr = new SvgQRCode(qrCodeData);
+            string svg = svgQr.GetGraphic(4); 
 
+            var bytes = Encoding.UTF8.GetBytes(svg);
+            var stream = new MemoryStream(bytes);
+            return stream;
+        }
         //private static string CreateRandomPassword(int passwordLength)
         //{
         //    string allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789!@$?_-";

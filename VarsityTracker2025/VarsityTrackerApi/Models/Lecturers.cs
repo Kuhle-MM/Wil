@@ -14,6 +14,7 @@ namespace VarsityTrackerApi.Models
         public string? qualification { get; set; }
         public string? password { get; set; }
         public string? role { get; set; }
+        public string? qrCode { get; set; }
 
 
         //ITableEntity implementation
