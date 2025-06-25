@@ -72,6 +72,11 @@ def enableProguardInReleaseBuilds = false
  */
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
+project.ext.react = [
+    enableHermes: false, // Optional if you’re not using Hermes
+    reactNativeArchitectures: "armeabi-v7a"
+]
+
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
