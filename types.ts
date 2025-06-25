@@ -13,4 +13,6 @@ export type RootTabParamList = {
   CreateUser: { role: 'admin' };
   Calendar: undefined;
   LecturerCard: undefined;
+  StudentAttendance: undefined;
+  LecturerAttendance: undefined;
 };

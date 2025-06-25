@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type AuthRouteProp = RouteProp<RootTabParamList, 'AuthLecturer'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
@@ -37,6 +38,14 @@ const AuthScreenLect: React.FC = () => {
       Alert.alert('Login Failed', json.message || 'Invalid credentials');
       return;
     }
+    const idNumber = email.split('@')[0];
+
+    await AsyncStorage.setItem('userSession', JSON.stringify({
+      lecturerID: idNumber,
+      role,
+      token: json.token || null, 
+      email,
+    }));
 
     Alert.alert('Success', json.message);
     navigation.navigate('MainLecturer', { role });  
