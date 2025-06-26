@@ -18,6 +18,9 @@ const LecturerDashboard: React.FC = () => {
     const handleCalandar = async () => {
     navigation.navigate('Calendar');  
     };
+    const handleAttendance = async () => {
+    navigation.navigate('LecturerAttendance');  
+    };
     
   return (
     <View style={styles.scrollContainer}>
@@ -25,6 +28,7 @@ const LecturerDashboard: React.FC = () => {
         <Text style={styles.sectionTitle}>Set Today’s Modules</Text>
         <TouchableOpacity style={styles.card}><Text style={styles.cardText}>tap to generate</Text></TouchableOpacity>
         <TouchableOpacity style={styles.smallButton} onPress={handleReport}><Text>report overview</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.smallButton} onPress={handleAttendance}><Text>Clock In</Text></TouchableOpacity>
       </View>
   );
 };

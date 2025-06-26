@@ -19,7 +19,9 @@ const StudentDashboard: React.FC = () => {
     const handleCalandar = async () => {
     navigation.navigate('Calendar');  
     };
-    
+    const handleAttendance = async () => {
+    navigation.navigate('StudentAttendance');  
+    };
   return (
     <View style={styles.scrollContainer}>
         <Text style={styles.header}>Dashboard</Text>
@@ -29,6 +31,7 @@ const StudentDashboard: React.FC = () => {
         <View style={styles.card}><Text>weekly attendance progress</Text></View>
         <TouchableOpacity style={styles.smallButton} onPress={handleReport}><Text>report overview</Text></TouchableOpacity>
         <TouchableOpacity style={styles.smallButton}  onPress={handleCalandar}><Text>get calendar</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.smallButton} onPress={handleAttendance}><Text>Clock In</Text></TouchableOpacity>
         {/* <TouchableOpacity onPress={handleLogout} style={styles.button}>
           <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity> */}

@@ -24,6 +24,8 @@ import LecturersReports from './LecturerReports.tsx';
 import AuthScreenAdm from './AuthScreenAdm.tsx';
 import CreateUser from './CreateUser.tsx';
 import AdminsDashboard from './AdminDashboard.tsx';
+import StudentAttendances from './StudentAttendance.tsx';
+import LecturerAttendance from './LecturerAttendance.tsx';
 
 const Stack = createNativeStackNavigator<RootTabParamList>();
 
@@ -135,6 +137,8 @@ export default function App() {
         <StackNav.Screen name="MainLecturer" component={LecturersDashboard} />
         <StackNav.Screen name="MainAdmin" component={AdminsDashboard} />
         <StackNav.Screen name="ReportLecturer" component={LecturersReports} />
+        <StackNav.Screen name="StudentAttendance" component={StudentAttendances} />
+        <StackNav.Screen name="LecturerAttendance" component={LecturerAttendance} />
       </StackNav.Navigator>
     </NavigationContainer>
   );
