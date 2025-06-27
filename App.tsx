@@ -26,6 +26,7 @@ import CreateUser from './CreateUser.tsx';
 import AdminsDashboard from './AdminDashboard.tsx';
 import StudentAttendances from './StudentAttendance.tsx';
 import LecturerAttendance from './LecturerAttendance.tsx';
+import CreateModule from './CreateModule.tsx';
 
 const Stack = createNativeStackNavigator<RootTabParamList>();
 
@@ -128,6 +129,7 @@ export default function App() {
       <StackNav.Navigator screenOptions={{ headerShown: false }}>
         <StackNav.Screen name="Login" component={LoginScreen} />
         <StackNav.Screen name="CreateUser" component={CreateUser} />
+        <StackNav.Screen name="CreateModule" component={CreateModule} />
         <StackNav.Screen name="Auth" component={AuthScreen} /> 
         <StackNav.Screen name="AuthLecturer" component={AuthScreenLect} />
         <StackNav.Screen name="AuthAdmin" component={AuthScreenAdm} />

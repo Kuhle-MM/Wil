@@ -16,6 +16,9 @@ const AdminDashboard: React.FC = () => {
     const createUser = async () => {
     navigation.navigate('CreateUser', { role });  
     };
+    const createModule = async () => {
+    navigation.navigate('CreateModule', { role });  
+    };
     
   return (
   <View style={styles.scrollContainer}>
@@ -23,6 +26,9 @@ const AdminDashboard: React.FC = () => {
 
     <TouchableOpacity style={styles.smallButton} onPress={createUser}>
       <Text>Create User</Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.smallButton} onPress={createModule}>
+      <Text>Create Module</Text>
     </TouchableOpacity>
 
     <Text style={styles.header}>QR Code</Text>

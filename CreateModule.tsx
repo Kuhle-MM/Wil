@@ -1,0 +1,96 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootTabParamList } from './types';
+
+type AuthRouteProp = RouteProp<RootTabParamList, 'CreateModule'>;
+type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
+
+const CreateModule: React.FC = () => {
+    const navigation = useNavigation<AuthNavProp>();
+    const route = useRoute<AuthRouteProp>();
+    const { role } = route.params;
+
+    const [code, setCode] = useState('');
+    const [moduleName, setModuleName] = useState('');
+    const [NQF, setNQF] = useState('');
+    const [Credits, setCredits] = useState('');
+    const [courseCode, setCourseCode] = useState('');
+    const [year, setYear] = useState('');
+
+  const handleCreateUser = async () => {
+    const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/create_module';
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, moduleName, NQF, Credits, courseCode, year }),
+      });
+
+      const json = await response.json();
+
+      if (!response.ok || !json.success) {
+        Alert.alert('Failed', json.message || 'Could not create module.');
+        return;
+      }
+
+      Alert.alert('Success', json.message);
+      navigation.navigate('MainAdmin', { role }); 
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Could not connect to the server.');
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Create Module</Text>
+
+      <TextInput placeholder="Module Name" value={moduleName} onChangeText={setModuleName} style={styles.input} />
+      <TextInput placeholder="Module Code" value={code} onChangeText={setCode} autoCapitalize="none" style={styles.input} />
+      <TextInput placeholder="Course Code" value={courseCode} onChangeText={setCourseCode} style={styles.input} />
+      <TextInput placeholder="Year" value={year} onChangeText={setYear} style={styles.input} />
+      <TextInput placeholder="NQF" value={NQF} onChangeText={setNQF} autoCapitalize="none" style={styles.input} />
+      <TextInput placeholder="Credits" value={Credits} onChangeText={setCredits} style={styles.input} />
+      
+      <TouchableOpacity style={styles.button} onPress={handleCreateUser}>
+        <Text style={styles.buttonText}>Create Module</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default CreateModule;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    justifyContent: 'center',
+    backgroundColor: '#fff'
+  },
+  title: {
+    fontSize: 28,
+    marginBottom: 20,
+    textAlign: 'center'
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16
+  },
+  button: {
+    backgroundColor: '#4287f5',
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center'
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold'
+  }
+});
