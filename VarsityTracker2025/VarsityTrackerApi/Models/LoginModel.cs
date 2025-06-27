@@ -1,4 +1,7 @@
-﻿namespace VarsityTrackerApi.Models
+﻿using Azure.Data.Tables;
+using System.ComponentModel.DataAnnotations;
+
+namespace VarsityTrackerApi.Models
 {
     public class LoginModel
     {

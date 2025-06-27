@@ -4,15 +4,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace VarsityTrackerApi.Models
 {
-    public class Modules: ITableEntity
+    public class Lesson: ITableEntity
     {
         [Key]
-        public string code { get; set; }
-        public string moduleName { get; set; }
-        public int NQF { get; set; }
-        public int credits { get; set; }
+        public string lessonID { get; set; }
+        public DateTime date { get; set; }
         public string courseCode { get; set; }
-        public int year { get; set; }
+        public string moduleCode { get; set; }
+        public string lecturerID { get; set; }
+        public bool started = false;
+        public bool finished = false;
         //ITableEntity implementation
         public string? PartitionKey
         { get; set; }
