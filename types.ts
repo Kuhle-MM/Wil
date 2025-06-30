@@ -11,6 +11,7 @@ export type RootTabParamList = {
   Report: undefined;
   ReportLecturer: undefined;
   CreateUser: { role: 'admin' };
+  CreateModule: { role: 'admin' };
   Calendar: undefined;
   LecturerCard: undefined;
   StudentAttendance: undefined;
