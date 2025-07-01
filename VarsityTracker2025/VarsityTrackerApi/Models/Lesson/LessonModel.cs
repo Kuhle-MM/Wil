@@ -1,4 +1,4 @@
-﻿namespace VarsityTrackerApi.Models
+﻿namespace VarsityTrackerApi.Models.Lesson
 {
     public class LessonModel
     {

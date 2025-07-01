@@ -2,9 +2,9 @@
 using Azure.Data.Tables;
 using System.ComponentModel.DataAnnotations;
 
-namespace VarsityTrackerApi.Models
+namespace VarsityTrackerApi.Models.Lesson
 {
-    public class WaitingList: ITableEntity
+    public class LessonList: ITableEntity
     {
         [Key]
         public string LessonID { get; set; }

@@ -4,8 +4,10 @@ using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using VarsityTrackerApi.Models;
 using System.Globalization;
+using System.Reflection;
+using VarsityTrackerApi.Models.Access;
+using VarsityTrackerApi.Models.Module;
 
 namespace VarsityTrackerApi.Controllers
 {
@@ -16,19 +18,18 @@ namespace VarsityTrackerApi.Controllers
         private readonly TableClient _lecturerTable;
         private readonly string _connectionString;
         private readonly TableClient _studentTable;
-        private readonly TableClient _adminTable;
         private readonly TableClient _moduleTable;
-        private readonly BlobServiceClient _blobServiceClient;
-        private readonly string _containerName = "qrcodes";
+        private readonly TableClient _lecturerModuleTable;
+        private readonly TableClient _studentModuleTable;
 
         public ModuleController(IOptions<AzureTableStorageSettings> storageOptions)
         {
             _connectionString = storageOptions.Value.ConnectionString;
             _lecturerTable = new TableClient(_connectionString, "Lecturers");
             _studentTable = new TableClient(_connectionString, "Students");
-            _adminTable = new TableClient(_connectionString, "Admins");
             _moduleTable = new TableClient(_connectionString, "Modules");
-            _blobServiceClient = new BlobServiceClient(_connectionString);
+            _lecturerModuleTable = new TableClient(_connectionString, "LecturerModules");
+            _studentModuleTable = new TableClient(_connectionString, "StudentModules");
         }
 
         [HttpPost("create_module")]
@@ -58,6 +59,110 @@ namespace VarsityTrackerApi.Controllers
 
                 await _moduleTable.AddEntityAsync(newModule);
                 return Ok($"Module with code: {module.code} created successfully.");
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error saving module: {ex.Message}");
+            }
+        }
+
+        [HttpPost("lecturer_add_module")]
+        public async Task<IActionResult> Add_Module_Lecturer(LecturerModuleModel module)
+        {
+            try
+            {
+                Lecturers lecturer = null;
+                //checks if the lecturer exists in the system.
+                await foreach (var s in _lecturerTable.QueryAsync<Lecturers>(s => s.lecturerID == module.lecturerID.ToUpper()))
+                {
+                    lecturer = s;
+                    break;
+                }
+
+                if (lecturer == null)
+                    return NotFound("Lecturer not found.");
+
+                Modules modules = null;
+                //checks if the module exists in the system.
+                await foreach (var s in _moduleTable.QueryAsync<Modules>(s => s.code == module.moduleCode.ToUpper()))
+                {
+                    modules = s;
+                    break;
+                }
+
+                if (modules == null)
+                    return NotFound("Module not found.");
+
+                // Check if a lecturer already has the module code assigned to them
+                await foreach (var existingModule in _lecturerModuleTable.QueryAsync<LecturerModules>())
+                {
+                    if (existingModule.lecturerID == module.lecturerID && existingModule.moduleCode == module.moduleCode)
+                    {
+                        return BadRequest($"{module.lecturerID} already exists has module {module.moduleCode} assigned to them.");
+                    }
+                }
+                var newModule = new LecturerModules
+                {
+                    PartitionKey = "Lecturers_Modules",
+                    RowKey = Guid.NewGuid().ToString(),
+                    lecturerID = module.lecturerID.ToLower(),
+                    moduleCode = module.moduleCode.ToUpper()
+                };
+
+                await _lecturerModuleTable.AddEntityAsync(newModule);
+                return Ok($"Module with code: {module.moduleCode} added successfully to lecturer {lecturer.firstName + " " + lecturer.lastName}'s profile.");
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error saving module to lecturer profile: {ex.Message}.");
+            }
+        }
+
+        [HttpPost("student_add_module")]
+        public async Task<IActionResult> Add_Module_Lecturer(StudentModuleModel module)
+        {
+            try
+            {
+                Students student = null;
+                //checks if the lecturer exists in the system.
+                await foreach (var s in _studentTable.QueryAsync<Students>(s => s.studentNumber == module.studentNumber.ToUpper()))
+                {
+                    student = s;
+                    break;
+                }
+
+                if (student == null)
+                    return NotFound("Student not found.");
+
+                Modules modules = null;
+                //checks if the module exists in the system.
+                await foreach (var s in _moduleTable.QueryAsync<Modules>(s => s.code == module.moduleCode.ToUpper()))
+                {
+                    modules = s;
+                    break;
+                }
+
+                if (modules == null)
+                    return NotFound("Module not found.");
+
+                // Check if a lecturer already has the module code assigned to them
+                await foreach (var existingModule in _studentModuleTable.QueryAsync<StudentModules>())
+                {
+                    if (existingModule.studentNumber == module.studentNumber.ToUpper() && existingModule.moduleCode == module.moduleCode.ToUpper())
+                    {
+                        return BadRequest($"{module.studentNumber.ToUpper()} already exists has module {module.moduleCode} assigned to them.");
+                    }
+                }
+                var newModule = new LecturerModules
+                {
+                    PartitionKey = "Lecturers_Modules",
+                    RowKey = Guid.NewGuid().ToString(),
+                    lecturerID = module.studentNumber.ToUpper(),
+                    moduleCode = module.moduleCode.ToUpper()
+                };
+
+                await _studentModuleTable.AddEntityAsync(newModule);
+                return Ok($"Module with code: {module.moduleCode} added successfully to student: {student.firstName + " " + student.lastName}'s profile.");
             }
             catch (RequestFailedException ex)
             {

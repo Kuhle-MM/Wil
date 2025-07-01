@@ -1,6 +1,6 @@
 
 using Microsoft.Extensions.Configuration;
-using VarsityTrackerApi.Models;
+using VarsityTrackerApi.Models.Access;
 
 namespace VarsityTrackerApi
 {

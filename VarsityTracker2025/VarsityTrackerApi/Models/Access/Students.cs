@@ -2,18 +2,20 @@
 using Azure.Data.Tables;
 using System.ComponentModel.DataAnnotations;
 
-namespace VarsityTrackerApi.Models
+namespace VarsityTrackerApi.Models.Access
 {
-    public class Admin : ITableEntity
+    public class Students : ITableEntity
     {
         [Key]
-        public string adminID { get; set; }
-        public string? adminEmail { get; set; }
+        public string studentNumber { get; set; }
+        public string? studentEmail { get; set; }
+        public string StudentCardId { get; set; }
         public string? firstName { get; set; }
         public string? lastName { get; set; }
+        public string? qualification { get; set; }
         public string? password { get; set; }
         public string? role { get; set; }
-        public string? qrCode { get; set; }
+        public string? qrCode { get; set; } 
 
         //ITableEntity implementation
         public string? PartitionKey { get; set; }

@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Azure.Data.Tables;
 using Microsoft.Extensions.Options;
-using VarsityTrackerApi.Models;
+using VarsityTrackerApi.Models.Access;
+using VarsityTrackerApi.Models.Report.AttendanceRecord;
 
 namespace VarsityTrackerApi.Controllers
 {

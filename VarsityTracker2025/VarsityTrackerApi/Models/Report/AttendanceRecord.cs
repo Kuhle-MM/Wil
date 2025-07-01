@@ -2,7 +2,7 @@
 using Azure.Data.Tables;
 using System;
 
-namespace VarsityTrackerApi.Models
+namespace VarsityTrackerApi.Models.Report.AttendanceRecord
 {
     public class AttendanceRecord: ITableEntity
     {
