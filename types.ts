@@ -16,4 +16,5 @@ export type RootTabParamList = {
   LecturerCard: undefined;
   StudentAttendance: undefined;
   LecturerAttendance: undefined;
+  LecturerModules: { role: 'lecturer' };
 };
