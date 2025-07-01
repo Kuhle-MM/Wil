@@ -169,6 +169,26 @@ namespace VarsityTrackerApi.Controllers
                 return StatusCode(500, $"Error saving module: {ex.Message}");
             }
         }
+
+        [HttpGet("all_modules")]
+        public async Task<IActionResult> GetAllModules()
+        {
+            try
+            {
+                var modulesList = new List<Modules>();
+
+                await foreach (var module in _moduleTable.QueryAsync<Modules>())
+                {
+                    modulesList.Add(module);
+                }
+
+                return Ok(modulesList);
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error retrieving modules: {ex.Message}");
+            }
+        }
     }
 }
 /*References 
