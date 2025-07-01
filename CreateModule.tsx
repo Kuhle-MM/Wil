@@ -15,7 +15,7 @@ const CreateModule: React.FC = () => {
     const [code, setCode] = useState('');
     const [moduleName, setModuleName] = useState('');
     const [NQF, setNQF] = useState('');
-    const [Credits, setCredits] = useState('');
+    const [credits, setCredits] = useState('');
     const [courseCode, setCourseCode] = useState('');
     const [year, setYear] = useState('');
 
@@ -23,26 +23,36 @@ const CreateModule: React.FC = () => {
     const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/create_module';
 
     try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, moduleName, NQF, Credits, courseCode, year }),
-      });
+    const payload = {
+      code,
+      moduleName,
+      NQF: parseInt(NQF),
+      credits: parseInt(credits),
+      courseCode,
+      year: parseInt(year)
+    };
 
-      const json = await response.json();
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
 
-      if (!response.ok || !json.success) {
-        Alert.alert('Failed', json.message || 'Could not create module.');
-        return;
-      }
+    const resultText = await response.text();
 
-      Alert.alert('Success', json.message);
-      navigation.navigate('MainAdmin', { role }); 
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'Could not connect to the server.');
+    if (!response.ok) {
+      Alert.alert('Failed', resultText);
+      return;
     }
-  };
+
+    Alert.alert('Success', resultText);
+    navigation.navigate('MainAdmin', { role });
+
+  } catch (error) {
+    console.error(error);
+    Alert.alert('Error', 'Could not connect to the server.');
+  }
+};
 
   return (
     <View style={styles.container}>
@@ -53,7 +63,7 @@ const CreateModule: React.FC = () => {
       <TextInput placeholder="Course Code" value={courseCode} onChangeText={setCourseCode} style={styles.input} />
       <TextInput placeholder="Year" value={year} onChangeText={setYear} style={styles.input} />
       <TextInput placeholder="NQF" value={NQF} onChangeText={setNQF} autoCapitalize="none" style={styles.input} />
-      <TextInput placeholder="Credits" value={Credits} onChangeText={setCredits} style={styles.input} />
+      <TextInput placeholder="Credits" value={credits} onChangeText={setCredits} style={styles.input} />
       
       <TouchableOpacity style={styles.button} onPress={handleCreateUser}>
         <Text style={styles.buttonText}>Create Module</Text>

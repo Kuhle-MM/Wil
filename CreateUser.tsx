@@ -7,7 +7,7 @@ import { RootTabParamList } from './types';
 type AuthRouteProp = RouteProp<RootTabParamList, 'CreateUser'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
-const AuthScreen: React.FC = () => {
+const CreateUser: React.FC = () => {
   const navigation = useNavigation<AuthNavProp>();
   const route = useRoute<AuthRouteProp>();
   const { role } = route.params;
@@ -60,7 +60,7 @@ const AuthScreen: React.FC = () => {
   );
 };
 
-export default AuthScreen;
+export default CreateUser;
 
 const styles = StyleSheet.create({
   container: {

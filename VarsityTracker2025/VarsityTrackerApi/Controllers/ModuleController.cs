@@ -73,7 +73,7 @@ namespace VarsityTrackerApi.Controllers
             {
                 Lecturers lecturer = null;
                 //checks if the lecturer exists in the system.
-                await foreach (var s in _lecturerTable.QueryAsync<Lecturers>(s => s.lecturerID == module.lecturerID.ToUpper()))
+                await foreach (var s in _lecturerTable.QueryAsync<Lecturers>(s => s.lecturerID == module.lecturerID.ToLower()))
                 {
                     lecturer = s;
                     break;
@@ -153,11 +153,11 @@ namespace VarsityTrackerApi.Controllers
                         return BadRequest($"{module.studentNumber.ToUpper()} already exists has module {module.moduleCode} assigned to them.");
                     }
                 }
-                var newModule = new LecturerModules
+                var newModule = new StudentModules
                 {
-                    PartitionKey = "Lecturers_Modules",
+                    PartitionKey = "Students_Modules",
                     RowKey = Guid.NewGuid().ToString(),
-                    lecturerID = module.studentNumber.ToUpper(),
+                    studentNumber = module.studentNumber.ToUpper(),
                     moduleCode = module.moduleCode.ToUpper()
                 };
 
