@@ -10,7 +10,7 @@ using System.Drawing.Imaging;
 using System.Net.Http;
 using System.Net.Mail;
 using System.Text;
-using VarsityTrackerApi.Models;
+using VarsityTrackerApi.Models.Access;
 
 namespace VarsityTrackerApi.Controllers
 {

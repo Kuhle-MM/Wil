@@ -4,7 +4,8 @@ using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Globalization;
-using VarsityTrackerApi.Models;
+using VarsityTrackerApi.Models.Access;
+using VarsityTrackerApi.Models.Lesson;
 
 namespace VarsityTrackerApi.Controllers
 {
@@ -77,49 +78,58 @@ namespace VarsityTrackerApi.Controllers
                 return StatusCode(500, $"Error saving lesson: {ex.Message}");
             }
         }
-
-        public async Task<WaitingList> CreateWaitingList(Lesson lesson)
+        [HttpPost("clockin/{studentNumber}")]
+        public async Task<IActionResult> StudentList(string studentNumber)
         {
+            Students student = null;
+            await foreach (var s in _studentTable.QueryAsync<Students>(s => s.studentNumber == studentNumber.ToUpper()))
+            {
+                student = s;
+                break;
+            }
 
+            if (student == null)
+                return NotFound("Student not found.");
+
+            var today = DateTime.UtcNow.Date;
+            var studentList = new StudentList
+            {
+                PartitionKey = "StudentList",
+                RowKey = Guid.NewGuid().ToString(),
+                StudentID = student.studentNumber,
+                ClockInTime = DateTime.UtcNow,
+                ClockOutTime = null
+            };
+
+            await _waitingList.AddEntityAsync(studentList);
+            return Ok($"Student with ID: {studentList.StudentID} added successfully to waiting list.");
         }
 
-        //[HttpPost("clockin/{studentNumber}")]
-        //public async Task<IActionResult> ClockIn(string studentNumber)
-        //{
-        //    Students student = null;
-        //    await foreach (var s in _studentTable.QueryAsync<Students>(s => s.studentNumber == studentNumber.ToUpper()))
-        //    {
-        //        student = s;
-        //        break;
-        //    }
+        [HttpPost("clockoutStudent/{studentNumber}")]
+        public async Task<IActionResult> StudentListClockout(string studentNumber)
+        {
+            var today = DateTime.UtcNow.Date;
 
-        //    if (student == null)
-        //        return NotFound("Student not found.");
+            StudentList recordToUpdate = null;
 
-        //    var today = DateTime.UtcNow.Date;
+            await foreach (var record in _waitingList.QueryAsync<StudentList>(r =>
+                r.PartitionKey == "StudentList" &&
+                r.StudentID == studentNumber &&
+                r.ClockInTime >= today))
+            {
+                recordToUpdate = record;
+                break;
+            }
 
-        //    // Prevent multiple clock-ins for the same day
-        //    await foreach (var record in _attendanceTable.QueryAsync<AttendanceRecord>(r =>
-        //        r.PartitionKey == "Attendance" &&
-        //        r.StudentNumber == studentNumber &&
-        //        r.ClockInTime >= today))
-        //    {
-        //        return BadRequest("Student already clocked in today.");
-        //    }
+            if (recordToUpdate == null)
+                return NotFound("No active clock-in found for today.");
 
-        //    var attendance = new AttendanceRecord
-        //    {
-        //        PartitionKey = "Attendance",
-        //        RowKey = Guid.NewGuid().ToString(),
-        //        StudentNumber = student.studentNumber,
-        //        StudentEmail = student.studentEmail,
-        //        ClockInTime = DateTime.UtcNow,
-        //        ClockOutTime = null,
-        //        Status = "Present"
-        //    };
+            recordToUpdate.ClockOutTime = DateTime.UtcNow;
 
-        //    await _attendanceTable.AddEntityAsync(attendance);
-        //    return Ok("Clock-in recorded.");
-        //}
+            await _waitingList.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
+
+            return Ok(new { success = true, message = "Student clocked out." });
+        }
+        
     }
 }

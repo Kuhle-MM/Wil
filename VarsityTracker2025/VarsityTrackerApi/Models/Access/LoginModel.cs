@@ -1,7 +1,7 @@
 ﻿using Azure.Data.Tables;
 using System.ComponentModel.DataAnnotations;
 
-namespace VarsityTrackerApi.Models
+namespace VarsityTrackerApi.Models.Access
 {
     public class LoginModel
     {
