@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity, TextInput, ActivityIndicator, FlatList, ScrollView } from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
 import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type AuthRouteProp = RouteProp<RootTabParamList, 'LecturerModules'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
@@ -14,14 +15,18 @@ type Module = {
   moduleName: string;
 };
 
+
 const LecturerModules: React.FC = () => {
     const navigation = useNavigation<AuthNavProp>();
     const route = useRoute<AuthRouteProp>();
     const role = route.params?.role ?? 'lecturer';
+    
+    const [lecturerID, setID] = useState('');
+    const [moduleCode, setModuleCode] = useState('');
 
     const [selectedModule, setSelectedModule] = useState('');
-  const [modules, setModules] = useState<Module[]>([]);
-  const [loading, setLoading] = useState(true);
+    const [modules, setModules] = useState<Module[]>([]);
+    const [loading, setLoading] = useState(true);
 
    useEffect(() => {
     const fetchModules = async () => {
@@ -42,6 +47,95 @@ const LecturerModules: React.FC = () => {
 
     fetchModules();
   }, []);
+
+  useEffect(() => {
+    const LecturerModules = async () => {
+      try {
+      // Load lecturerID from AsyncStorage first
+      const session = await AsyncStorage.getItem('userSession');
+      if (!session) {
+        throw new Error('No user session found');
+      }
+
+      const parsed = JSON.parse(session);
+      const lecturerIDFromSession = parsed.lecturerID;
+
+      if (!lecturerIDFromSession) {
+        throw new Error('Lecturer ID not found in session');
+      }
+
+      setID(lecturerIDFromSession);
+
+      // Call your API with lecturerID as query parameter
+      const response = await fetch(
+        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_lecturer_modules?lecturerID=${lecturerID}`
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch modules for lecturer');
+      }
+
+      const data: Module[] = await response.json();
+      setModules(data);
+    } catch (error) {
+      console.error('Error loading lecturer modules:', error);
+      Alert.alert('Error', 'Could not load your modules.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  LecturerModules();
+}, []);
+
+  useEffect(() => {
+  const loadLecturerID = async () => {
+    try {
+      const session = await AsyncStorage.getItem('userSession');
+      if (session) {
+        const parsed = JSON.parse(session);
+        setID(parsed.lecturerID); 
+      }
+    } catch (error) {
+      console.error('Error loading lecturer ID:', error);
+    }
+  };
+
+  loadLecturerID();
+}, []);
+  
+const AddModules = async () => {
+    const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/lecturer_add_module';
+
+    try {
+    const payload = {
+        lecturerID,
+        moduleCode : selectedModule
+    };
+
+    const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+
+    const resultText = await response.text();
+
+    if (!response.ok) {
+        Alert.alert('Failed', resultText);
+        return;
+    }
+
+    Alert.alert('Success', resultText);
+    navigation.navigate('LecturerModules', { role });
+
+    } catch (error) {
+    console.error(error);
+    Alert.alert('Error', 'Could not connect to the server.');
+    }
+
+};
+
   const renderItem = ({ item }: { item: Module }) => (
       <View style={styles.reportRow}>
           <Text>{item.code}</Text>
@@ -70,19 +164,27 @@ const LecturerModules: React.FC = () => {
     )}
 
     <Picker
-      selectedValue={selectedModule}
-      onValueChange={(itemValue) => setSelectedModule(itemValue)}
-      style={styles.picker}
-    >
-      <Picker.Item label="-- Select Module --" value="" />
-      {modules.map((module, index) => (
-        <Picker.Item
-          label={`${module.code} - ${module.moduleName}`}
-          value={module.code} 
-          key={index}
-        />
-      ))}
-    </Picker>
+        selectedValue={selectedModule}
+        onValueChange={(itemValue) => {
+            setSelectedModule(itemValue);
+            setModuleCode(itemValue); 
+        }}
+        style={styles.picker}
+        >
+        <Picker.Item label="MAPC5112 - Test Module" value="MAPC5112" />
+
+        {modules.map((module, index) => (
+            <Picker.Item
+            label={`${module.code} - ${module.moduleName}`}
+            value={module.code}
+            key={index}
+            />
+        ))}
+        </Picker>
+    <TouchableOpacity style={styles.button} onPress={AddModules}>
+            <Text style={styles.buttonText}>Create Account</Text>
+          </TouchableOpacity>
+    
   </ScrollView>
   );
 };
