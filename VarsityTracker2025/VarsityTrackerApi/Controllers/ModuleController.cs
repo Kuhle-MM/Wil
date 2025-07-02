@@ -169,8 +169,56 @@ namespace VarsityTrackerApi.Controllers
                 return StatusCode(500, $"Error saving module: {ex.Message}");
             }
         }
+
+        [HttpGet("all_modules")]
+        public async Task<IActionResult> GetAllModules()
+        {
+            try
+            {
+                var modulesList = new List<Modules>();
+
+                await foreach (var module in _moduleTable.QueryAsync<Modules>())
+                {
+                    modulesList.Add(module);
+                }
+
+                return Ok(modulesList);
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error retrieving modules: {ex.Message}");
+            }
+        }
+        
+        [HttpGet("all_lecturer_modules")]
+        public async Task<IActionResult> GetModulesByLecturer(string lecturerID)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(lecturerID))
+                {
+                    return BadRequest("Lecturer ID is required.");
+                }
+
+                var modulesList = new List<LecturerModules>();
+
+                var filter = TableClient.CreateQueryFilter<LecturerModules>(m => m.lecturerID == lecturerID);
+
+                await foreach (var module in _lecturerModuleTable.QueryAsync<LecturerModules>(filter))
+                {
+                    modulesList.Add(module);
+                }
+
+                return Ok(modulesList);
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error retrieving modules: {ex.Message}");
+            }
+        }
     }
 }
+
 /*References 
   - Symmons, D. (2023). Is there a way to capitalize first letters of each word in a parameter string? - Microsoft Q&A. [online] Microsoft.com. Available at: https://learn.microsoft.com/en-us/answers/questions/1189474/is-there-a-way-to-capitalize-first-letters-of-each [Accessed 27 Jun. 2025].
   - 
