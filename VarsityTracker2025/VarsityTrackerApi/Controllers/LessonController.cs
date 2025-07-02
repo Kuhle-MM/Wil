@@ -6,6 +6,8 @@ using Microsoft.Extensions.Options;
 using System.Globalization;
 using VarsityTrackerApi.Models.Access;
 using VarsityTrackerApi.Models.Lesson;
+using System.Reflection;
+using VarsityTrackerApi.Models.Module;
 
 namespace VarsityTrackerApi.Controllers
 {
@@ -19,6 +21,9 @@ namespace VarsityTrackerApi.Controllers
         private readonly TableClient _lessonTable;
         private readonly TableClient _moduleTable;
         private readonly TableClient _waitingList;
+        private readonly TableClient _lecturerModuleTable;
+        private readonly TableClient _studentModuleTable;
+        private readonly TableClient _lessonListTable;
         private readonly BlobServiceClient _blobServiceClient;
         private readonly string _containerName = "qrcodes";
 
@@ -31,6 +36,9 @@ namespace VarsityTrackerApi.Controllers
             _moduleTable = new TableClient(_connectionString, "Modules");
             _blobServiceClient = new BlobServiceClient(_connectionString);
             _waitingList = new TableClient(_connectionString, "WaitingList");
+            _lecturerModuleTable = new TableClient(_connectionString, "LecturerModules");
+            _studentModuleTable = new TableClient(_connectionString, "StudentModules");
+            _lessonListTable = new TableClient(_connectionString, "LessonList");
         }
 
         [HttpPost("create_lesson")]
@@ -130,6 +138,97 @@ namespace VarsityTrackerApi.Controllers
 
             return Ok(new { success = true, message = "Student clocked out." });
         }
-        
+
+        [HttpPost("startLesson/{lessonID}")]
+        public async Task<IActionResult> StartLesson(string lessonID)
+        {
+            Lesson lesson = null;
+            await foreach (var s in _lessonTable.QueryAsync<Lesson>(s => s.lessonID == lessonID))
+            {
+                lesson = s;
+                break;
+            }
+            if (lesson == null)
+                return NotFound("Lesson not found.");
+            await foreach (var existing in _waitingList.QueryAsync<StudentList>())
+            {
+                await foreach (var f in _studentModuleTable.QueryAsync<StudentModules>())
+                {
+                    if(f.studentNumber == existing.StudentID)
+                    {
+                        var addStudent = new LessonList
+                        {
+                            PartitionKey = "LessonList",
+                            RowKey = Guid.NewGuid().ToString(),
+                            LessonID = lesson.lessonID,
+                            StudentID = existing.StudentID,
+                            LessonDate = lesson.date,
+                            ClockInTime = existing.ClockInTime,
+                            ClockOutTime = existing.ClockOutTime
+                        };
+
+                        await _lessonListTable.AddEntityAsync(addStudent);
+                    }
+                }
+            }
+
+            Lesson recordToUpdate = null;
+
+            await foreach (var record in _lessonTable.QueryAsync<Lesson>(r =>
+                r.PartitionKey == "Lessons" &&
+                r.lessonID == lessonID))
+            {
+                recordToUpdate = record;
+                break;
+            }
+
+            if (recordToUpdate == null)
+                return NotFound("No active lesson for today.");
+
+            recordToUpdate.started = true;
+
+            await _lessonTable.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
+
+            return Ok(new { success = true, message = "Lesson has started" });
+        }
+
+        [HttpPost("endLesson/{lessonID}")]
+        public async Task<IActionResult> endLesson(string lessonID)
+        {
+            Lesson lesson = null;
+            await foreach (var s in _lessonTable.QueryAsync<Lesson>(s => s.lessonID == lessonID))
+            {
+                lesson = s;
+                break;
+            }
+
+            await foreach (var existing in _lessonListTable.QueryAsync<LessonList>())
+            {
+                if(lesson.lessonID == existing.LessonID)
+                {
+                    await _lessonListTable.DeleteEntityAsync(existing);
+
+                }
+            }
+
+            Lesson recordToUpdate = null;
+
+            await foreach (var record in _lessonTable.QueryAsync<Lesson>(r =>
+                r.PartitionKey == "Lessons" &&
+                r.lessonID == lessonID))
+            {
+                recordToUpdate = record;
+                break;
+            }
+
+            if (recordToUpdate == null)
+                return NotFound("No active lesson for today.");
+
+            recordToUpdate.finished = true;
+
+            await _lessonTable.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
+
+            return Ok(new { success = true, message = "Lesson has ended" });
+        }
     }
 }
