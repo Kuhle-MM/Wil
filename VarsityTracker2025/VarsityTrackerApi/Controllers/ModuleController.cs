@@ -216,6 +216,33 @@ namespace VarsityTrackerApi.Controllers
                 return StatusCode(500, $"Error retrieving modules: {ex.Message}");
             }
         }
+
+        [HttpGet("all_student_modules")]
+        public async Task<IActionResult> GetModulesByStudent(string studentNumber)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(studentNumber))
+                {
+                    return BadRequest("Student Number is required.");
+                }
+
+                var modulesList = new List<StudentModules>();
+
+                var filter = TableClient.CreateQueryFilter<StudentModules>(m => m.studentNumber == studentNumber);
+
+                await foreach (var module in _studentModuleTable.QueryAsync<StudentModules>(filter))
+                {
+                    modulesList.Add(module);
+                }
+
+                return Ok(modulesList);
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error retrieving modules: {ex.Message}");
+            }
+        }
     }
 }
 
