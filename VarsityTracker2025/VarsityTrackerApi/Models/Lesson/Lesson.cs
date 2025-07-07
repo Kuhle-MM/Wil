@@ -13,6 +13,7 @@ namespace VarsityTrackerApi.Models.Lesson
         public string moduleCode { get; set; }
         public string lecturerID { get; set; }
         public bool started = false;
+        public DateTime startedTime { get; set; }
         public bool finished = false;
         //ITableEntity implementation
         public string? PartitionKey

@@ -108,7 +108,29 @@ namespace VarsityTrackerApi.Controllers
                 ClockInTime = DateTime.UtcNow,
                 ClockOutTime = null
             };
+            Lesson lesson = null;
+            await foreach (var s in _lessonTable.QueryAsync<Lesson>(s => s.started == true && s.date >= today))
+            {
+                lesson = s;
+                break;
+            }
+            if (lesson == null)
+                return NotFound("No active lessons.");
+            if(lesson != null)
+            {
+                var addStudent = new LessonList
+                {
+                    PartitionKey = "LessonList",
+                    RowKey = Guid.NewGuid().ToString(),
+                    LessonID = lesson.lessonID,
+                    StudentID = student.studentNumber,
+                    LessonDate = lesson.date,
+                    ClockInTime = DateTime.UtcNow,
+                    ClockOutTime = null
+                };
 
+                await _lessonListTable.AddEntityAsync(addStudent);
+            }
             await _waitingList.AddEntityAsync(studentList);
             return Ok($"Student with ID: {studentList.StudentID} added successfully to waiting list.");
         }
@@ -206,8 +228,8 @@ namespace VarsityTrackerApi.Controllers
             {
                 if(lesson.lessonID == existing.LessonID)
                 {
+                    for(int i = )
                     await _lessonListTable.DeleteEntityAsync(existing);
-
                 }
             }
 
