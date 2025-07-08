@@ -29,6 +29,7 @@ import LecturerAttendance from './LecturerAttendance.tsx';
 import CreateModule from './CreateModule.tsx';
 import StudentModules from './StudentModules.tsx';
 import LecturerModules from './LecturerModules.tsx';
+import CreateLesson from './CreateLesson.tsx';
 
 const Stack = createNativeStackNavigator<RootTabParamList>();
 
@@ -145,6 +146,7 @@ export default function App() {
         <StackNav.Screen name="LecturerAttendance" component={LecturerAttendance} />
         <StackNav.Screen name="StudentModules" component={StudentModules} />
         <StackNav.Screen name="LecturerModules" component={LecturerModules} />
+        <StackNav.Screen name="CreateLesson" component={CreateLesson} />
       </StackNav.Navigator>
     </NavigationContainer>
   );
