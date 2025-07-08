@@ -2,19 +2,17 @@
 using Azure.Data.Tables;
 using System.ComponentModel.DataAnnotations;
 
-namespace VarsityTrackerApi.Models.Lesson
+namespace VarsityTrackerApi.Models.Report
 {
-    public class Lesson: ITableEntity
+    public class Reports: ITableEntity
     {
         [Key]
+        public string reportID { get; set; }
         public string lessonID { get; set; }
-        public DateTime date { get; set; }
-        public string courseCode { get; set; }
         public string moduleCode { get; set; }
-        public string lecturerID { get; set; }
-        public bool started { get; set; } = false;
-        public DateTime? startedTime { get; set; }
-        public bool finished { get; set; } = false;
+        public string studentNumber { get; set; }
+        public string status = "Absent";
+        
         //ITableEntity implementation
         public string? PartitionKey
         { get; set; }

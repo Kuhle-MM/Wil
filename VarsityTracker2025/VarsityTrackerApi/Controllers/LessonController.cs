@@ -8,6 +8,7 @@ using VarsityTrackerApi.Models.Access;
 using VarsityTrackerApi.Models.Lesson;
 using System.Reflection;
 using VarsityTrackerApi.Models.Module;
+using VarsityTrackerApi.Models.Report;
 
 namespace VarsityTrackerApi.Controllers
 {
@@ -21,7 +22,7 @@ namespace VarsityTrackerApi.Controllers
         private readonly TableClient _lessonTable;
         private readonly TableClient _moduleTable;
         private readonly TableClient _waitingList;
-        private readonly TableClient _lecturerModuleTable;
+        private readonly TableClient _reportsTable;
         private readonly TableClient _studentModuleTable;
         private readonly TableClient _lessonListTable;
         private readonly BlobServiceClient _blobServiceClient;
@@ -36,7 +37,7 @@ namespace VarsityTrackerApi.Controllers
             _moduleTable = new TableClient(_connectionString, "Modules");
             _blobServiceClient = new BlobServiceClient(_connectionString);
             _waitingList = new TableClient(_connectionString, "WaitingList");
-            _lecturerModuleTable = new TableClient(_connectionString, "LecturerModules");
+            _reportsTable = new TableClient(_connectionString, "Reports");
             _studentModuleTable = new TableClient(_connectionString, "StudentModules");
             _lessonListTable = new TableClient(_connectionString, "LessonList");
         }
@@ -58,13 +59,21 @@ namespace VarsityTrackerApi.Controllers
                 var lessons = new List<Lesson>();
                 await foreach(var existing in _lessonTable.QueryAsync<Lesson>())
                 {
-                    if(existing.moduleCode == lesson.moduleCode)
+                    if (lesson.date == default)
+                    {
+                        return BadRequest("Lesson date is required and cannot be empty.");
+                    }
+
+                    // Ensure the date is explicitly marked as UTC
+                    lesson.date = DateTime.SpecifyKind(lesson.date, DateTimeKind.Utc);
+
+                    if (existing.moduleCode == lesson.moduleCode)
                     {
                         lessons.Add(existing);
                     }
-                    
                 }
 
+                var specifiedDate = DateTime.SpecifyKind(lesson.date, DateTimeKind.Utc);
                 var newLesson = new Lesson
                 {
                     PartitionKey = "Lessons",
@@ -73,7 +82,7 @@ namespace VarsityTrackerApi.Controllers
                     lecturerID = lesson.lecturerID,
                     moduleCode = lesson.moduleCode,
                     courseCode = lesson.courseCode,
-                    date = lesson.date,
+                    date = specifiedDate,
                     started = false,
                     finished = false
                 };
@@ -86,9 +95,11 @@ namespace VarsityTrackerApi.Controllers
                 return StatusCode(500, $"Error saving lesson: {ex.Message}");
             }
         }
+
         [HttpPost("clockin/{studentNumber}")]
         public async Task<IActionResult> StudentList(string studentNumber)
         {
+            // Find the student
             Students student = null;
             await foreach (var s in _studentTable.QueryAsync<Students>(s => s.studentNumber == studentNumber.ToUpper()))
             {
@@ -99,25 +110,45 @@ namespace VarsityTrackerApi.Controllers
             if (student == null)
                 return NotFound("Student not found.");
 
-            var today = DateTime.UtcNow.Date;
+            var now = DateTime.UtcNow;
+            var today = now.Date;
+
+            // Add to waiting list
             var studentList = new StudentList
             {
                 PartitionKey = "StudentList",
                 RowKey = Guid.NewGuid().ToString(),
                 StudentID = student.studentNumber,
-                ClockInTime = DateTime.UtcNow,
+                ClockInTime = now,
                 ClockOutTime = null
             };
+
+            await _waitingList.AddEntityAsync(studentList);
+
+            // Find an active lesson that started today
             Lesson lesson = null;
-            await foreach (var s in _lessonTable.QueryAsync<Lesson>(s => s.started == true && s.date >= today))
+            var todayStart = DateTime.UtcNow.Date;
+            var todayEnd = todayStart.AddDays(1);
+
+            await foreach (var s in _lessonTable.QueryAsync<Lesson>(s =>
+                s.started == true && s.date >= todayStart && s.date < todayEnd))
             {
                 lesson = s;
                 break;
             }
-            if (lesson == null)
-                return NotFound("No active lessons.");
-            if(lesson != null)
+
+            // Check if the student is already in the LessonList
+            LessonList existingEntry = null;
+            await foreach (var entry in _lessonListTable.QueryAsync<LessonList>(l =>
+                l.LessonID == lesson.lessonID && l.StudentID == student.studentNumber))
             {
+                existingEntry = entry;
+                break;
+            }
+
+            if (existingEntry == null)
+            {
+                // Add new LessonList record if none exists
                 var addStudent = new LessonList
                 {
                     PartitionKey = "LessonList",
@@ -125,14 +156,22 @@ namespace VarsityTrackerApi.Controllers
                     LessonID = lesson.lessonID,
                     StudentID = student.studentNumber,
                     LessonDate = lesson.date,
-                    ClockInTime = DateTime.UtcNow,
+                    ClockInTime = now,
                     ClockOutTime = null
                 };
 
                 await _lessonListTable.AddEntityAsync(addStudent);
             }
-            await _waitingList.AddEntityAsync(studentList);
-            return Ok($"Student with ID: {studentList.StudentID} added successfully to waiting list.");
+            else
+            {
+                // Update existing LessonList record's clock-in time
+                existingEntry.ClockInTime = now;
+                existingEntry.ClockOutTime = null;  // Optional: reset clock-out time if you want
+
+                await _lessonListTable.UpdateEntityAsync(existingEntry, existingEntry.ETag, TableUpdateMode.Replace);
+            }
+
+            return Ok($"Student with ID: {studentList.StudentID} clocked in successfully.");
         }
 
         [HttpPost("clockoutStudent/{studentNumber}")]
@@ -164,41 +203,66 @@ namespace VarsityTrackerApi.Controllers
         [HttpPost("startLesson/{lessonID}")]
         public async Task<IActionResult> StartLesson(string lessonID)
         {
+            // Retrieve the lesson
             Lesson lesson = null;
             await foreach (var s in _lessonTable.QueryAsync<Lesson>(s => s.lessonID == lessonID))
             {
                 lesson = s;
                 break;
             }
+
             if (lesson == null)
                 return NotFound("Lesson not found.");
-            await foreach (var existing in _waitingList.QueryAsync<StudentList>())
-            {
-                await foreach (var f in _studentModuleTable.QueryAsync<StudentModules>())
-                {
-                    if(f.studentNumber == existing.StudentID)
-                    {
-                        var addStudent = new LessonList
-                        {
-                            PartitionKey = "LessonList",
-                            RowKey = Guid.NewGuid().ToString(),
-                            LessonID = lesson.lessonID,
-                            StudentID = existing.StudentID,
-                            LessonDate = lesson.date,
-                            ClockInTime = existing.ClockInTime,
-                            ClockOutTime = existing.ClockOutTime
-                        };
 
-                        await _lessonListTable.AddEntityAsync(addStudent);
-                    }
+            var today = DateTime.UtcNow.Date;
+
+            // Build a dictionary of students who have clocked in today
+            var waitingDict = new Dictionary<string, StudentList>();
+            await foreach (var wl in _waitingList.QueryAsync<StudentList>())
+            {
+                if (wl.ClockInTime.HasValue && wl.ClockInTime.Value.Date == today)
+                {
+                    waitingDict[wl.StudentID] = wl;
                 }
             }
 
-            Lesson recordToUpdate = null;
+            // Get all student IDs enrolled in the lesson's module
+            var eligibleStudentIDs = new HashSet<string>();
+            await foreach (var f in _studentModuleTable.QueryAsync<StudentModules>(m => m.moduleCode == lesson.moduleCode))
+            {
+                eligibleStudentIDs.Add(f.studentNumber);
+            }
 
+            // Track already added students to prevent duplicates
+            var addedStudents = new HashSet<string>();
+
+            foreach (var studentID in eligibleStudentIDs)
+            {
+                if (addedStudents.Contains(studentID))
+                    continue;
+
+                // Check if student clocked in
+                var isClockedIn = waitingDict.TryGetValue(studentID, out var clockedInStudent);
+
+                var lessonListEntry = new LessonList
+                {
+                    PartitionKey = "LessonList",
+                    RowKey = Guid.NewGuid().ToString(),
+                    LessonID = lesson.lessonID,
+                    StudentID = studentID,
+                    LessonDate = lesson.date,
+                    ClockInTime = isClockedIn ? clockedInStudent.ClockInTime : null,
+                    ClockOutTime = isClockedIn ? clockedInStudent.ClockOutTime : null
+                };
+
+                await _lessonListTable.AddEntityAsync(lessonListEntry);
+                addedStudents.Add(studentID);
+            }
+
+            // Update lesson as started
+            Lesson recordToUpdate = null;
             await foreach (var record in _lessonTable.QueryAsync<Lesson>(r =>
-                r.PartitionKey == "Lessons" &&
-                r.lessonID == lessonID))
+                r.PartitionKey == "Lessons" && r.lessonID == lessonID))
             {
                 recordToUpdate = record;
                 break;
@@ -208,10 +272,11 @@ namespace VarsityTrackerApi.Controllers
                 return NotFound("No active lesson for today.");
 
             recordToUpdate.started = true;
+            recordToUpdate.startedTime = DateTime.UtcNow;
 
             await _lessonTable.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
 
-            return Ok(new { success = true, message = "Lesson has started" });
+            return Ok(new { success = true, message = "Lesson has started and students have been registered." });
         }
 
         [HttpPost("endLesson/{lessonID}")]
@@ -224,11 +289,12 @@ namespace VarsityTrackerApi.Controllers
                 break;
             }
 
+            TableClient _reports;
+
             await foreach (var existing in _lessonListTable.QueryAsync<LessonList>())
             {
-                if(lesson.lessonID == existing.LessonID)
+                if (lesson.lessonID == existing.LessonID)
                 {
-                    for(int i = )
                     await _lessonListTable.DeleteEntityAsync(existing);
                 }
             }
