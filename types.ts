@@ -18,5 +18,8 @@ export type RootTabParamList = {
   LecturerAttendance: undefined;
   StudentModules: { role: 'student' };
   LecturerModules: { role: 'lecturer' };
+  LecturerLessons: { role: 'lecturer' };
   CreateLesson: { role: 'lecturer' };
+  LessonActivity: { role: 'lecturer' };
+  LessonReports: { role: 'lecturer' };
 };
