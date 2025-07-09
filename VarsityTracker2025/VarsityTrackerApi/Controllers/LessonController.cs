@@ -190,7 +190,7 @@ namespace VarsityTrackerApi.Controllers
                 break;
             }
 
-            if (recordToUpdate == null)
+            if (recordToUpdate.ClockInTime == null || recordToUpdate == null)
                 return NotFound("No active clock-in found for today.");
 
             recordToUpdate.ClockOutTime = DateTime.UtcNow;
@@ -280,8 +280,9 @@ namespace VarsityTrackerApi.Controllers
         }
 
         [HttpPost("endLesson/{lessonID}")]
-        public async Task<IActionResult> endLesson(string lessonID)
+        public async Task<IActionResult> EndLesson(string lessonID)
         {
+            // Find the lesson
             Lesson lesson = null;
             await foreach (var s in _lessonTable.QueryAsync<Lesson>(s => s.lessonID == lessonID))
             {
@@ -289,18 +290,48 @@ namespace VarsityTrackerApi.Controllers
                 break;
             }
 
-            TableClient _reports;
+            if (lesson == null)
+                return NotFound("Lesson not found.");
 
-            await foreach (var existing in _lessonListTable.QueryAsync<LessonList>())
+            // Process only students in this lesson
+            var lessonStudents = new List<LessonList>();
+            await foreach (var existing in _lessonListTable.QueryAsync<LessonList>(l => l.LessonID == lessonID))
             {
-                if (lesson.lessonID == existing.LessonID)
-                {
-                    await _lessonListTable.DeleteEntityAsync(existing);
-                }
+                lessonStudents.Add(existing);
             }
 
-            Lesson recordToUpdate = null;
+            foreach (var student in lessonStudents)
+            {
+                // If student has not clocked out, set ClockOutTime to now
+                if (student.ClockInTime != null && student.ClockOutTime == null)
+                {
+                    student.ClockOutTime = DateTime.UtcNow;
+                    await _lessonListTable.UpdateEntityAsync(student, student.ETag, TableUpdateMode.Replace);
+                }
 
+                // Determine status based on presence
+                string status = student.ClockInTime != null ? "Present" : "Absent";
+
+                var report = new Reports
+                {
+                    PartitionKey = "LessonList",
+                    RowKey = Guid.NewGuid().ToString(),
+                    reportID = $"{lesson.lessonID}-Report",
+                    lessonID = lesson.lessonID,
+                    studentNumber = student.StudentID,
+                    status = status,
+                    moduleCode = lesson.moduleCode
+                };
+
+                // Avoid duplicate reports 
+                await _reportsTable.AddEntityAsync(report);
+
+                // Remove from LessonList
+                await _lessonListTable.DeleteEntityAsync(student.PartitionKey, student.RowKey);
+            }
+
+            // Mark lesson as finished
+            Lesson recordToUpdate = null;
             await foreach (var record in _lessonTable.QueryAsync<Lesson>(r =>
                 r.PartitionKey == "Lessons" &&
                 r.lessonID == lessonID))
@@ -310,13 +341,40 @@ namespace VarsityTrackerApi.Controllers
             }
 
             if (recordToUpdate == null)
-                return NotFound("No active lesson for today.");
+                return NotFound("Lesson record could not be found for update.");
 
             recordToUpdate.finished = true;
 
             await _lessonTable.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
 
-            return Ok(new { success = true, message = "Lesson has ended" });
+            return Ok(new { success = true, message = "Lesson has ended and student statuses recorded." });
+        }
+
+        [HttpGet("display_report")]
+        public async Task<IActionResult> GetReportByID(string ReportID)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(ReportID))
+                {
+                    return BadRequest("Report ID is required.");
+                }
+
+                var reportList = new List<Reports>();
+
+                var filter = TableClient.CreateQueryFilter<Reports>(m => m.reportID == ReportID);
+
+                await foreach (var report in _reportsTable.QueryAsync<Reports>(filter))
+                {
+                    reportList.Add(report);
+                }
+
+                return Ok(reportList);
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error retrieving Report: {ex.Message}");
+            }
         }
     }
 }
