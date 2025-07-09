@@ -1,47 +1,47 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
+import { SvgUri } from 'react-native-svg';
 
 
-type AuthRouteProp = RouteProp<RootTabParamList, 'AuthLecturer'>;
+type AuthRouteProp = RouteProp<RootTabParamList, 'AuthAdmin'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
-const LecturerDashboard: React.FC = () => {
+const AdminDashboard: React.FC = () => {
   const navigation = useNavigation<AuthNavProp>();
     const route = useRoute<AuthRouteProp>();
     const { role } = route.params;
-    const handleReport = async () => {
-    navigation.navigate('ReportLecturer');  
+    const createUser = async () => {
+    navigation.navigate('CreateUser', { role });  
     };
-    const handleCalandar = async () => {
-    navigation.navigate('Calendar');  
-    };
-    const handleAttendance = async () => {
-    navigation.navigate('LecturerAttendance');  
-    };
-    const handleModule = async () => {
-    navigation.navigate('LecturerModules', { role });  
-    };
-    const handleLesson = async () => {
-    navigation.navigate('CreateLesson', { role });  
+    const createModule = async () => {
+    navigation.navigate('CreateModule', { role });  
     };
     
   return (
-    <View style={styles.scrollContainer}>
-        <Text style={styles.header}>Dashboard</Text>
-        <Text style={styles.sectionTitle}>Set Today’s Modules</Text>
-        <TouchableOpacity style={styles.card}><Text style={styles.cardText}>tap to generate</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.smallButton} onPress={handleReport}><Text>report overview</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.smallButton} onPress={handleAttendance}><Text>Clock In</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.smallButton} onPress={handleModule}><Text>Your Modules</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.smallButton} onPress={handleLesson}><Text>Create Lesson</Text></TouchableOpacity>
-      </View>
-  );
-};
+  <View style={styles.scrollContainer}>
+    <Text style={styles.header}>Dashboard</Text>
 
-export default LecturerDashboard;
+    <TouchableOpacity style={styles.smallButton} onPress={createUser}>
+      <Text>Create User</Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.smallButton} onPress={createModule}>
+      <Text>Create Module</Text>
+    </TouchableOpacity>
+
+    <Text style={styles.header}>QR Code</Text>
+
+    <SvgUri
+      width="200"
+      height="200"
+      uri="https://varsitytracker2025.blob.core.windows.net/qrcodes/jdjones.svg"
+    />
+  </View>
+);
+};
+export default AdminDashboard;
 
 const styles = StyleSheet.create({
   centeredContainer: {

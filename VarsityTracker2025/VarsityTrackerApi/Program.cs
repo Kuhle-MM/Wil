@@ -1,6 +1,6 @@
 
 using Microsoft.Extensions.Configuration;
-using VarsityTrackerApi.Models;
+using VarsityTrackerApi.Models.Access;
 
 namespace VarsityTrackerApi
 {
@@ -16,6 +16,7 @@ namespace VarsityTrackerApi
             builder.Services.Configure<AzureTableStorageSettings>(
         builder.Configuration.GetSection("AzureTableStorage"));
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll", builder =>
@@ -26,9 +27,11 @@ namespace VarsityTrackerApi
                         .AllowAnyHeader();
                 });
             });
-
+            AppContext.SetSwitch("System.Drawing.EnableUnixSupport", true);
             var app = builder.Build();
 
+            app.UseSwagger();
+            app.UseSwaggerUI();
             app.UseCors("AllowAll");
 
             app.UseHttpsRedirection();

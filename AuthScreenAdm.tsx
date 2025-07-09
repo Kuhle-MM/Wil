@@ -5,10 +5,10 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type AuthRouteProp = RouteProp<RootTabParamList, 'AuthLecturer'>;
+type AuthRouteProp = RouteProp<RootTabParamList, 'AuthAdmin'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
-const AuthScreenLect: React.FC = () => {
+const AuthScreenAdm: React.FC = () => {
   const navigation = useNavigation<AuthNavProp>();
   const route = useRoute<AuthRouteProp>();
   const { role } = route.params;
@@ -17,7 +17,7 @@ const AuthScreenLect: React.FC = () => {
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
-  const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Access/login_lecturer';
+  const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Access/login_admin';
 
   try {
     const response = await fetch(endpoint, {
@@ -38,17 +38,18 @@ const AuthScreenLect: React.FC = () => {
       Alert.alert('Login Failed', json.message || 'Invalid credentials');
       return;
     }
+
     const idNumber = email.split('@')[0];
 
     await AsyncStorage.setItem('userSession', JSON.stringify({
-      lecturerID: idNumber,
+      studentNumber: idNumber,
       role,
       token: json.token || null, 
       email,
     }));
 
     Alert.alert('Success', json.message);
-    navigation.navigate('MainLecturer', { role });  
+    navigation.navigate('MainAdmin', { role });
   } catch (error) {
     console.error(error);
     Alert.alert('Error', 'Could not connect to the server.');
@@ -81,7 +82,7 @@ const AuthScreenLect: React.FC = () => {
   );
 };
 
-export default AuthScreenLect;
+export default AuthScreenAdm;
 
 const styles = StyleSheet.create({
   container: {

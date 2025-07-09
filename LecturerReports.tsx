@@ -1,26 +1,12 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, FlatList } from 'react-native';
 
 type AttendanceRecord = {
   rowKey: string;
   clockInTime: string;
+  studentNumber: string;
   status: string;
 };
-
-const getStudentId = async (): Promise<string | null> => {
-  try {
-    const session = await AsyncStorage.getItem('userSession');
-    if (session) {
-      const { studentNumber } = JSON.parse(session);
-      return studentNumber.toUpperCase();
-    }
-  } catch (e) {
-    console.error('Failed to load student ID from storage', e);
-  }
-  return null;
-};
-
 const StudentsReports: React.FC = () => {
   const [data, setData] = useState<AttendanceRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,17 +16,10 @@ const StudentsReports: React.FC = () => {
     const fetchReport = async () => {
       
       try {
-        
-        const studentNumber = await getStudentId();
-        console.log('Student ID from storage:', studentNumber);
-        const url = `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/report/${studentNumber}`;
+        const url = `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/report/getAll`;
         console.log('Requesting attendance from:', url);
-        if (!studentNumber) {
-          throw new Error('Student ID not found. Please log in again.');
-        }
-
         const response = await fetch(
-          `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/report/${studentNumber}`
+          `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/report/getAll`
         );
 
         if (!response.ok) {
@@ -63,6 +42,7 @@ const StudentsReports: React.FC = () => {
 
   const renderItem = ({ item }: { item: AttendanceRecord }) => (
     <View style={styles.reportRow}>
+        <Text>{item.studentNumber}</Text>
       <Text> {item.clockInTime}</Text>
       <Text>{item.status}</Text>
     </View>
