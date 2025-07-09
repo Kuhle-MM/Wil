@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, Alert, TouchableOpacity, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Picker } from '@react-native-picker/picker';
+
+type Module = {
+  moduleCode: string;
+  courseCode: string;
+};
 
 const CreateLesson: React.FC = () => {
   const [lecturerID, setLecturerID] = useState<string>('');
@@ -12,6 +18,7 @@ const CreateLesson: React.FC = () => {
   const [selectedTime, setSelectedTime] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [modules, setModules] = useState<Module[]>([]);
 
   const handleCreateLesson = async () => {
     if (!lecturerID || !moduleCode || !courseCode || !date) {
@@ -98,16 +105,40 @@ const CreateLesson: React.FC = () => {
     loadLecturerID();
   }, []);
 
+  useEffect(() => {
+  const fetchModules = async () => {
+    try {
+      if (!lecturerID) return;
+
+      const response = await fetch(
+        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_lecturer_modules?lecturerID=${lecturerID}`
+      );
+      if (!response.ok) throw new Error('Failed to fetch modules');
+
+      const data = await response.json();
+      setModules(data); // Assuming each item has moduleCode and courseCode
+    } catch (error) {
+      Alert.alert('Error', (error as Error).message);
+    }
+  };
+
+  fetchModules();
+}, [lecturerID]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Create Lesson</Text>
 
-      <TextInput
-        placeholder="Module Code"
+      <Picker
+        selectedValue={moduleCode}
+        onValueChange={(value) => setModuleCode(value)}
         style={styles.input}
-        value={moduleCode}
-        onChangeText={setModuleCode}
-      />
+      >
+        <Picker.Item label="Select a module" value="" />
+        {modules.map((mod) => (
+          <Picker.Item key={mod.moduleCode} label={mod.moduleCode} value={mod.moduleCode} />
+        ))}
+      </Picker>
       <TextInput
         placeholder="Course Code"
         style={styles.input}

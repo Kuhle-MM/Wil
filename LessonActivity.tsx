@@ -4,103 +4,116 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 
+type Lessons = {
+  rowKey: string;
+  lessonID: string;
+  moduleCode: string;
+};
+
 const LessonActivity: React.FC = () => {
   const [lecturerID, setLecturerID] = useState<string>('');
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedLessonID, setSelectedLessonID] = useState('');
   const [lessonStarted, setLessonStarted] = useState(false);
-
-   const handleCreateLesson = async () => {
-    Alert.alert('Error', 'All fields are required');
-    return;
-  }; 
+  const [lessons, setLessons] = useState<Lessons[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadLecturerID = async () => {
+    const loadLecturerIDAndLessons = async () => {
       try {
         const session = await AsyncStorage.getItem('userSession');
         if (!session) throw new Error('No user session found');
         const parsed = JSON.parse(session);
         if (!parsed.lecturerID) throw new Error('Lecturer ID not found');
         setLecturerID(parsed.lecturerID);
+
+        const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/all_lecturer_lessons?lecturerID=${parsed.lecturerID}`);
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText);
+        }
+
+        const data = await response.json();
+        setLessons(data);
       } catch (error) {
         Alert.alert('Error', (error as Error).message);
+      } finally {
+        setLoading(false);
       }
     };
 
-    loadLecturerID();
+    loadLecturerIDAndLessons();
   }, []);
 
   const startLesson = async (lessonID: string) => {
-  try {
-    const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/startLesson/${lessonID}`, {
-      method: 'POST',
-    });
+    try {
+      const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/startLesson/${lessonID}`, {
+        method: 'POST',
+      });
 
-    if (!response.ok) {
-      const errorData = await response.text();
-      Alert.alert('Error', errorData);
-      return;
+      if (!response.ok) {
+        const errorData = await response.text();
+        Alert.alert('Error', errorData);
+        return;
+      }
+
+      const result = await response.json();
+      Alert.alert('Success', result.message);
+    } catch (error) {
+      Alert.alert('Error', 'Failed to start lesson. Please try again.');
     }
+  };
 
-    const result = await response.json();
-    Alert.alert('Success', result.message);
-  } catch (error) {
-    Alert.alert('Error', 'Failed to start lesson. Please try again.');
-  }
-};
+  const endLesson = async (lessonID: string) => {
+    try {
+      const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/endLesson/${lessonID}`, {
+        method: 'POST',
+      });
 
-const endLesson = async (lessonID: string) => {
-  try {
-    const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/endLesson/${lessonID}`, {
-      method: 'POST',
-    });
+      if (!response.ok) {
+        const errorData = await response.text();
+        Alert.alert('Error', errorData);
+        return;
+      }
 
-    if (!response.ok) {
-      const errorData = await response.text();
-      Alert.alert('Error', errorData);
-      return;
+      const result = await response.json();
+      Alert.alert('Success', result.message);
+    } catch (error) {
+      Alert.alert('Error', 'Failed to end lesson. Please try again.');
     }
-
-    const result = await response.json();
-    Alert.alert('Success', result.message);
-  } catch (error) {
-    Alert.alert('Error', 'Failed to end lesson. Please try again.');
-  }
-};
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Begin Lesson</Text>
-      
+      <Text style={styles.header}>Manage Lesson</Text>
 
       <Picker
-        selectedValue={selectedOption}
-        onValueChange={(itemValue) => {
-          setSelectedOption(itemValue);
-          setLessonStarted(false); // reset toggle when lesson changes
-        }}
+        selectedValue={selectedLessonID}
+        onValueChange={(itemValue) => setSelectedLessonID(itemValue)}
         style={styles.picker}
       >
-        <Picker.Item label="Select Lesson" value="" />
-        <Picker.Item label="MAPC5112-LES-0" value="MAPC5112-LES-0" />
-        <Picker.Item label="MAPC5112-LES-1" value="MAPC5112-LES-1" />
-        <Picker.Item label="PROG7311-LES-0" value="PROG7311-LES-0" />
-        <Picker.Item label="PROG7311-LES-1" value="PROG7311-LES-1" />
+        <Picker.Item label="Select a Lesson" value="" />
+        {lessons.map((lesson) => (
+          <Picker.Item
+            key={lesson.lessonID}
+            label={`${lesson.lessonID} (${lesson.moduleCode})`}
+            value={lesson.lessonID}
+          />
+        ))}
       </Picker>
 
       <Button
         title={lessonStarted ? 'End Lesson' : 'Begin Lesson'}
         onPress={() => {
-          if (!selectedOption) {
+          if (!selectedLessonID) {
             Alert.alert('Error', 'Please select a lesson first.');
             return;
           }
 
           if (!lessonStarted) {
-            startLesson(selectedOption);
+            startLesson(selectedLessonID);
             setLessonStarted(true);
           } else {
-            endLesson(selectedOption);
+            endLesson(selectedLessonID);
             setLessonStarted(false);
           }
         }}

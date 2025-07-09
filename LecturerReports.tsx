@@ -3,30 +3,32 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityInd
 import { Picker } from '@react-native-picker/picker';
 
 type Report = {
+  reportID: string;
   lessonID: string;
   moduleCode: string;
   studentNumber: string;
-  rowKey: string;    // For the FlatList keyExtractor
+  rowKey: string;
   timestamp: string;
-  }
+};
 
 const LecturerReports: React.FC = () => {
-  const [lecturerID, setLecturerID] = useState<string>('');
-  const [reportID, setReportID] = useState('');
   const [reportData, setReportData] = useState<Report[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [selectedReportID, setSelectedReportID] = useState<string>('');
+  const [reports, setReports] = useState<Report[]>([]);
 
   const fetchReport = async () => {
-    if (!reportID.trim()) {
-      Alert.alert('Error', 'Please enter a Report ID.');
+    if (!selectedReportID.trim()) {
+      Alert.alert('Error', 'Please select a Report ID.');
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/display_report?ReportID=${reportID}`);
+      const response = await fetch(
+        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/display_report?ReportID=${selectedReportID}`
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -42,16 +44,48 @@ const LecturerReports: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchAllReports = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/all_reports'
+        );
+
+        if (!response.ok) {
+          const error = await response.text();
+          throw new Error(error);
+        }
+
+        const data = await response.json();
+        setReports(data);
+      } catch (error) {
+        Alert.alert('Error', (error as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllReports();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>View Lesson Report</Text>
-      <Picker selectedValue={selectedOption} onValueChange={(itemValue) => {
-          setSelectedOption(itemValue); }} style={styles.picker} >
-        <Picker.Item label="Select Lesson" value="" />
-        <Picker.Item label="MAPC5112-LES-0" value="MAPC5112-LES-0" />
-        <Picker.Item label="MAPC5112-LES-1" value="MAPC5112-LES-1" />
-        <Picker.Item label="PROG7311-LES-0" value="PROG7311-LES-0" />
-        <Picker.Item label="PROG7311-LES-1" value="PROG7311-LES-1" />
+
+      <Picker
+        selectedValue={selectedReportID}
+        onValueChange={(itemValue) => setSelectedReportID(itemValue)}
+        style={styles.picker}
+      >
+        <Picker.Item label="Select a Report" value="" />
+        {reports.map((report) => (
+          <Picker.Item
+            key={report.reportID}
+            label={`${report.lessonID}`}
+            value={report.reportID}
+          />
+        ))}
       </Picker>
 
       <Button title="Fetch Report" onPress={fetchReport} />
