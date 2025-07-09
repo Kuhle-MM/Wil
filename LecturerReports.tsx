@@ -1,93 +1,112 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, FlatList, Button } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 
-type AttendanceRecord = {
-  rowKey: string;
-  clockInTime: string;
+type Report = {
+  lessonID: string;
+  moduleCode: string;
   studentNumber: string;
-  status: string;
-};
-const StudentsReports: React.FC = () => {
-  const [data, setData] = useState<AttendanceRecord[]>([]);
-  const [loading, setLoading] = useState(true);
+  rowKey: string;    // For the FlatList keyExtractor
+  timestamp: string;
+  }
 
-  
-  useEffect(() => {
-    const fetchReport = async () => {
-      
-      try {
-        const url = `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/report/getAll`;
-        console.log('Requesting attendance from:', url);
-        const response = await fetch(
-          `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/report/getAll`
-        );
+const LecturerReports: React.FC = () => {
+  const [lecturerID, setLecturerID] = useState<string>('');
+  const [reportID, setReportID] = useState('');
+  const [reportData, setReportData] = useState<Report[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedOption, setSelectedOption] = useState('');
 
-        if (!response.ok) {
-          const text = await response.text();
-          throw new Error(text || 'Failed to fetch attendance report.');
-        }
+  const fetchReport = async () => {
+    if (!reportID.trim()) {
+      Alert.alert('Error', 'Please enter a Report ID.');
+      return;
+    }
 
-        const result = await response.json();
-        setData(result);
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred.';
-        Alert.alert('Error', errorMessage);
-      } finally {
-        setLoading(false);
+    setLoading(true);
+
+    try {
+      const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/display_report?ReportID=${reportID}`);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
       }
-    };
 
-    fetchReport();
-  }, []);
-
-  const renderItem = ({ item }: { item: AttendanceRecord }) => (
-    <View style={styles.reportRow}>
-        <Text>{item.studentNumber}</Text>
-      <Text> {item.clockInTime}</Text>
-      <Text>{item.status}</Text>
-    </View>
-  );
+      const data = await response.json();
+      setReportData(data);
+    } catch (error: any) {
+      Alert.alert('Error', error.message || 'Failed to fetch report.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <View style={styles.scrollContainer}>
-      <Text style={styles.header}>Report</Text>
-      <Text style={styles.subHeader}>MONTH ▼</Text>
+    <View style={styles.container}>
+      <Text style={styles.header}>View Lesson Report</Text>
+      <Picker selectedValue={selectedOption} onValueChange={(itemValue) => {
+          setSelectedOption(itemValue); }} style={styles.picker} >
+        <Picker.Item label="Select Lesson" value="" />
+        <Picker.Item label="MAPC5112-LES-0" value="MAPC5112-LES-0" />
+        <Picker.Item label="MAPC5112-LES-1" value="MAPC5112-LES-1" />
+        <Picker.Item label="PROG7311-LES-0" value="PROG7311-LES-0" />
+        <Picker.Item label="PROG7311-LES-1" value="PROG7311-LES-1" />
+      </Picker>
 
+      <Button title="Fetch Report" onPress={fetchReport} />
       {loading ? (
-        <ActivityIndicator size="large" color="#000000" />
+        <Text style={{ marginTop: 20 }}>Loading...</Text>
       ) : (
         <FlatList
-          data={data}
+          data={reportData}
           keyExtractor={(item) => item.rowKey}
-          renderItem={renderItem}
+          renderItem={({ item }) => (
+            <View style={styles.card}>
+              <Text style={styles.cardText}>Lesson ID: {item.lessonID}</Text>
+              <Text style={styles.cardText}>Module: {item.moduleCode}</Text>
+              <Text style={styles.cardText}>Student: {item.studentNumber}</Text>
+              <Text style={styles.cardText}>TimeStamp: {item.timestamp}</Text>
+            </View>
+          )}
+          ListEmptyComponent={<Text style={{ marginTop: 20 }}>No data found.</Text>}
         />
       )}
     </View>
   );
 };
 
-export default StudentsReports;
+export default LecturerReports;
 
 const styles = StyleSheet.create({
-  scrollContainer: {
-    flex: 1,
+  container: {
     padding: 16,
     backgroundColor: '#fff',
+    flex: 1,
+  },
+  picker: { 
+    height: 50, 
+    width: '100%' 
   },
   header: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 12,
   },
-  subHeader: {
-    fontSize: 16,
-    marginBottom: 8,
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 12,
   },
-  reportRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+  card: {
+    backgroundColor: '#f0f0f0',
+    padding: 16,
+    borderRadius: 10,
+    marginVertical: 8,
+  },
+  cardText: {
+    fontSize: 16,
   },
 });

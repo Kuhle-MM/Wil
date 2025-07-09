@@ -350,6 +350,33 @@ namespace VarsityTrackerApi.Controllers
             return Ok(new { success = true, message = "Lesson has ended and student statuses recorded." });
         }
 
+        [HttpGet("all_lecturer_lessons")]
+        public async Task<IActionResult> GetLessonsByLecturer(string lecturerID)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(lecturerID))
+                {
+                    return BadRequest("Lecturer ID is required.");
+                }
+
+                var lessonsList = new List<Lesson>();
+
+                var filter = TableClient.CreateQueryFilter<Lesson>(m => m.lecturerID == lecturerID);
+
+                await foreach (var module in _lessonTable.QueryAsync<Lesson>(filter))
+                {
+                    lessonsList.Add(module);
+                }
+
+                return Ok(lessonsList);
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error retrieving Lesson: {ex.Message}");
+            }
+        }
+
         [HttpGet("display_report")]
         public async Task<IActionResult> GetReportByID(string ReportID)
         {
@@ -374,6 +401,26 @@ namespace VarsityTrackerApi.Controllers
             catch (RequestFailedException ex)
             {
                 return StatusCode(500, $"Error retrieving Report: {ex.Message}");
+            }
+        }
+
+        [HttpGet("all_reports")]
+        public async Task<IActionResult> GetAllReports()
+        {
+            try
+            {
+                var reportsList = new List<Reports>();
+
+                await foreach (var reports in _reportsTable.QueryAsync<Reports>())
+                {
+                    reportsList.Add(reports);
+                }
+
+                return Ok(reportsList);
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error retrieving modules: {ex.Message}");
             }
         }
     }
