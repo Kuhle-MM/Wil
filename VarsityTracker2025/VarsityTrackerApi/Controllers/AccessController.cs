@@ -67,7 +67,7 @@ namespace VarsityTrackerApi.Controllers
                     {
                         PartitionKey = "Lecturers",
                         RowKey = Guid.NewGuid().ToString(),
-                        lecturerEmail = user.email,
+                        lecturerEmail = user.email.ToLower(),
                         password = PasswordHelper.HashPassword(user.password),
                         firstName = user.firstName,
                         lastName = user.lastName,

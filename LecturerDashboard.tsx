@@ -25,7 +25,7 @@ const LecturerDashboard: React.FC = () => {
     navigation.navigate('LecturerModules', { role });  
     };
     const handleLesson = async () => {
-    navigation.navigate('CreateLesson', { role });  
+    navigation.navigate('LecturerLessons', { role });  
     };
     
   return (
@@ -36,7 +36,7 @@ const LecturerDashboard: React.FC = () => {
         <TouchableOpacity style={styles.smallButton} onPress={handleReport}><Text>report overview</Text></TouchableOpacity>
         <TouchableOpacity style={styles.smallButton} onPress={handleAttendance}><Text>Clock In</Text></TouchableOpacity>
         <TouchableOpacity style={styles.smallButton} onPress={handleModule}><Text>Your Modules</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.smallButton} onPress={handleLesson}><Text>Create Lesson</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.smallButton} onPress={handleLesson}><Text>Your Lesson</Text></TouchableOpacity>
       </View>
   );
 };

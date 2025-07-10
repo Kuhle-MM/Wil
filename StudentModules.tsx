@@ -70,7 +70,7 @@ const StudentModules: React.FC = () => {
     const fetchAssignedModules = async () => {
       try {
         const response = await fetch(
-          `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_student_modules?lecturerID=${studentNumber}`
+          `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_student_modules?studentNumber=${studentNumber.toUpperCase()}`
         );
         if (!response.ok) throw new Error('Failed to fetch assigned modules');
         const data = await response.json();
@@ -122,7 +122,7 @@ const StudentModules: React.FC = () => {
       // Refresh list
       setLoadingAssigned(true);
       const updatedResponse = await fetch(
-        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_student_modules?lecturerID=${studentNumber}`
+        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_student_modules?studentNumber=${studentNumber.toUpperCase()}`
       );
       const updatedData = await updatedResponse.json();
       const transformed = updatedData.map((item: any) => ({

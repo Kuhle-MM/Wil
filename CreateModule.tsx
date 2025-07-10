@@ -19,7 +19,7 @@ const CreateModule: React.FC = () => {
     const [courseCode, setCourseCode] = useState('');
     const [year, setYear] = useState('');
 
-  const handleCreateUser = async () => {
+  const handleCreateModule = async () => {
     const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/create_module';
 
     try {
@@ -65,7 +65,7 @@ const CreateModule: React.FC = () => {
       <TextInput placeholder="NQF" value={NQF} onChangeText={setNQF} autoCapitalize="none" style={styles.input} />
       <TextInput placeholder="Credits" value={credits} onChangeText={setCredits} style={styles.input} />
       
-      <TouchableOpacity style={styles.button} onPress={handleCreateUser}>
+      <TouchableOpacity style={styles.button} onPress={handleCreateModule}>
         <Text style={styles.buttonText}>Create Module</Text>
       </TouchableOpacity>
     </View>
