@@ -8,11 +8,6 @@ import { RootTabParamList } from './types';
 type AuthRouteProp = RouteProp<RootTabParamList, 'LecturerLessons'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
-type Lessons = {
-  RowKey: string;
-  lecturerID: string;
-};
-
 const LecturerLessons: React.FC = () => {
   const navigation = useNavigation<AuthNavProp>();
     const route = useRoute<AuthRouteProp>();
