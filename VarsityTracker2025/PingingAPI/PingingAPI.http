@@ -1,0 +1,6 @@
+@PingingAPI_HostAddress = http://localhost:5090
+
+GET {{PingingAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
