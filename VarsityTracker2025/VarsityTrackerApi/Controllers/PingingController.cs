@@ -84,7 +84,7 @@ public class PingingController : ControllerBase
         var lessonId = matchingLessons.Select(l => l.PartitionKey).FirstOrDefault();
         var studentList = matchingLessons.Select(l => l.RowKey).Where(s => s != null).ToList();
 
-        int totalPings = studentList.Contains(_tempAppDetail.StudentNumber)
+        int totalPings = studentList.Contains(_tempAppDetail.StudentID)
             ? _tempAppDetail.PingNumber
             : 0;
 
@@ -92,7 +92,7 @@ public class PingingController : ControllerBase
         {
             PartitionKey = "Pings",
             RowKey = Guid.NewGuid().ToString(),
-            StudentID = _tempAppDetail.StudentNumber,
+            StudentID = _tempAppDetail.StudentID,
             LessonID = lessonId ?? string.Empty,
             TotalPings = totalPings,
             EspNumber = _tempAppDetail.EspNumber

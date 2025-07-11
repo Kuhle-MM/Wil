@@ -7,7 +7,7 @@ namespace VarsityTrackerApi.Models.Pinging
     {
         public string PartitionKey { get; set; } = "AppDetails";
         public string RowKey { get; set; } = Guid.NewGuid().ToString();
-        public string StudentNumber { get; set; }
+        public string StudentID { get; set; }
         public int LessonNumber { get; set; }
         public string HashNumber { get; set; }
         public DateTimeOffset? Timestamp { get; set; }
