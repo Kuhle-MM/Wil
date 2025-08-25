@@ -37,7 +37,7 @@ const CreateLesson: React.FC = () => {
           body: JSON.stringify({
             lecturerID,
             moduleCode,
-            courseCode,
+            courseCode : courseCode,
             date,
           }),
         }
@@ -139,12 +139,14 @@ const CreateLesson: React.FC = () => {
           <Picker.Item key={mod.moduleCode} label={mod.moduleCode} value={mod.moduleCode} />
         ))}
       </Picker>
-      <TextInput
-        placeholder="Course Code"
-        style={styles.input}
-        value={courseCode}
-        onChangeText={setCourseCode}
-      />
+      <Picker
+              selectedValue={courseCode}
+              onValueChange={(itemValue) => setCourseCode(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label="Select Course Code" value="" />
+              <Picker.Item label="BCAD0701" value="BCAD0701" />
+      </Picker>
 
       {/* Date Picker */}
       <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.input}>
@@ -191,6 +193,10 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     backgroundColor: '#fff',
+  },
+  picker: { 
+    height: 50, 
+    width: '100%' 
   },
   loadingContainer: {
     flex: 1,

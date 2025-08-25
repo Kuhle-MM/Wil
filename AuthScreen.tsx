@@ -11,7 +11,7 @@ type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 const AuthScreen: React.FC = () => {
   const navigation = useNavigation<AuthNavProp>();
   const route = useRoute<AuthRouteProp>();
-  const { role } = route.params;
+  const role = route.params?.role ?? 'student';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -54,6 +54,181 @@ const AuthScreen: React.FC = () => {
     console.error(error);
     Alert.alert('Error', 'Could not connect to the server.');
   }
+
+};
+const handleAdminLogin = async () => {
+  const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Access/login_admin'; 
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const contentType = response.headers.get('content-type') || '';
+    let json: { success?: boolean; message?: string; token?: string; role?: string } = {};
+
+    if (contentType.includes('application/json')) {
+      json = await response.json();
+    } else {
+      const text = await response.text();
+      console.warn('Server returned non-JSON:', text);
+      Alert.alert('Error', text);
+      return;
+    }
+
+    if (!response.ok || !json.success) {
+      Alert.alert('Login Failed', json.message || 'Invalid credentials');
+      return;
+    }
+
+    const idNumber = email.split('@')[0];
+    const userRole = json.role as 'student' | 'lecturer' | 'admin' ?? 'admin';
+
+    await AsyncStorage.setItem('userSession', JSON.stringify({
+      studentNumber: idNumber,
+      role: userRole,
+      token: json.token || null,
+      email,
+    }));
+
+    Alert.alert('Success', json.message);
+    navigation.navigate(userRole === 'admin' ? 'MainAdmin' : 'Main', { role: userRole });
+
+  } catch (error) {
+    console.error('Network or server error:', error);
+    Alert.alert('Error', 'Could not connect to the server.');
+  }
+};
+
+const handleStudentLogin = async () => {
+  const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Access/login_student'; 
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const contentType = response.headers.get('content-type') || '';
+    let json: { success?: boolean; message?: string; token?: string; role?: string } = {};
+
+    if (contentType.includes('application/json')) {
+      json = await response.json();
+    } else {
+      const text = await response.text();
+      console.warn('Server returned non-JSON:', text);
+      Alert.alert('Error', text);
+      return;
+    }
+
+    if (!response.ok || !json.success) {
+      Alert.alert('Login Failed', json.message || 'Invalid credentials');
+      return;
+    }
+
+    const idNumber = email.split('@')[0];
+    const userRole = json.role as 'student' | 'lecturer' | 'admin' ?? 'student';
+
+    await AsyncStorage.setItem('userSession', JSON.stringify({
+      studentNumber: idNumber,
+      role: userRole,
+      token: json.token || null,
+      email,
+    }));
+
+    Alert.alert('Success', json.message);
+    navigation.navigate(userRole === 'student' ? 'Main' : 'Main', { role: userRole });
+
+  } catch (error) {
+    console.error('Network or server error:', error);
+    Alert.alert('Error', 'Could not connect to the server.');
+  }
+};
+
+const handleLecturerLogin = async () => {
+  const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Access/login_lecturer'; 
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const contentType = response.headers.get('content-type') || '';
+    let json: { success?: boolean; message?: string; token?: string; role?: string } = {};
+
+    if (contentType.includes('application/json')) {
+      json = await response.json();
+    } else {
+      const text = await response.text();
+      console.warn('Server returned non-JSON:', text);
+      Alert.alert('Error', text);
+      return;
+    }
+
+    if (!response.ok || !json.success) {
+      Alert.alert('Login Failed', json.message || 'Invalid credentials');
+      return;
+    }
+
+    const idNumber = email.split('@')[0];
+    const userRole = json.role as 'student' | 'lecturer' | 'admin' ?? 'lecturer';
+
+    await AsyncStorage.setItem('userSession', JSON.stringify({
+      studentNumber: idNumber,
+      role: userRole,
+      token: json.token || null,
+      email,
+    }));
+
+    Alert.alert('Success', json.message);
+    navigation.navigate(userRole === 'lecturer' ? 'MainLecturer' : 'Main', { role: userRole });
+
+  } catch (error) {
+    console.error('Network or server error:', error);
+    Alert.alert('Error', 'Could not connect to the server.');
+  }
+};
+
+const handleLoginUser = async () => {
+  const endpoint = 'https://localhost:7276/Access/login'; 
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const text = await response.text();
+    console.log('Response:', text); 
+    const json = JSON.parse(text);
+
+    if (!response.ok || !json.success) {
+      Alert.alert('Login Failed', json.message || 'Invalid credentials');
+      return;
+    }
+
+    const idNumber = email.split('@')[0];
+    const userRole = json.role as 'student' | 'lecturer' | 'admin';
+
+    await AsyncStorage.setItem('userSession', JSON.stringify({
+      studentNumber: idNumber,
+      role: userRole, 
+      token: json.token || null,
+      email,
+    }));
+
+    Alert.alert('Success', json.message);
+    navigation.navigate('Main', { role: userRole });
+  } catch (error) {
+    console.error(error);
+    Alert.alert('Error', 'Could not connect to the server.');
+  }
 };
 
   return (
@@ -75,8 +250,16 @@ const AuthScreen: React.FC = () => {
         style={styles.input}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
+      <TouchableOpacity style={styles.button} onPress={handleStudentLogin}>
+        <Text style={styles.buttonText}>Login as Student</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={handleLecturerLogin}>
+        <Text style={styles.buttonText}>Login as Lecturer</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={handleAdminLogin}>
+        <Text style={styles.buttonText}>Login as Admin</Text>
       </TouchableOpacity>
     </View>
   );

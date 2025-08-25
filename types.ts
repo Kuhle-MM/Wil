@@ -1,6 +1,6 @@
 export type RootTabParamList = {
   Login: undefined;
-  Auth: { role: 'student' };
+  Auth: { role: 'student' | 'lecturer' | 'admin' };
   AuthLecturer: { role: 'lecturer' };
   AuthAdmin: { role: 'admin' };
   Main: { role: 'student' | 'lecturer' | 'admin'};
@@ -22,4 +22,5 @@ export type RootTabParamList = {
   CreateLesson: { role: 'lecturer' };
   LessonActivity: { role: 'lecturer' };
   LessonReports: { role: 'lecturer' };
+  Modules: { role: 'admin' };
 };

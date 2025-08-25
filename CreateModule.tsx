@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
+import { Picker } from '@react-native-picker/picker';
 
 type AuthRouteProp = RouteProp<RootTabParamList, 'CreateModule'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
@@ -28,7 +29,7 @@ const CreateModule: React.FC = () => {
       moduleName,
       NQF: parseInt(NQF),
       credits: parseInt(credits),
-      courseCode,
+      courseCode : courseCode,
       year: parseInt(year)
     };
 
@@ -60,7 +61,14 @@ const CreateModule: React.FC = () => {
 
       <TextInput placeholder="Module Name" value={moduleName} onChangeText={setModuleName} style={styles.input} />
       <TextInput placeholder="Module Code" value={code} onChangeText={setCode} autoCapitalize="none" style={styles.input} />
-      <TextInput placeholder="Course Code" value={courseCode} onChangeText={setCourseCode} style={styles.input} />
+      <Picker
+        selectedValue={courseCode}
+        onValueChange={(itemValue) => setCourseCode(itemValue)}
+        style={styles.picker}
+      >
+        <Picker.Item label="Select Course Code" value="" />
+        <Picker.Item label="BCAD0701" value="BCAD0701" />
+      </Picker>
       <TextInput placeholder="Year" value={year} onChangeText={setYear} style={styles.input} />
       <TextInput placeholder="NQF" value={NQF} onChangeText={setNQF} autoCapitalize="none" style={styles.input} />
       <TextInput placeholder="Credits" value={credits} onChangeText={setCredits} style={styles.input} />
@@ -92,6 +100,10 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     marginBottom: 16
+  },
+  picker: { 
+    height: 50, 
+    width: '100%' 
   },
   button: {
     backgroundColor: '#4287f5',

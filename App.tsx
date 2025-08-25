@@ -32,6 +32,7 @@ import LecturerModules from './LecturerModules.tsx';
 import CreateLesson from './CreateLesson.tsx';
 import LecturerLessons from './LecturerLessons.tsx';
 import LessonActivity from './LessonActivity.tsx';
+import Modules from './Modules.tsx';
 
 const Stack = createNativeStackNavigator<RootTabParamList>();
 
@@ -131,7 +132,7 @@ const MainTabs: React.FC = () => {
 export default function App() {
   return (
     <NavigationContainer>
-      <StackNav.Navigator screenOptions={{ headerShown: false }}>
+      <StackNav.Navigator screenOptions={{ headerShown: false }} initialRouteName="Auth">
         <StackNav.Screen name="Login" component={LoginScreen} />
         <StackNav.Screen name="CreateUser" component={CreateUser} />
         <StackNav.Screen name="CreateModule" component={CreateModule} />
@@ -151,6 +152,7 @@ export default function App() {
         <StackNav.Screen name="LecturerLessons" component={LecturerLessons} />
         <StackNav.Screen name="CreateLesson" component={CreateLesson} />
         <StackNav.Screen name="LessonActivity" component={LessonActivity} />
+        <StackNav.Screen name="Modules" component={Modules} />
       </StackNav.Navigator>
     </NavigationContainer>
   );
