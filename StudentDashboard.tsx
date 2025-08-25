@@ -25,6 +25,9 @@ const StudentDashboard: React.FC = () => {
     const handleModule = async () => {
     navigation.navigate('StudentModules', { role });  
     };
+    const handlePing = async () => {
+    navigation.navigate('BLEReceiver', { role });  
+    };
   return (
     <View style={styles.scrollContainer}>
         <Text style={styles.header}>Dashboard</Text>
@@ -36,6 +39,7 @@ const StudentDashboard: React.FC = () => {
         <TouchableOpacity style={styles.smallButton}  onPress={handleCalandar}><Text>get calendar</Text></TouchableOpacity>
         <TouchableOpacity style={styles.smallButton} onPress={handleAttendance}><Text>Clock In</Text></TouchableOpacity>
         <TouchableOpacity style={styles.smallButton} onPress={handleModule}><Text>Your Modules</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.smallButton} onPress={handlePing}><Text>Ping View</Text></TouchableOpacity>
         {/* <TouchableOpacity onPress={handleLogout} style={styles.button}>
           <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity> */}

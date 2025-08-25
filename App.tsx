@@ -14,7 +14,7 @@ const Tab = createBottomTabNavigator();
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from './types';
 import AuthScreen from './AuthScreen';
-import AuthScreenLec from './AuthScreenLect.tsx';
+//import AuthScreenLec from './AuthScreenLect.tsx';
 import LecturersDashboard from './LecturerDashboard.tsx';
 import StudentsDashboard from './StudentDashboard';
 import StudentsCalandar from './StudentsCalendar';
@@ -33,10 +33,10 @@ import CreateLesson from './CreateLesson.tsx';
 import LecturerLessons from './LecturerLessons.tsx';
 import LessonActivity from './LessonActivity.tsx';
 
-const Stack = createNativeStackNavigator<RootTabParamList>();
+//const Stack = createNativeStackNavigator<RootTabParamList>();
 
-type LoginScreenNavigationProp = BottomTabNavigationProp<RootTabParamList, 'Login'>;
-type MainScreenRouteProp = RouteProp<RootTabParamList, 'Main'>;
+//type LoginScreenNavigationProp = BottomTabNavigationProp<RootTabParamList, 'Login'>;
+//type MainScreenRouteProp = RouteProp<RootTabParamList, 'Main'>;
 // Login Screen with role selection
 const LoginScreen: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootTabParamList>>();

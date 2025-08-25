@@ -22,4 +22,5 @@ export type RootTabParamList = {
   CreateLesson: { role: 'lecturer' };
   LessonActivity: { role: 'lecturer' };
   LessonReports: { role: 'lecturer' };
+  BLEReceiver: {role: 'student'};
 };
