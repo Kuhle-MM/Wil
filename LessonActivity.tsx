@@ -11,7 +11,7 @@ type Lessons = {
 };
 
 const LessonActivity: React.FC = () => {
-  const [lecturerID, setLecturerID] = useState<string>('');
+  const [studentNumber, setStudentNumber] = useState<string>('');
   const [selectedLessonID, setSelectedLessonID] = useState('');
   const [lessonStarted, setLessonStarted] = useState(false);
   const [lessons, setLessons] = useState<Lessons[]>([]);
@@ -23,10 +23,10 @@ const LessonActivity: React.FC = () => {
         const session = await AsyncStorage.getItem('userSession');
         if (!session) throw new Error('No user session found');
         const parsed = JSON.parse(session);
-        if (!parsed.lecturerID) throw new Error('Lecturer ID not found');
-        setLecturerID(parsed.lecturerID);
+        if (!parsed.studentNumber) throw new Error('Lecturer ID not found');
+        setStudentNumber(parsed.studentNumber);
 
-        const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/all_lecturer_lessons?lecturerID=${parsed.lecturerID}`);
+        const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/all_lecturer_lessons?lecturerID=${parsed.studentNumber}`);
         if (!response.ok) {
           const errorText = await response.text();
           throw new Error(errorText);
@@ -44,9 +44,9 @@ const LessonActivity: React.FC = () => {
     loadLecturerIDAndLessons();
   }, []);
 
-  const startLesson = async (lessonID: string) => {
+  const startLesson = async (studentNumber: string) => {
     try {
-      const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/startLesson/${lessonID}`, {
+      const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/startLesson/${studentNumber}`, {
         method: 'POST',
       });
 
@@ -63,9 +63,9 @@ const LessonActivity: React.FC = () => {
     }
   };
 
-  const endLesson = async (lessonID: string) => {
+  const endLesson = async (studentNumber: string) => {
     try {
-      const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/endLesson/${lessonID}`, {
+      const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/endLesson/${studentNumber}`, {
         method: 'POST',
       });
 

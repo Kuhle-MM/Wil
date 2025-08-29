@@ -5,8 +5,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import StudentBottomNav from './BottomNav.tsx';
 
-type AuthRouteProp = RouteProp<RootTabParamList, 'StudentModules'>;
+type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
 type Module = {
@@ -16,7 +17,9 @@ type Module = {
 };
 
 const StudentModules: React.FC = () => {
-    const navigation = useNavigation<AuthNavProp>();
+  const navigation = useNavigation<AuthNavProp>();
+  const route = useRoute<AuthRouteProp>();
+  const { role } = route.params;
 
   const [studentNumber, setStudentNumber] = useState<string>('');
   const [allModules, setAllModules] = useState<Module[]>([]);
@@ -158,42 +161,45 @@ const StudentModules: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Assigned Modules</Text>
-      {assignedModules.length === 0 ? (
-        <Text>No modules assigned to you yet.</Text>
-      ) : (
-        <>
-          <View style={styles.tableHeader}>
-            <Text style={[styles.cell, styles.headerCell]}>Module Code</Text>
-            <Text style={[styles.cell, styles.headerCell]}>Module Name</Text>
-          </View>
-          <FlatList
-            data={assignedModules}
-            keyExtractor={(item) => item.RowKey}
-            renderItem={renderModule}
-          />
-        </>
-      )}
+      <View style={styles.scrollContainer}>
+        <Text style={styles.header}>Assigned Modules</Text>
+        {assignedModules.length === 0 ? (
+          <Text>No modules assigned to you yet.</Text>
+        ) : (
+          <>
+            <View style={styles.tableHeader}>
+              <Text style={[styles.cell, styles.headerCell]}>Module Code</Text>
+              <Text style={[styles.cell, styles.headerCell]}>Module Name</Text>
+            </View>
+            <FlatList
+              data={assignedModules}
+              keyExtractor={(item) => item.RowKey}
+              renderItem={renderModule}
+            />
+          </>
+        )}
 
-      <Text style={[styles.header, { marginTop: 20 }]}>Add Module</Text>
-      <Picker
-        selectedValue={selectedModule}
-        onValueChange={(itemValue) => setSelectedModule(itemValue)}
-        style={styles.picker}
-      >
-        <Picker.Item label="Select a Module" value="" />
-        {allModules.map((mod) => (
-          <Picker.Item
-            label={`${mod.code} - ${mod.moduleName}`}
-            value={mod.code}
-            key={mod.RowKey}
-          />
-        ))}
-      </Picker>
+        <Text style={[styles.header, { marginTop: 20 }]}>Add Module</Text>
+        <Picker
+          selectedValue={selectedModule}
+          onValueChange={(itemValue) => setSelectedModule(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="Select a Module" value="" />
+          {allModules.map((mod) => (
+            <Picker.Item
+              label={`${mod.code} - ${mod.moduleName}`}
+              value={mod.code}
+              key={mod.RowKey}
+            />
+          ))}
+        </Picker>
 
-      <TouchableOpacity style={styles.button} onPress={AddModule}>
-        <Text style={styles.buttonText}>Add Module</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={AddModule}>
+          <Text style={styles.buttonText}>Add Module</Text>
+        </TouchableOpacity>
+      </View>
+      <StudentBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
     </View>
   );
 };
@@ -201,7 +207,14 @@ const StudentModules: React.FC = () => {
 export default StudentModules;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#fff' },
+  container: {
+  flex: 1,             
+  backgroundColor: '#fff',
+  },
+  scrollContainer: {
+    flex: 1,              
+    padding: 16,
+  },
   header: { fontSize: 24, fontWeight: 'bold', marginBottom: 12 },
   tableHeader: {
     flexDirection: 'row',

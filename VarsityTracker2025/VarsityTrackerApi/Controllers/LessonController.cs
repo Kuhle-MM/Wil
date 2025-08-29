@@ -423,5 +423,52 @@ namespace VarsityTrackerApi.Controllers
                 return StatusCode(500, $"Error retrieving modules: {ex.Message}");
             }
         }
+
+        [HttpGet("student_timetable/{studentNumber}")]
+        public async Task<IActionResult> GetStudentTimetable(string studentNumber)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(studentNumber))
+                    return BadRequest("Student number is required.");
+
+                // Step 1: Get all modules for this student
+                var studentModules = new List<StudentModules>();
+                var filterModules = TableClient.CreateQueryFilter<StudentModules>(m => m.studentNumber == studentNumber);
+                await foreach (var module in _studentModuleTable.QueryAsync<StudentModules>(filterModules))
+                {
+                    studentModules.Add(module);
+                }
+
+                if (studentModules.Count == 0)
+                    return NotFound("No modules found for this student.");
+
+                var moduleCodes = studentModules.Select(m => m.moduleCode).ToHashSet();
+
+                // Step 2: Collect lessons for these modules
+                var lessons = new List<Lesson>();
+                await foreach (var lesson in _lessonTable.QueryAsync<Lesson>())
+                {
+                    if (moduleCodes.Contains(lesson.moduleCode))
+                    {
+                        lessons.Add(lesson);
+                    }
+                }
+
+                if (lessons.Count == 0)
+                    return NotFound("No lessons found for this student’s modules.");
+
+                // Step 3: Order lessons by Date (and time if applicable)
+                var timetable = lessons
+                    .OrderBy(l => l.date) // ensures chronological order
+                    .ToList();
+
+                return Ok(timetable);
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error retrieving timetable: {ex.Message}");
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
 
 
-type AuthRouteProp = RouteProp<RootTabParamList, 'AuthLecturer'>;
+type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
 const LecturerDashboard: React.FC = () => {

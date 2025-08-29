@@ -294,6 +294,8 @@ namespace VarsityTrackerApi.Controllers
                 if (existingStudent.studentNumber == id.ToUpper())
                 {
                     return Ok($"Email: {existingStudent.studentEmail}" +
+                        $"\n\nFirstName: {existingStudent.firstName}" +
+                        $"\n\nLastName: {existingStudent.lastName}" +
                         $"\n\nETAG: {existingStudent.ETag}" +
                         $"\n\nPartition Key: {existingStudent.PartitionKey}" +
                         $"\n\nRow Key: {existingStudent.RowKey}" +
@@ -309,9 +311,11 @@ namespace VarsityTrackerApi.Controllers
         {
             await foreach (var existingLecturer in _lecturerTable.QueryAsync<Lecturers>())
             {
-                if (existingLecturer.lecturerID == id.ToUpper())
+                if (existingLecturer.lecturerID == id.ToLower())
                 {
                     return Ok($"Email: {existingLecturer.lecturerID}" +
+                        $"\n\nFirstName: {existingLecturer.firstName}" +
+                        $"\n\nLastName: {existingLecturer.lastName}" +
                         $"\n\nETAG: {existingLecturer.ETag}" +
                         $"\n\nPartition Key: {existingLecturer.PartitionKey}" +
                         $"\n\nRow Key: {existingLecturer.RowKey}" +

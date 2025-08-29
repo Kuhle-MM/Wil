@@ -33,6 +33,7 @@ import CreateLesson from './CreateLesson.tsx';
 import LecturerLessons from './LecturerLessons.tsx';
 import LessonActivity from './LessonActivity.tsx';
 import Modules from './Modules.tsx';
+import StudentBottomNav from './BottomNav.tsx';
 
 const Stack = createNativeStackNavigator<RootTabParamList>();
 

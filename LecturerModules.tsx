@@ -18,7 +18,7 @@ type Module = {
 const LecturerModules: React.FC = () => {
     const navigation = useNavigation<AuthNavProp>();
 
-  const [lecturerID, setLecturerID] = useState<string>('');
+  const [studentNumber, setStudentNumber] = useState<string>('');
   const [allModules, setAllModules] = useState<Module[]>([]);
   const [assignedModules, setAssignedModules] = useState<Module[]>([]);
   const [selectedModule, setSelectedModule] = useState<string>('');
@@ -32,8 +32,8 @@ const LecturerModules: React.FC = () => {
         const session = await AsyncStorage.getItem('userSession');
         if (!session) throw new Error('No user session found');
         const parsed = JSON.parse(session);
-        if (!parsed.lecturerID) throw new Error('Lecturer ID not found');
-        setLecturerID(parsed.lecturerID);
+        if (!parsed.studentNumber) throw new Error('Lecturer ID not found');
+        setStudentNumber(parsed.studentNumber);
       } catch (error) {
         Alert.alert('Error', (error as Error).message);
         setLoadingModules(false);
@@ -65,12 +65,12 @@ const LecturerModules: React.FC = () => {
 
   // Fetch assigned modules when lecturerID is ready
   useEffect(() => {
-    if (!lecturerID) return;
+    if (!studentNumber) return;
 
     const fetchAssignedModules = async () => {
       try {
         const response = await fetch(
-          `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_lecturer_modules?lecturerID=${lecturerID}`
+          `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_lecturer_modules?lecturerID=${studentNumber}`
         );
         if (!response.ok) throw new Error('Failed to fetch assigned modules');
         const data = await response.json();
@@ -94,7 +94,7 @@ const LecturerModules: React.FC = () => {
     };
 
     fetchAssignedModules();
-  }, [lecturerID, allModules]);
+  }, [studentNumber, allModules]);
 
   const AddModule = async () => {
     if (!selectedModule) {
@@ -103,7 +103,7 @@ const LecturerModules: React.FC = () => {
     }
 
     try {
-      const payload = { lecturerID, moduleCode: selectedModule };
+      const payload = { studentNumber, moduleCode: selectedModule };
       const response = await fetch(
         'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/lecturer_add_module',
         {
@@ -122,7 +122,7 @@ const LecturerModules: React.FC = () => {
       // Refresh list
       setLoadingAssigned(true);
       const updatedResponse = await fetch(
-        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_lecturer_modules?lecturerID=${lecturerID}`
+        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_lecturer_modules?lecturerID=${studentNumber}`
       );
       const updatedData = await updatedResponse.json();
       const transformed = updatedData.map((item: any) => ({

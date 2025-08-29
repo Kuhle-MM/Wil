@@ -10,7 +10,7 @@ type Module = {
 };
 
 const CreateLesson: React.FC = () => {
-  const [lecturerID, setLecturerID] = useState<string>('');
+  const [studentNumber, setStudentNumber] = useState<string>('');
   const [moduleCode, setModuleCode] = useState('');
   const [courseCode, setCourseCode] = useState('');
   const [date, setDate] = useState(''); // final ISO string for API
@@ -21,7 +21,7 @@ const CreateLesson: React.FC = () => {
   const [modules, setModules] = useState<Module[]>([]);
 
   const handleCreateLesson = async () => {
-    if (!lecturerID || !moduleCode || !courseCode || !date) {
+    if (!studentNumber || !moduleCode || !courseCode || !date) {
       Alert.alert('Error', 'All fields are required');
       return;
     }
@@ -35,7 +35,7 @@ const CreateLesson: React.FC = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            lecturerID,
+            studentNumber,
             moduleCode,
             courseCode : courseCode,
             date,
@@ -95,8 +95,8 @@ const CreateLesson: React.FC = () => {
         const session = await AsyncStorage.getItem('userSession');
         if (!session) throw new Error('No user session found');
         const parsed = JSON.parse(session);
-        if (!parsed.lecturerID) throw new Error('Lecturer ID not found');
-        setLecturerID(parsed.lecturerID);
+        if (!parsed.studentNumber) throw new Error('Lecturer ID not found');
+        setStudentNumber(parsed.studentNumber);
       } catch (error) {
         Alert.alert('Error', (error as Error).message);
       }
@@ -108,10 +108,10 @@ const CreateLesson: React.FC = () => {
   useEffect(() => {
   const fetchModules = async () => {
     try {
-      if (!lecturerID) return;
+      if (!studentNumber) return;
 
       const response = await fetch(
-        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_lecturer_modules?lecturerID=${lecturerID}`
+        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_lecturer_modules?lecturerID=${studentNumber}`
       );
       if (!response.ok) throw new Error('Failed to fetch modules');
 
@@ -123,7 +123,7 @@ const CreateLesson: React.FC = () => {
   };
 
   fetchModules();
-}, [lecturerID]);
+}, [studentNumber]);
 
   return (
     <View style={styles.container}>

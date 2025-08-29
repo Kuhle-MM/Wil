@@ -37,13 +37,6 @@ const AdminDashboard: React.FC = () => {
       <Text>Create Module</Text>
     </TouchableOpacity>
 
-    <Text style={styles.header}>QR Code</Text>
-
-    <SvgUri
-      width="200"
-      height="200"
-      uri="https://varsitytracker2025.blob.core.windows.net/qrcodes/jdjones.svg"
-    />
   </View>
 );
 };
