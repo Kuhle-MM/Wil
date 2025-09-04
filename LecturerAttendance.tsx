@@ -26,13 +26,13 @@ const LecturerAttendance: React.FC = () => {
         return;
       }
 
-      const { lecturerID } = JSON.parse(session);
-      const endpoint = `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/lecturer/clockin/${lecturerID}`;
+      const { studentNumber } = JSON.parse(session);
+      const endpoint = `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/lecturer/clockin/${studentNumber}`;
 
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lecturerID }),
+        body: JSON.stringify({ studentNumber }),
       });
 
       const text = await response.text();
@@ -57,13 +57,13 @@ const LecturerAttendance: React.FC = () => {
         return;
       }
 
-      const { lecturerID } = JSON.parse(session);
-      const endpoint = `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/lecturer/clockout/${lecturerID}`;
+      const { studentNumber } = JSON.parse(session);
+      const endpoint = `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/lecturer/clockout/${studentNumber}`;
 
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lecturerID }),
+        body: JSON.stringify({ studentNumber }),
       });
 
       const text = await response.text();

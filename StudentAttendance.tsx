@@ -1,10 +1,21 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { useRoute, CommonActions, useNavigation, RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootTabParamList } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, FlatList } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import StudentBottomNav from './BottomNav.tsx';
 
+
+type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
+type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
 const StudentAttendance: React.FC = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootTabParamList>>();
   const [isClockedIn, setIsClockedIn] = useState(false);
+  const route = useRoute<AuthRouteProp>();
+  const { role } = route.params;
 
   useEffect(() => {
     const loadClockStatus = async () => {
@@ -84,9 +95,15 @@ const StudentAttendance: React.FC = () => {
 
   
   return (
-    <View style={styles.centeredContainer}>
-        <Text style={styles.header}>Student Clock In</Text>
-        <TouchableOpacity style={styles.smallButton} onPress={isClockedIn ? handleClockOut : handleClockIn}><Text>{isClockedIn ? 'Clock Out' : 'Clock In'}</Text></TouchableOpacity>
+    <View style={styles.container}>
+      {/* Main Content */}
+      <View style={styles.scrollContainer}>
+          <Text style={styles.header}>Student Clock In</Text>
+          <TouchableOpacity style={styles.smallButton} onPress={isClockedIn ? handleClockOut : handleClockIn}><Text>{isClockedIn ? 'Clock Out' : 'Clock In'}</Text></TouchableOpacity>
+      </View>
+        {/* Bottom navbar */}
+          <StudentBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
+      
     </View>
   );
 };
@@ -102,7 +119,14 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
   },
+  container: {
+  flex: 1,             
+  backgroundColor: '#fff',
+  },
   scrollContainer: {
+    flex: 1,              
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 16,
     backgroundColor: '#fff',
   },
