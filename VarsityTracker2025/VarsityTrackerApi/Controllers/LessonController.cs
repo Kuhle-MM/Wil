@@ -49,6 +49,26 @@ namespace VarsityTrackerApi.Controllers
         [HttpPost("create_lesson")]
         public async Task<IActionResult> Create_Lesson(LessonModel lesson)
         {
+            // Validate that the date is not empty
+            if (lesson.date == default)
+            {
+                return BadRequest("Lesson date is required and cannot be empty.");
+            }
+
+            lesson.date = DateTime.SpecifyKind(lesson.date, DateTimeKind.Utc);
+
+            // Check if the date falls on a weekend (Saturday and Sunday)
+            if (lesson.date.DayOfWeek == DayOfWeek.Saturday || lesson.date.DayOfWeek == DayOfWeek.Sunday)
+            {
+                return BadRequest("Lesson date cannot be scheduled on a weekend (Saturday or Sunday).");
+            }
+
+            // Check if the lesson date is being made in the past
+            if (lesson.date.Date < DateTime.UtcNow.Date)
+            {
+                return BadRequest("Lesson date cannot be made in the past. Please select today or a future date.");
+            }
+
             if (lesson == null)
                 return BadRequest("Lesson payload is required.");
             if (lesson.date == default)
