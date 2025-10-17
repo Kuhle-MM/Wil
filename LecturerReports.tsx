@@ -7,9 +7,11 @@ type Report = {
   lessonID: string;
   moduleCode: string;
   studentNumber: string;
+  status: string;
   rowKey: string;
   timestamp: string;
 };
+
 
 const LecturerReports: React.FC = () => {
   const [reportData, setReportData] = useState<Report[]>([]);
@@ -101,6 +103,7 @@ const LecturerReports: React.FC = () => {
               <Text style={styles.cardText}>Module: {item.moduleCode}</Text>
               <Text style={styles.cardText}>Student: {item.studentNumber}</Text>
               <Text style={styles.cardText}>TimeStamp: {item.timestamp}</Text>
+              <Text style={styles.cardText}>Status: {item.status}</Text>
             </View>
           )}
           ListEmptyComponent={<Text style={{ marginTop: 20 }}>No data found.</Text>}

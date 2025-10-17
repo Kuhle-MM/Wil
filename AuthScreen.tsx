@@ -240,6 +240,7 @@ const handleLoginUser = async () => {
   }
 };
 
+
   return (
     <ImageBackground
           source={require('./assets/images/BackgroundImage.jpg')}

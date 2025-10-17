@@ -103,7 +103,7 @@ const LecturerModules: React.FC = () => {
     }
 
     try {
-      const payload = { studentNumber, moduleCode: selectedModule };
+      const payload = { lecturerID: studentNumber, moduleCode: selectedModule };
       const response = await fetch(
         'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/lecturer_add_module',
         {
@@ -176,24 +176,46 @@ const LecturerModules: React.FC = () => {
       )}
 
       <Text style={[styles.header, { marginTop: 20 }]}>Add Module</Text>
-      <Picker
-        selectedValue={selectedModule}
-        onValueChange={(itemValue) => setSelectedModule(itemValue)}
-        style={styles.picker}
-      >
-        <Picker.Item label="Select a Module" value="" />
-        {allModules.map((mod) => (
-          <Picker.Item
-            label={`${mod.code} - ${mod.moduleName}`}
-            value={mod.code}
-            key={mod.RowKey}
-          />
-        ))}
-      </Picker>
+      {(() => {
+        const availableModules = allModules.filter(
+          (mod) => !assignedModules.some((assigned) => assigned.code === mod.code)
+        );
 
-      <TouchableOpacity style={styles.button} onPress={AddModule}>
-        <Text style={styles.buttonText}>Add Module</Text>
-      </TouchableOpacity>
+        const placeholderLabel =
+          availableModules.length === 0
+            ? "No more modules to choose from"
+            : "Select a Module";
+
+        return (
+          <>
+            <Picker
+              selectedValue={selectedModule}
+              onValueChange={(itemValue) => setSelectedModule(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label={placeholderLabel} value="" />
+              {availableModules.map((mod) => (
+                <Picker.Item
+                  label={`${mod.code} - ${mod.moduleName}`}
+                  value={mod.code}
+                  key={mod.RowKey}
+                />
+              ))}
+            </Picker>
+
+            <TouchableOpacity
+              style={[
+                styles.button,
+                { opacity: availableModules.length === 0 ? 0.5 : 1 },
+              ]}
+              onPress={AddModule}
+              disabled={availableModules.length === 0}
+            >
+              <Text style={styles.buttonText}>Add Module</Text>
+            </TouchableOpacity>
+          </>
+        );
+      })()}
     </View>
   );
 };

@@ -568,5 +568,38 @@ namespace VarsityTrackerApi.Controllers
                 return StatusCode(500, $"Error retrieving timetable: {ex.Message}");
             }
         }
+
+        [HttpPut("update_report_status")]
+        public async Task<IActionResult> UpdateReportStatus(string reportID, string studentNumber, string newStatus)
+        {
+            if (string.IsNullOrWhiteSpace(reportID) || string.IsNullOrWhiteSpace(studentNumber) || string.IsNullOrWhiteSpace(newStatus))
+                return BadRequest("Report ID, student number, and new status are required.");
+
+            try
+            {
+                // Find the specific report for this student
+                Reports reportToUpdate = null;
+                await foreach (var report in _reportsTable.QueryAsync<Reports>(r => r.reportID == reportID && r.studentNumber == studentNumber))
+                {
+                    reportToUpdate = report;
+                    break;
+                }
+
+                if (reportToUpdate == null)
+                    return NotFound($"Report for student {studentNumber} with ID {reportID} not found.");
+
+                // Update the status
+                reportToUpdate.status = newStatus;
+
+                // Update in Azure Table Storage
+                await _reportsTable.UpdateEntityAsync(reportToUpdate, reportToUpdate.ETag, TableUpdateMode.Replace);
+
+                return Ok(new { success = true, message = $"Report status for student {studentNumber} updated to '{newStatus}'." });
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error updating report: {ex.Message}");
+            }
+        }
     }
 }

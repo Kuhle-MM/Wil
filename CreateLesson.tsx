@@ -35,7 +35,7 @@ const CreateLesson: React.FC = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            studentNumber,
+            lecturerID: studentNumber,
             moduleCode,
             courseCode : courseCode,
             date,
