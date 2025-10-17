@@ -9,6 +9,10 @@ using VarsityTrackerApi.Models.Lesson;
 using System.Reflection;
 using VarsityTrackerApi.Models.Module;
 using VarsityTrackerApi.Models.Report;
+using Azure.Storage.Blobs.Models;
+using QRCoder;
+using System.Drawing.Imaging;
+using System.Drawing;
 
 namespace VarsityTrackerApi.Controllers
 {
@@ -45,55 +49,149 @@ namespace VarsityTrackerApi.Controllers
         [HttpPost("create_lesson")]
         public async Task<IActionResult> Create_Lesson(LessonModel lesson)
         {
-            try
+            if (lesson == null)
+                return BadRequest("Lesson payload is required.");
+            if (lesson.date == default)
+                return BadRequest("Lesson date is required.");
+
+            await foreach (var existingLesson in _lessonTable.QueryAsync<Lesson>())
             {
-                // Check if a module with the same code already exists
-                await foreach (var existingLesson in _lessonTable.QueryAsync<Lesson>())
-                {
-                    if (existingLesson.date == lesson.date && existingLesson.moduleCode == lesson.moduleCode)
-                    {
-                        return BadRequest($"Lesson with ID: {existingLesson.lessonID} already exists in the system for the {lesson.date}.");
-                    }
-                }
-
-                var lessons = new List<Lesson>();
-                await foreach(var existing in _lessonTable.QueryAsync<Lesson>())
-                {
-                    if (lesson.date == default)
-                    {
-                        return BadRequest("Lesson date is required and cannot be empty.");
-                    }
-
-                    // Ensure the date is explicitly marked as UTC
-                    lesson.date = DateTime.SpecifyKind(lesson.date, DateTimeKind.Utc);
-
-                    if (existing.moduleCode == lesson.moduleCode)
-                    {
-                        lessons.Add(existing);
-                    }
-                }
-
-                var specifiedDate = DateTime.SpecifyKind(lesson.date, DateTimeKind.Utc);
-                var newLesson = new Lesson
-                {
-                    PartitionKey = "Lessons",
-                    RowKey = Guid.NewGuid().ToString(),
-                    lessonID = lesson.moduleCode + "-LES-" + lessons.Count,
-                    lecturerID = lesson.lecturerID,
-                    moduleCode = lesson.moduleCode,
-                    courseCode = lesson.courseCode,
-                    date = specifiedDate,
-                    started = false,
-                    finished = false
-                };
-
-                await _lessonTable.AddEntityAsync(newLesson);
-                return Ok($"Lesson with code: {newLesson.lessonID} created successfully.");
+                if (existingLesson.date == lesson.date && existingLesson.moduleCode == lesson.moduleCode)
+                    return BadRequest($"Lesson with ID: {existingLesson.lessonID} already exists for {lesson.date}.");
             }
-            catch (RequestFailedException ex)
+
+            var lessons = new List<Lesson>();
+            await foreach (var existing in _lessonTable.QueryAsync<Lesson>())
             {
-                return StatusCode(500, $"Error saving lesson: {ex.Message}");
+                if (existing.moduleCode == lesson.moduleCode)
+                    lessons.Add(existing);
             }
+
+            var specifiedDate = DateTime.SpecifyKind(lesson.date, DateTimeKind.Utc);
+            var lessonID = $"{lesson.moduleCode}-LES-{lessons.Count}";
+
+            var newLesson = new Lesson
+            {
+                PartitionKey = "Lessons",
+                RowKey = Guid.NewGuid().ToString(),
+                lessonID = lessonID,
+                lecturerID = lesson.lecturerID,
+                moduleCode = lesson.moduleCode,
+                courseCode = lesson.courseCode,
+                date = specifiedDate,
+                started = false,
+                finished = false
+            };
+
+            await _lessonTable.AddEntityAsync(newLesson);
+
+            // --- QR Code Generation (sharp 200x200) ---
+            string qrText = $"LessonID:{newLesson.lessonID}|Module:{newLesson.moduleCode}|Course:{newLesson.courseCode}|Date:{newLesson.date:O}";
+            using var qrGenerator = new QRCodeGenerator();
+            using var qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
+            using var qrCode = new QRCode(qrCodeData);
+
+            int moduleCount = qrCodeData.ModuleMatrix.Count;
+            int pixelsPerModule = 200 / moduleCount;
+
+            using Bitmap qrBitmap = qrCode.GetGraphic(pixelsPerModule, Color.Black, Color.White, drawQuietZones: false);
+
+            Bitmap finalQr = new Bitmap(200, 200);
+            using (Graphics g = Graphics.FromImage(finalQr))
+            {
+                g.Clear(Color.White);
+                int offsetX = (200 - qrBitmap.Width) / 2;
+                int offsetY = (200 - qrBitmap.Height) / 2;
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+                g.DrawImage(qrBitmap, offsetX, offsetY, qrBitmap.Width, qrBitmap.Height);
+            }
+
+            using var ms = new MemoryStream();
+            var encoder = ImageCodecInfo.GetImageEncoders().First(c => c.MimeType == "image/jpeg");
+            var encoderParams = new EncoderParameters(1);
+            encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 50L);
+
+            finalQr.Save(ms, encoder, encoderParams);
+            ms.Position = 0;
+
+            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+            await containerClient.CreateIfNotExistsAsync();
+            await containerClient.SetAccessPolicyAsync(PublicAccessType.Blob);
+
+            string fileName = $"{lessonID}_{DateTime.UtcNow.Ticks}.jpeg";
+            var blobClient = containerClient.GetBlobClient(fileName);
+            await blobClient.UploadAsync(ms, overwrite: true);
+
+            // Save QR URL back to lesson
+            newLesson.qrUrl = blobClient.Uri.ToString();
+            await _lessonTable.UpdateEntityAsync(newLesson, newLesson.ETag, TableUpdateMode.Replace);
+
+            return Ok(new
+            {
+                message = $"Lesson {lessonID} created successfully.",
+                qrCodeUrl = newLesson.qrUrl
+            });
+        }
+
+        [HttpPost("generateQRCode/{lessonID}")]
+        public async Task<IActionResult> GenerateLessonQRCode(string lessonID)
+        {
+            Lesson lesson = null;
+            await foreach (var l in _lessonTable.QueryAsync<Lesson>(x => x.lessonID == lessonID))
+            {
+                lesson = l;
+                break;
+            }
+
+            if (lesson == null)
+                return NotFound("Lesson not found");
+
+            string qrText = $"LessonID:{lesson.lessonID}|Module:{lesson.moduleCode}|Course:{lesson.courseCode}|Date:{lesson.date:O}";
+
+            using var qrGenerator = new QRCodeGenerator();
+            using var qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
+            using var qrCode = new QRCode(qrCodeData);
+
+            int moduleCount = qrCodeData.ModuleMatrix.Count;
+            int pixelsPerModule = 200 / moduleCount;
+
+            using Bitmap qrBitmap = qrCode.GetGraphic(pixelsPerModule, Color.Black, Color.White, drawQuietZones: false);
+
+            Bitmap finalQr = new Bitmap(200, 200);
+            using (Graphics g = Graphics.FromImage(finalQr))
+            {
+                g.Clear(Color.White);
+                int offsetX = (200 - qrBitmap.Width) / 2;
+                int offsetY = (200 - qrBitmap.Height) / 2;
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+                g.DrawImage(qrBitmap, offsetX, offsetY, qrBitmap.Width, qrBitmap.Height);
+            }
+
+            using var ms = new MemoryStream();
+            var encoder = ImageCodecInfo.GetImageEncoders().First(c => c.MimeType == "image/jpeg");
+            var encoderParams = new EncoderParameters(1);
+            encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 50L);
+
+            finalQr.Save(ms, encoder, encoderParams);
+            ms.Position = 0;
+
+            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+            await containerClient.CreateIfNotExistsAsync();
+            await containerClient.SetAccessPolicyAsync(PublicAccessType.Blob);
+
+            string fileName = $"{lesson.lessonID}_{DateTime.UtcNow.Ticks}.jpeg";
+            var blobClient = containerClient.GetBlobClient(fileName);
+            await blobClient.UploadAsync(ms, overwrite: true);
+
+            string publicUrl = blobClient.Uri.ToString();
+
+            // Save URL back to lesson entity
+            lesson.qrUrl = publicUrl;
+            await _lessonTable.UpdateEntityAsync(lesson, lesson.ETag, TableUpdateMode.Replace);
+
+            return Ok(new { message = "QR Generated", qrCodeUrl = publicUrl });
         }
 
         [HttpPost("clockin/{studentNumber}")]
