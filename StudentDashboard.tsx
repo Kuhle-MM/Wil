@@ -17,6 +17,8 @@ const StudentDashboard: React.FC = () => {
   const [studentName, setStudentName] = useState<string>('');
   const [progressData, setProgressData] = useState<{ Attended: number; TotalLessons: number; AttendancePercentage: number } | null>(null);
   const [loadingProgress, setLoadingProgress] = useState(true);
+  const [todaysModules, setTodaysModules] = useState<any[]>([]);
+  const [loadingModules, setLoadingModules] = useState(true);
 
   useEffect(() => {
     const fetchStudentDetails = async () => {
@@ -45,9 +47,38 @@ const StudentDashboard: React.FC = () => {
 
         // Fetch weekly progress
         fetchWeeklyProgress(studentId);
+        // Fetch today's modules
+        fetchTodaysModules(studentId);
 
       } catch (error) {
         console.error('Error fetching student details', error);
+      }
+    };
+
+    const fetchTodaysModules = async (studentId: string) => {
+      try {
+        const response = await fetch(
+          `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/student_timetable/${studentId}`
+        );
+
+        if (!response.ok) throw new Error('Failed to fetch timetable');
+        const data = await response.json();
+
+        // Get today's date
+        const today = new Date();
+        const todayDateOnly = today.toISOString().split('T')[0];
+
+        // Filter lessons that are today
+        const todays = data.filter((lesson: any) => {
+          const lessonDate = new Date(lesson.date).toISOString().split('T')[0];
+          return lessonDate === todayDateOnly;
+        });
+
+        setTodaysModules(todays);
+      } catch (error: any) {
+        Alert.alert('Error', error.message);
+      } finally {
+        setLoadingModules(false);
       }
     };
 
@@ -86,8 +117,21 @@ const StudentDashboard: React.FC = () => {
       {/* Main Content */}
       <View style={styles.scrollContainer}> 
         <Text style={styles.header}> {studentName || 'Student'}'s Dashboard</Text> 
-        <Text style={styles.sectionTitle}>Today’s modules</Text> 
-        <View style={styles.card}><Text style={styles.cardText}>Today’s Modules</Text></View> 
+        <Text style={styles.sectionTitle}>Today’s Modules</Text>
+
+        <View style={styles.card}>
+          {loadingModules ? (
+            <ActivityIndicator size="large" color="#4caf50" />
+          ) : todaysModules.length === 0 ? (
+            <Text style={styles.cardText}>No modules scheduled for today 🎉</Text>
+          ) : (
+            todaysModules.map((lesson, index) => (
+              <Text key={index} style={styles.cardText}>
+                {lesson.moduleCode} — {new Date(lesson.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </Text>
+            ))
+          )}
+        </View>
         
         <Text style={styles.sectionTitle}>Weekly attendance progress</Text>
         <View style={styles.card}>
