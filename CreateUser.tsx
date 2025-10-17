@@ -20,6 +20,21 @@ const CreateUser: React.FC = () => {
   const [lastName, setLastName] = useState('');
 
   const handleCreateUser = async () => {
+    if (!email || !password || !selectedRole || !firstName || !lastName) {
+      Alert.alert('Error', 'All fields are required');
+      return;
+    }
+
+    if ((selectedRole === "Lecturer" || selectedRole === "Admin") && !email.toLowerCase().endsWith('@varsitycollege.co.za')) {
+      Alert.alert('Invalid Email, must contain @varsitycollege.co.za');
+      return;
+    }
+
+    if (selectedRole === "Student" && (!email.toLowerCase().startsWith("st") || !email.toLowerCase().endsWith('@vcconnect.edu.za'))) {
+      Alert.alert('Invalid Email, must contain st...@vcconnect.edu.za');
+      return;
+    }
+
     const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Access/create';
 
       try {

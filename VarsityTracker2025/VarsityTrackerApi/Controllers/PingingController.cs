@@ -1,105 +1,120 @@
-﻿using Azure;
-using Azure.Data.Tables;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using VarsityTrackerApi.Models.Lesson;
-using VarsityTrackerApi.Models.Pinging;
+using System.Security.Cryptography;
+using System.Text;
 
-[ApiController]
-[Route("api/[controller]")]
-public class PingingController : ControllerBase
+namespace VarsityTrackerApi.Controllers
 {
-    private readonly TableClient _lessonListTable;
-    private readonly TableClient _pingingTable;
-
-    // Temporarily store AppDetail from Method 1
-    private static AppDetail _tempAppDetail;
-
-    public PingingController(Microsoft.Extensions.Configuration.IConfiguration config)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PingingController : ControllerBase
     {
-        string connectionString = config.GetConnectionString("AzureStorage");
-        _lessonListTable = new TableClient(connectionString, "LessonList");
-        _pingingTable = new TableClient(connectionString, "PingingTable");
 
-        _lessonListTable.CreateIfNotExists();
-        _pingingTable.CreateIfNotExists();
-    }
+        // Temporary storage
+        private static string _espPingString;
+        private static DateTime _espPingTime;
+        private static string _reactPingString;
+        private static DateTime _reactPingTime;
 
-    // Method 1: Store AppDetails temporarily
-    [HttpPost("GetAppDetails")]
-    public IActionResult GetAppDetails([FromBody] AppDetail input)
-    {
-        _tempAppDetail = input;
-        return Ok("App details stored temporarily.");
-    }
-
-    // Method 2: GetStudentNumbers for lessons matching timestamp ±1 minute
-    [HttpGet("GetStudentNumbers")]
-    public async Task<ActionResult<List<string>>> GetStudentNumbers()
-    {
-        if (_tempAppDetail == null || !_tempAppDetail.Timestamp.HasValue)
-            return BadRequest("Call GetAppDetails first and ensure Timestamp is set.");
-
-        DateTime targetTimestamp = _tempAppDetail.Timestamp.Value.UtcDateTime;
-        DateTime start = targetTimestamp.AddMinutes(-1);
-        DateTime end = targetTimestamp.AddMinutes(1);
-
-        var studentIds = new HashSet<string>();
-
-        await foreach (var entity in _lessonListTable.QueryAsync<LessonList>(
-            e => e.LessonDate >= start && e.LessonDate <= end))
+        // =============================================================
+        // POST: Receive ESP Ping
+        // =============================================================
+        [HttpPost("ReceiveEspPing")]
+        public IActionResult ReceiveEspPing([FromBody] string espPingString)
         {
-            if (!string.IsNullOrEmpty(entity.RowKey)) // RowKey = StudentID
-                studentIds.Add(entity.RowKey);
+            if (string.IsNullOrWhiteSpace(espPingString))
+                return BadRequest("ESP ping string cannot be empty.");
+
+            _espPingString = espPingString.Trim();
+            _espPingTime = DateTime.UtcNow;
+
+            return Ok("ESP ping received.");
         }
 
-        if (!studentIds.Any())
-            return NotFound("No lessons matched timestamp.");
-
-        return Ok(studentIds.ToList());
-    }
-
-    // Method 3: VerifyStudents and add ping entry
-    [HttpPost("VerifyStudents")]
-    public async Task<IActionResult> VerifyStudents()
-    {
-        if (_tempAppDetail == null || !_tempAppDetail.Timestamp.HasValue)
-            return BadRequest("Call GetAppDetails first and ensure Timestamp is set.");
-
-        DateTime targetTimestamp = _tempAppDetail.Timestamp.Value.UtcDateTime;
-        DateTime start = targetTimestamp.AddMinutes(-1);
-        DateTime end = targetTimestamp.AddMinutes(1);
-
-        var matchingLessons = new List<LessonList>();
-
-        await foreach (var entity in _lessonListTable.QueryAsync<LessonList>(
-            e => e.LessonDate >= start && e.LessonDate <= end))
+        // =============================================================
+        // POST: Receive React Ping
+        // =============================================================
+        [HttpPost("ReceiveReactPing")]
+        public IActionResult ReceiveReactPing([FromBody] string reactPingString)
         {
-            matchingLessons.Add(entity);
+            if (string.IsNullOrWhiteSpace(reactPingString))
+                return BadRequest("React ping string cannot be empty.");
+
+            _reactPingString = reactPingString.Trim();
+            _reactPingTime = DateTime.UtcNow;
+
+            // Optional: Extract and decrypt encrypted student number if provided
+            string encryptedPart = null;
+            if (_reactPingString.Contains("/"))
+            {
+                encryptedPart = _reactPingString.Split('/').Last();
+                string decryptedStudentId = DecryptStudentNumber(encryptedPart);
+                Console.WriteLine($"[DEBUG] Decrypted Student ID: {decryptedStudentId}");
+            }
+
+            return Ok("React ping received.");
         }
 
-        var lessonId = matchingLessons.Select(l => l.PartitionKey).FirstOrDefault();
-        var studentList = matchingLessons.Select(l => l.RowKey).Where(s => s != null).ToList();
-
-        int totalPings = studentList.Contains(_tempAppDetail.StudentID)
-            ? _tempAppDetail.PingNumber
-            : 0;
-
-        var ping = new Pinging
+        // =============================================================
+        // GET: Compare ESP & React Pings
+        // =============================================================
+        [HttpGet("ComparePings")]
+        public IActionResult ComparePings()
         {
-            PartitionKey = "Pings",
-            RowKey = Guid.NewGuid().ToString(),
-            StudentID = _tempAppDetail.StudentID,
-            LessonID = lessonId ?? string.Empty,
-            TotalPings = totalPings,
-            EspNumber = _tempAppDetail.EspNumber
-        };
+            if (string.IsNullOrEmpty(_espPingString) || string.IsNullOrEmpty(_reactPingString))
+                return BadRequest("Both ESP and React pings must be received first.");
 
-        await _pingingTable.AddEntityAsync(ping);
+            // Remove anything after '/' for comparison
+            string espBase = _espPingString.Split('/')[0];
+            string reactBase = _reactPingString.Split('/')[0];
 
-        return Ok("Ping verification saved.");
+            // Calculate time difference
+            double timeDifference = Math.Abs((_espPingTime - _reactPingTime).TotalMinutes);
+
+            // Compare base strings (case-insensitive) and timestamp
+            bool isMatch = espBase.Equals(reactBase, StringComparison.OrdinalIgnoreCase) && timeDifference <= 1;
+
+            return Ok(new
+            {
+                EspPing = espBase,
+                ReactPing = reactBase,
+                TimeDifferenceMinutes = timeDifference,
+                Match = isMatch
+            });
+        }
+
+        // =============================================================
+        // Utility: Decrypt Encrypted Student Number (if used)
+        // =============================================================
+        // ⚠️ Example AES decryption — replace with your actual key setup
+        private static string DecryptStudentNumber(string encryptedText)
+        {
+            try
+            {
+                // These should be securely stored (e.g., Azure Key Vault)
+                string key = "1234567890ABCDEF1234567890ABCDEF"; // 32 chars = 256-bit key
+                string iv = "ABCDEF1234567890"; // 16 chars = 128-bit IV
+
+                using (Aes aes = Aes.Create())
+                {
+                    aes.Key = Encoding.UTF8.GetBytes(key);
+                    aes.IV = Encoding.UTF8.GetBytes(iv);
+                    aes.Mode = CipherMode.CBC;
+                    aes.Padding = PaddingMode.PKCS7;
+
+                    byte[] buffer = Convert.FromBase64String(encryptedText);
+                    using var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+                    byte[] decrypted = decryptor.TransformFinalBlock(buffer, 0, buffer.Length);
+
+                    return Encoding.UTF8.GetString(decrypted);
+                }
+            }
+            catch
+            {
+                return "DECRYPTION_FAILED";
+            }
+        }
+
+
     }
 }

@@ -218,6 +218,7 @@ namespace VarsityTrackerApi.Controllers
 
             Lecturers foundLecturer = null;
 
+
             var query = _lecturerTable.QueryAsync<Lecturers>(filter: $"PartitionKey eq 'Lecturers'");
             await foreach (var l in query)
             {
@@ -293,6 +294,8 @@ namespace VarsityTrackerApi.Controllers
                 if (existingStudent.studentNumber == id.ToUpper())
                 {
                     return Ok($"Email: {existingStudent.studentEmail}" +
+                        $"\n\nFirstName: {existingStudent.firstName}" +
+                        $"\n\nLastName: {existingStudent.lastName}" +
                         $"\n\nETAG: {existingStudent.ETag}" +
                         $"\n\nPartition Key: {existingStudent.PartitionKey}" +
                         $"\n\nRow Key: {existingStudent.RowKey}" +
@@ -308,9 +311,11 @@ namespace VarsityTrackerApi.Controllers
         {
             await foreach (var existingLecturer in _lecturerTable.QueryAsync<Lecturers>())
             {
-                if (existingLecturer.lecturerID == id.ToUpper())
+                if (existingLecturer.lecturerID == id.ToLower())
                 {
                     return Ok($"Email: {existingLecturer.lecturerID}" +
+                        $"\n\nFirstName: {existingLecturer.firstName}" +
+                        $"\n\nLastName: {existingLecturer.lastName}" +
                         $"\n\nETAG: {existingLecturer.ETag}" +
                         $"\n\nPartition Key: {existingLecturer.PartitionKey}" +
                         $"\n\nRow Key: {existingLecturer.RowKey}" +
@@ -434,6 +439,67 @@ namespace VarsityTrackerApi.Controllers
             {
                 throw ex;
             }
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginUser(LoginModel user)
+        {
+            if (string.IsNullOrWhiteSpace(user.email) || string.IsNullOrWhiteSpace(user.password))
+                return BadRequest(new { success = false, message = "Email and password are required." });
+
+            string lowerEmail = user.email.ToLower();
+
+            // Student check
+            Students student = null;
+            await foreach (var s in _studentTable.QueryAsync<Students>(
+                filter: $"PartitionKey eq 'Students' and studentEmail eq '{lowerEmail}'"))
+            {
+                student = s;
+                break;
+            }
+
+            if (student != null)
+            {
+                if (PasswordHelper.VerifyPassword(user.password, student.password))
+                    return Ok(new { success = true, role = "Student", message = "User logged in." });
+                return BadRequest(new { success = false, message = "Incorrect password." });
+            }
+
+            // Lecturer check
+            Lecturers lecturer = null;
+            await foreach (var l in _lecturerTable.QueryAsync<Lecturers>(
+                filter: $"PartitionKey eq 'Lecturers' and lecturerEmail eq '{lowerEmail}'"))
+            {
+                lecturer = l;
+                break;
+            }
+
+            if (lecturer != null)
+            {
+                if (PasswordHelper.VerifyPassword(user.password, lecturer.password))
+                    return Ok(new { success = true, role = "Lecturer", message = "User logged in." });
+                return BadRequest(new { success = false, message = "Incorrect password." });
+            }
+
+            // Admin check
+            Admin admin = null;
+            await foreach (var a in _adminTable.QueryAsync<Admin>(
+                filter: $"PartitionKey eq 'Admins' and adminEmail eq '{lowerEmail}'"))
+            {
+                admin = a;
+                break;
+            }
+
+            if (admin != null)
+            {
+                if (PasswordHelper.VerifyPassword(user.password, admin.password))
+                    return Ok(new { success = true, role = "Admin", message = "User logged in." });
+                return BadRequest(new { success = false, message = "Incorrect password." });
+            }
+
+            // Not found
+            return NotFound(new { success = false, message = "User not found." });
+
         }
     }
 }

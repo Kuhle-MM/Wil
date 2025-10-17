@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Alert, TouchableOpacity, Platform } from 'react-native';
+import { View, Button, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
@@ -10,35 +10,42 @@ type Module = {
 };
 
 const CreateLesson: React.FC = () => {
-  const [lecturerID, setLecturerID] = useState<string>('');
+  const [studentNumber, setStudentNumber] = useState<string>('');
   const [moduleCode, setModuleCode] = useState('');
   const [courseCode, setCourseCode] = useState('');
   const [date, setDate] = useState(''); // final ISO string for API
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTime, setSelectedTime] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string>(''); 
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
   const [modules, setModules] = useState<Module[]>([]);
 
+  const lessonTimes = ['08:20', '09:20', '10:20', '12:00', '13:00', '14:00', '15:00'];
+
   const handleCreateLesson = async () => {
-    if (!lecturerID || !moduleCode || !courseCode || !date) {
+    if (!studentNumber || !moduleCode || !courseCode || !selectedDate || !selectedTime) {
       Alert.alert('Error', 'All fields are required');
       return;
     }
+
+    // Combine date and selected time into ISO string
+    const [hours, minutes] = selectedTime.split(':').map(Number);
+    const combinedDate = new Date(selectedDate);
+    combinedDate.setHours(hours);
+    combinedDate.setMinutes(minutes);
+    combinedDate.setSeconds(0);
+    setDate(combinedDate.toISOString());
 
     try {
       const response = await fetch(
         'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/create_lesson',
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            lecturerID,
+            lecturerID: studentNumber,
             moduleCode,
             courseCode,
-            date,
+            date: combinedDate.toISOString(),
           }),
         }
       );
@@ -49,9 +56,8 @@ const CreateLesson: React.FC = () => {
         Alert.alert('Success', result);
         setModuleCode('');
         setCourseCode('');
-        setDate('');
         setSelectedDate(null);
-        setSelectedTime(null);
+        setSelectedTime('');
       } else {
         Alert.alert('Error', result);
       }
@@ -63,30 +69,7 @@ const CreateLesson: React.FC = () => {
 
   const handleDateChange = (event: any, datePicked?: Date) => {
     setShowDatePicker(false);
-    if (datePicked) {
-      setSelectedDate(datePicked);
-      if (selectedTime) {
-        combineDateAndTime(datePicked, selectedTime);
-      }
-    }
-  };
-
-  const handleTimeChange = (event: any, timePicked?: Date) => {
-    setShowTimePicker(false);
-    if (timePicked) {
-      setSelectedTime(timePicked);
-      if (selectedDate) {
-        combineDateAndTime(selectedDate, timePicked);
-      }
-    }
-  };
-
-  const combineDateAndTime = (datePart: Date, timePart: Date) => {
-    const combined = new Date(datePart);
-    combined.setHours(timePart.getHours());
-    combined.setMinutes(timePart.getMinutes());
-    combined.setSeconds(0);
-    setDate(combined.toISOString()); // set final ISO string
+    if (datePicked) setSelectedDate(datePicked);
   };
 
   useEffect(() => {
@@ -95,40 +78,37 @@ const CreateLesson: React.FC = () => {
         const session = await AsyncStorage.getItem('userSession');
         if (!session) throw new Error('No user session found');
         const parsed = JSON.parse(session);
-        if (!parsed.lecturerID) throw new Error('Lecturer ID not found');
-        setLecturerID(parsed.lecturerID);
+        if (!parsed.studentNumber) throw new Error('Lecturer ID not found');
+        setStudentNumber(parsed.studentNumber);
       } catch (error) {
         Alert.alert('Error', (error as Error).message);
       }
     };
-
     loadLecturerID();
   }, []);
 
   useEffect(() => {
-  const fetchModules = async () => {
-    try {
-      if (!lecturerID) return;
-
-      const response = await fetch(
-        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_lecturer_modules?lecturerID=${lecturerID}`
-      );
-      if (!response.ok) throw new Error('Failed to fetch modules');
-
-      const data = await response.json();
-      setModules(data); // Assuming each item has moduleCode and courseCode
-    } catch (error) {
-      Alert.alert('Error', (error as Error).message);
-    }
-  };
-
-  fetchModules();
-}, [lecturerID]);
+    const fetchModules = async () => {
+      try {
+        if (!studentNumber) return;
+        const response = await fetch(
+          `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_lecturer_modules?lecturerID=${studentNumber}`
+        );
+        if (!response.ok) throw new Error('Failed to fetch modules');
+        const data = await response.json();
+        setModules(data);
+      } catch (error) {
+        Alert.alert('Error', (error as Error).message);
+      }
+    };
+    fetchModules();
+  }, [studentNumber]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Create Lesson</Text>
 
+      {/* Module Picker */}
       <Picker
         selectedValue={moduleCode}
         onValueChange={(value) => setModuleCode(value)}
@@ -139,12 +119,16 @@ const CreateLesson: React.FC = () => {
           <Picker.Item key={mod.moduleCode} label={mod.moduleCode} value={mod.moduleCode} />
         ))}
       </Picker>
-      <TextInput
-        placeholder="Course Code"
+
+      {/* Course Picker */}
+      <Picker
+        selectedValue={courseCode}
+        onValueChange={(value) => setCourseCode(value)}
         style={styles.input}
-        value={courseCode}
-        onChangeText={setCourseCode}
-      />
+      >
+        <Picker.Item label="Select Course Code" value="" />
+        <Picker.Item label="BCAD0701" value="BCAD0701" />
+      </Picker>
 
       {/* Date Picker */}
       <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.input}>
@@ -160,17 +144,16 @@ const CreateLesson: React.FC = () => {
       )}
 
       {/* Time Picker */}
-      <TouchableOpacity onPress={() => setShowTimePicker(true)} style={styles.input}>
-        <Text>{selectedTime ? selectedTime.toLocaleTimeString() : 'Select Time'}</Text>
-      </TouchableOpacity>
-      {showTimePicker && (
-        <DateTimePicker
-          value={selectedTime || new Date()}
-          mode="time"
-          display="default"
-          onChange={handleTimeChange}
-        />
-      )}
+      <Picker
+        selectedValue={selectedTime}
+        onValueChange={(value) => setSelectedTime(value)}
+        style={styles.input}
+      >
+        <Picker.Item label="Select Time" value="" />
+        {lessonTimes.map((time) => (
+          <Picker.Item key={time} label={time} value={time} />
+        ))}
+      </Picker>
 
       <Button title="Create Lesson" onPress={handleCreateLesson} />
     </View>
@@ -179,101 +162,21 @@ const CreateLesson: React.FC = () => {
 
 export default CreateLesson;
 
-
 const styles = StyleSheet.create({
-  centeredContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-  },
   container: {
     padding: 16,
     backgroundColor: '#fff',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  logo: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    marginBottom: 40,
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
   },
-  subHeader: {
-    fontSize: 18,
-    marginVertical: 8,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    marginVertical: 8,
-    fontWeight: '500',
-  },
-  card: {
-    width: '100%',
-    padding: 20,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 12,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  cardText: {
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#ccc',
-    padding: 12,
-    width: 200,
-    borderRadius: 8,
-    marginVertical: 8,
-    alignItems: 'center',
-  },
-  smallButton: {
-    backgroundColor: '#ddd',
-    padding: 10,
-    borderRadius: 6,
-    marginVertical: 6,
-    alignItems: 'center',
-  },
-  buttonText: {
-    fontSize: 16,
-  },
-  reportRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 12,
     borderRadius: 8,
     marginBottom: 12,
-  },
-  roleSelector: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 12,
-  },
-  roleButton: {
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 8,
-    width: '48%',
-    alignItems: 'center',
-  },
-  roleSelected: {
-    backgroundColor: '#cce5ff',
-    borderColor: '#007bff',
   },
 });
