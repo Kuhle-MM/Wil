@@ -17,6 +17,8 @@ const StudentDashboard: React.FC = () => {
   const [studentName, setStudentName] = useState<string>('');
   const [progressData, setProgressData] = useState<{ Attended: number; TotalLessons: number; AttendancePercentage: number } | null>(null);
   const [loadingProgress, setLoadingProgress] = useState(true);
+  const [todaysModules, setTodaysModules] = useState<any[]>([]);
+  const [loadingModules, setLoadingModules] = useState(true);
 
   useEffect(() => {
     const fetchStudentDetails = async () => {
@@ -45,21 +47,52 @@ const StudentDashboard: React.FC = () => {
 
         // Fetch weekly progress
         fetchWeeklyProgress(studentId);
+        // Fetch today's modules
+        fetchTodaysModules(studentId);
 
       } catch (error) {
         console.error('Error fetching student details', error);
       }
     };
 
+    const fetchTodaysModules = async (studentId: string) => {
+      try {
+        
+        const response = await fetch(
+          `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/student_timetable/${studentId.toUpperCase()}`
+        );
+        
+        if (!response.ok) throw new Error('Failed to fetch timetable');
+        const data = await response.json();
+
+        console.log('Fetched timetable data:', data.length);
+        // Get today's date
+        const today = new Date();
+        const todayDateOnly = today.toISOString().split('T')[0];
+
+        // Filter lessons that are today 
+        const todays = data.filter((lesson: any) => {
+          const lessonDate = new Date(lesson.date);
+          return lessonDate.toDateString() === new Date().toDateString();
+        });
+
+        setTodaysModules(todays);
+      } catch (error: any) {
+        Alert.alert('Error', error.message);
+      } finally {
+        setLoadingModules(false);
+      }
+    };
+
     const fetchWeeklyProgress = async (studentId: string) => {
       try {
-        const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/StudentClocking/progress/${studentId}`);
+        const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/progress/${studentId.toUpperCase()}`);
         if (!response.ok) throw new Error('Failed to fetch progress');
         const data = await response.json();
         setProgressData({
-          Attended: data.Attended,
-          TotalLessons: data.TotalLessons,
-          AttendancePercentage: data.AttendancePercentage,
+          Attended: data.attended,
+          TotalLessons: data.totalLessons,
+          AttendancePercentage: data.attendancePercentage,
         });
       } catch (error: any) {
         Alert.alert('Error', error.message);
@@ -86,26 +119,47 @@ const StudentDashboard: React.FC = () => {
       {/* Main Content */}
       <View style={styles.scrollContainer}> 
         <Text style={styles.header}> {studentName || 'Student'}'s Dashboard</Text> 
-        <Text style={styles.sectionTitle}>Today’s modules</Text> 
-        <View style={styles.card}><Text style={styles.cardText}>Today’s Modules</Text></View> 
+        <Text style={styles.sectionTitle}>Today’s Modules</Text>
+
+        <View style={styles.card}>
+          {loadingModules ? (
+            <ActivityIndicator size="large" color="#4caf50" />
+          ) : todaysModules.length === 0 ? (
+            <Text style={styles.cardText}>No modules scheduled for today 🎉</Text>
+          ) : (
+            todaysModules.map((lesson, index) => (
+              <Text key={index} style={styles.cardText}>
+                {lesson.moduleCode} — {new Date(lesson.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </Text>
+            ))
+          )}
+        </View>
         
         <Text style={styles.sectionTitle}>Weekly attendance progress</Text>
+        {/* Show progress bar */}
         <View style={styles.card}>
-          {/* Show a progress bar */}
-          <Text style={styles.cardText}>
-            3 / 5 lessons attended {/*{progressData.Attended} / {progressData.TotalLessons} lessons attended*/}
-          </Text>
-          <Progress.Bar
-            progress={3 / 5} // {progressData.AttendancePercentage / 100}
-            width={350}
-            height={20}
-            color="#4caf50"
-            borderRadius={10}
-            style={{ marginTop: 10 }}
-          />
-          <Text style={[styles.cardText, { marginTop: 5 }]}>
-            60% {/*{progressData.AttendancePercentage.toFixed(2)}%*/}
-          </Text>
+        {loadingProgress ? (
+          <ActivityIndicator size="large" color="#4caf50" />
+        ) : progressData ? (
+          <>
+            <Text style={styles.cardText}>
+              {progressData.Attended} / {progressData.TotalLessons} lessons attended
+              </Text>
+              <Progress.Bar
+                progress={progressData.AttendancePercentage / 100}
+                width={350}
+                height={20}
+                color="#4caf50"
+                borderRadius={10}
+                style={{ marginTop: 10 }}
+              />
+              <Text style={[styles.cardText, { marginTop: 5 }]}>
+                {progressData.AttendancePercentage.toFixed(2)}%
+              </Text>
+            </>
+          ) : (
+            <Text style={styles.cardText}>No progress data available</Text>
+          )}
         </View>
 
         <View style={styles.buttonGrid}>

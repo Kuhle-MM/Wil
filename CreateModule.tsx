@@ -21,6 +21,18 @@ const CreateModule: React.FC = () => {
     const [year, setYear] = useState('');
 
   const handleCreateModule = async () => {
+
+    if (!moduleName || !code || !courseCode || !year || !NQF || !credits) {
+      Alert.alert('Missing Fields', 'Please enter all required fields.');
+      return; 
+    }
+    // Validate Module Code: 4 letters + 4 digits
+    const codeRegex = /^[A-Z]{4}[0-9]{4}$/;
+    if (!codeRegex.test(code)) {
+      Alert.alert('Invalid Module Code', 'Module code must be 4 letters followed by 4 numbers.');
+      return;
+    }
+    
     const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/create_module';
 
     try {
@@ -60,7 +72,8 @@ const CreateModule: React.FC = () => {
       <Text style={styles.title}>Create Module</Text>
 
       <TextInput placeholder="Module Name" value={moduleName} onChangeText={setModuleName} style={styles.input} />
-      <TextInput placeholder="Module Code" value={code} onChangeText={setCode} autoCapitalize="none" style={styles.input} />
+      <TextInput placeholder="Module Code" value={code} onChangeText={(text) => setCode(text.toUpperCase())}  style={styles.input} autoCapitalize="characters"/>
+      
       <Picker
         selectedValue={courseCode}
         onValueChange={(itemValue) => setCourseCode(itemValue)}

@@ -207,13 +207,12 @@ namespace VarsityTrackerApi.Controllers
         [HttpGet("progress/{studentNumber}")]
         public async Task<IActionResult> GetWeeklyProgress(string studentNumber)
         {
-            var now = DateTime.UtcNow;
+            // Step 1: Calculate local week range (Monday–Friday)
+            var localNow = DateTime.Now;
+            var startOfWeekLocal = localNow.Date.AddDays(-(int)localNow.DayOfWeek + (int)DayOfWeek.Monday);
+            var endOfWeekLocal = startOfWeekLocal.AddDays(5); // Monday–Friday
 
-            // Start of the current week (Monday) and end of week
-            var startOfWeek = now.Date.AddDays(-(int)now.DayOfWeek + (int)DayOfWeek.Monday);
-            var endOfWeek = startOfWeek.AddDays(5);
-
-            // Step 1: Get all lessons scheduled for this student this week
+            // Step 2: Get student modules
             var studentModules = new List<StudentModules>();
             var filterModules = TableClient.CreateQueryFilter<StudentModules>(m => m.studentNumber == studentNumber);
             await foreach (var module in _studentModuleTable.QueryAsync<StudentModules>(filterModules))
@@ -221,57 +220,58 @@ namespace VarsityTrackerApi.Controllers
                 studentModules.Add(module);
             }
 
-            var moduleCodes = studentModules.Select(m => m.moduleCode).ToHashSet();
+            if (!studentModules.Any())
+                return NotFound("No modules found for this student.");
 
+            // Step 3: Get lessons for these modules within the week
+            var moduleCodes = studentModules.Select(m => m.moduleCode).ToHashSet(StringComparer.OrdinalIgnoreCase);
             var scheduledLessons = new List<Lesson>();
-            await foreach (var lesson in _lessonTable.QueryAsync<Lesson>(l =>
-                l.date >= startOfWeek && l.date < endOfWeek))
+
+            await foreach (var lesson in _lessonTable.QueryAsync<Lesson>())
             {
                 if (moduleCodes.Contains(lesson.moduleCode))
-                    scheduledLessons.Add(lesson);
+                {
+                    var lessonDateLocal = lesson.date.ToLocalTime().Date;
+                    if (lessonDateLocal >= startOfWeekLocal.Date && lessonDateLocal < endOfWeekLocal.Date)
+                        scheduledLessons.Add(lesson);
+                }
             }
 
-            // Step 2: Get all attendance records for this student this week
+            // Step 4: Get attendance records for the student within the same week
             var attendanceRecords = new List<AttendanceRecord>();
             await foreach (var record in _attendanceTable.QueryAsync<AttendanceRecord>(r =>
                 r.PartitionKey == "Attendance" &&
                 r.StudentNumber == studentNumber &&
-                r.ClockInTime >= startOfWeek &&
-                r.ClockInTime < endOfWeek))
+                r.ClockInTime >= startOfWeekLocal.ToUniversalTime() &&
+                r.ClockInTime < endOfWeekLocal.ToUniversalTime()))
             {
                 attendanceRecords.Add(record);
             }
 
-            // Step 3: Calculate weekly attendance progress
+            // Step 5: Count attended lessons
             int totalLessons = scheduledLessons.Count;
-            // Step 3: Calculate weekly attendance progress with time check
-            int attended = 0;
-
-            foreach (var lesson in scheduledLessons)
-            {
-                // Check if there is any attendance record that overlaps this lesson's time
-                bool attendedThisLesson = attendanceRecords.Any(record =>
+            int attended = scheduledLessons.Count(lesson =>
+                attendanceRecords.Any(record =>
                     record.ClockInTime.HasValue &&
-                    record.ClockInTime.Value.Date == lesson.date.Date // same day
-                );
+                    record.ClockInTime.Value.ToLocalTime() >= lesson.date.ToLocalTime() &&
+                    record.ClockInTime.Value.ToLocalTime() <= lesson.date.ToLocalTime().AddHours(2)
+            ));
 
-                if (attendedThisLesson)
-                    attended++;
-            }
 
-            double percentage = totalLessons > 0 ? (double)attended / totalLessons * 100 : 0;
+            double percentage = totalLessons > 0 ? Math.Round((double)attended / totalLessons * 100, 2) : 0;
 
-            var progressReport = new
+            // Step 6: Return results
+            return Ok(new
             {
                 StudentNumber = studentNumber,
-                WeekStart = startOfWeek,
-                WeekEnd = endOfWeek,
+                WeekStart = startOfWeekLocal,
+                WeekEnd = endOfWeekLocal,
                 TotalLessons = totalLessons,
                 Attended = attended,
-                AttendancePercentage = Math.Round(percentage, 2)
-            };
-
-            return Ok(progressReport);
+                AttendancePercentage = percentage,
+                Lessons = scheduledLessons.Select(l => new { l.lessonID, l.date })
+            });
         }
+
     }
 }

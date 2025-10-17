@@ -11,7 +11,7 @@ namespace VarsityTrackerApi.Models.Report
         public string lessonID { get; set; }
         public string moduleCode { get; set; }
         public string studentNumber { get; set; }
-        public string status = "Absent";
+        public string status { get; set; } = "Absent";
         
         //ITableEntity implementation
         public string? PartitionKey

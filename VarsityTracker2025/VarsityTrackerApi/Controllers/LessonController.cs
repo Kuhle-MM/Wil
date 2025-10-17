@@ -47,6 +47,26 @@ namespace VarsityTrackerApi.Controllers
         {
             try
             {
+                // Validate that the date is not empty
+                if (lesson.date == default)
+                {
+                    return BadRequest("Lesson date is required and cannot be empty.");
+                }
+
+                lesson.date = DateTime.SpecifyKind(lesson.date, DateTimeKind.Utc);
+
+                // Check if the date falls on a weekend (Saturday and Sunday)
+                if (lesson.date.DayOfWeek == DayOfWeek.Saturday || lesson.date.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    return BadRequest("Lesson date cannot be scheduled on a weekend (Saturday or Sunday).");
+                }
+
+                // Check if the lesson date is being made in the past
+                if (lesson.date.Date < DateTime.UtcNow.Date)
+                {
+                    return BadRequest("Lesson date cannot be made in the past. Please select today or a future date.");
+                }
+
                 // Check if a module with the same code already exists
                 await foreach (var existingLesson in _lessonTable.QueryAsync<Lesson>())
                 {
@@ -468,6 +488,72 @@ namespace VarsityTrackerApi.Controllers
             catch (RequestFailedException ex)
             {
                 return StatusCode(500, $"Error retrieving timetable: {ex.Message}");
+            }
+        }
+
+        [HttpGet("lecturer_timetable/{lecturerID}")]
+        public async Task<IActionResult> GetLecturerTimetable(string lecturerID)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(lecturerID))
+                    return BadRequest("Lecturer ID is required.");
+
+                // Step 1: Get all lessons for this lecturer
+                var lecturerLessons = new List<Lesson>();
+                var filter = TableClient.CreateQueryFilter<Lesson>(l => l.lecturerID == lecturerID);
+
+                await foreach (var lesson in _lessonTable.QueryAsync<Lesson>(filter))
+                {
+                    lecturerLessons.Add(lesson);
+                }
+
+                if (!lecturerLessons.Any())
+                    return NotFound("No lessons found for this lecturer.");
+
+                // Step 2: Order lessons by date/time
+                var timetable = lecturerLessons
+                    .OrderBy(l => l.date)
+                    .ToList();
+
+                return Ok(timetable);
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error retrieving lecturer timetable: {ex.Message}");
+            }
+        }
+
+        [HttpPut("update_report_status")]
+        public async Task<IActionResult> UpdateReportStatus(string reportID, string studentNumber, string newStatus)
+        {
+            if (string.IsNullOrWhiteSpace(reportID) || string.IsNullOrWhiteSpace(studentNumber) || string.IsNullOrWhiteSpace(newStatus))
+                return BadRequest("Report ID, student number, and new status are required.");
+
+            try
+            {
+                // Find the specific report for this student
+                Reports reportToUpdate = null;
+                await foreach (var report in _reportsTable.QueryAsync<Reports>(r => r.reportID == reportID && r.studentNumber == studentNumber))
+                {
+                    reportToUpdate = report;
+                    break;
+                }
+
+                if (reportToUpdate == null)
+                    return NotFound($"Report for student {studentNumber} with ID {reportID} not found.");
+
+                // Update the status
+                reportToUpdate.status = newStatus;
+
+                // Update in Azure Table Storage
+                await _reportsTable.UpdateEntityAsync(reportToUpdate, reportToUpdate.ETag, TableUpdateMode.Replace);
+
+                return Ok(new { success = true, message = $"Report status for student {studentNumber} updated to '{newStatus}'." });
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error updating report: {ex.Message}");
             }
         }
     }

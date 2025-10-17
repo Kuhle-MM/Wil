@@ -179,25 +179,48 @@ const StudentModules: React.FC = () => {
           </>
         )}
 
-        <Text style={[styles.header, { marginTop: 20 }]}>Add Module</Text>
-        <Picker
-          selectedValue={selectedModule}
-          onValueChange={(itemValue) => setSelectedModule(itemValue)}
-          style={styles.picker}
-        >
-          <Picker.Item label="Select a Module" value="" />
-          {allModules.map((mod) => (
-            <Picker.Item
-              label={`${mod.code} - ${mod.moduleName}`}
-              value={mod.code}
-              key={mod.RowKey}
-            />
-          ))}
-        </Picker>
+      <Text style={[styles.header, { marginTop: 20 }]}>Add Module</Text>
+      {(() => {
+        const availableModules = allModules.filter(
+          (mod) => !assignedModules.some((assigned) => assigned.code === mod.code)
+        );
 
-        <TouchableOpacity style={styles.button} onPress={AddModule}>
-          <Text style={styles.buttonText}>Add Module</Text>
-        </TouchableOpacity>
+        const placeholderLabel =
+          availableModules.length === 0
+            ? "No more modules to choose from"
+            : "Select a Module";
+
+        return (
+          <>
+            <Picker
+              selectedValue={selectedModule}
+              onValueChange={(itemValue) => setSelectedModule(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label={placeholderLabel} value="" />
+              {availableModules.map((mod) => (
+                <Picker.Item
+                  label={`${mod.code} - ${mod.moduleName}`}
+                  value={mod.code}
+                  key={mod.RowKey}
+                />
+              ))}
+            </Picker>
+
+            <TouchableOpacity
+              style={[
+                styles.button,
+                { opacity: availableModules.length === 0 ? 0.5 : 1 },
+              ]}
+              onPress={AddModule}
+              disabled={availableModules.length === 0}
+            >
+              <Text style={styles.buttonText}>Add Module</Text>
+            </TouchableOpacity>
+          </>
+        );
+      })()}
+
       </View>
       <StudentBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
     </View>

@@ -7,6 +7,7 @@ type Report = {
   lessonID: string;
   moduleCode: string;
   studentNumber: string;
+  status: string;
   rowKey: string;
   timestamp: string;
 };
@@ -16,6 +17,9 @@ const LecturerReports: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedReportID, setSelectedReportID] = useState<string>('');
   const [reports, setReports] = useState<Report[]>([]);
+
+  // Here
+  const statusOptions = ['Present', 'Absent', 'Late', 'Excused'];
 
   const fetchReport = async () => {
     if (!selectedReportID.trim()) {
@@ -41,6 +45,38 @@ const LecturerReports: React.FC = () => {
       Alert.alert('Error', error.message || 'Failed to fetch report.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Function to update report status
+  const updateStatus = async (report: Report, newStatus: string) => {
+    try {
+      const response = await fetch(
+        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/update_report_status`,
+        {
+          method: 'POST', // or PUT depending on your API
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            reportID: report.reportID,
+            studentNumber: report.studentNumber,
+            status: newStatus
+          })
+        }
+      );
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
+      }
+      // Update local state for instant UI feedback
+      setReportData((prev) =>
+        prev.map((r) =>
+          r.reportID === report.reportID && r.studentNumber === report.studentNumber
+            ? { ...r, status: newStatus }
+            : r
+        )
+      );
+    } catch (error: any) {
+      Alert.alert('Error', error.message || 'Failed to update status.');
     }
   };
 
@@ -101,6 +137,19 @@ const LecturerReports: React.FC = () => {
               <Text style={styles.cardText}>Module: {item.moduleCode}</Text>
               <Text style={styles.cardText}>Student: {item.studentNumber}</Text>
               <Text style={styles.cardText}>TimeStamp: {item.timestamp}</Text>
+              
+              <View style={styles.statusRow}>
+                <Text style={styles.cardText}>Status:</Text>
+                <Picker
+                  selectedValue={item.status}
+                  onValueChange={(value) => updateStatus(item, value)}
+                  style={styles.statusPicker}
+                >
+                  {statusOptions.map((status) => (
+                    <Picker.Item key={status} label={status} value={status} />
+                  ))}
+                </Picker>
+              </View>
             </View>
           )}
           ListEmptyComponent={<Text style={{ marginTop: 20 }}>No data found.</Text>}
@@ -142,5 +191,16 @@ const styles = StyleSheet.create({
   },
   cardText: {
     fontSize: 16,
+  },
+  statusRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginTop: 8,
+  },
+  statusPicker: {
+    height: 60,
+    fontSize: 10,
+    width: 150,
+    marginLeft: 8, 
   },
 });
