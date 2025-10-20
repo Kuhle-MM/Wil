@@ -80,6 +80,9 @@ const LecturerDashboard: React.FC = () => {
       <TouchableOpacity style={styles.smallButton} onPress={handleReport}>
         <Text>Report Overview</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.smallButton} onPress={handleCalendar}>
+        <Text>Timetable</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.smallButton} onPress={handleAttendance}>
         <Text>Clock In</Text>
       </TouchableOpacity>
