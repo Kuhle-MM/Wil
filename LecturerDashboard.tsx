@@ -57,6 +57,7 @@ const LecturerDashboard: React.FC = () => {
   const handleAttendance = () => navigation.navigate('LecturerAttendance');
   const handleModule = () => navigation.navigate('LecturerModules', { role });
   const handleLesson = () => navigation.navigate('LecturerLessons', { role });
+  const handleQrCamera = () => navigation.navigate('QrCamera', { role });
 
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -91,6 +92,9 @@ const LecturerDashboard: React.FC = () => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.smallButton} onPress={handleLesson}>
         <Text>Your Lessons</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
+        <Text>Open Qr Camera</Text>
       </TouchableOpacity>
     </ScrollView>
   );

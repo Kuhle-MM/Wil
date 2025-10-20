@@ -109,6 +109,7 @@ const StudentDashboard: React.FC = () => {
   const handleAttendance = () => navigation.navigate('StudentAttendance',  { role });
   const handleModule = () => navigation.navigate('StudentModules', { role });
   const handleHome = () => navigation.navigate('Main', { role });
+  const handleQrCamera = () => navigation.navigate('QrCamera', { role });
 
   return (
     <ImageBackground
@@ -198,6 +199,9 @@ const StudentDashboard: React.FC = () => {
             />
             <Text style={styles.gridText}>Your Modules</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
+                  <Text>Open Qr Camera</Text>
+                </TouchableOpacity>
         </View>
       </View>
 

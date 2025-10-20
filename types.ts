@@ -24,4 +24,5 @@ export type RootTabParamList = {
   LessonReports: { role: 'lecturer' };
   Modules: { role: 'admin' };
   BottomNav: { role: 'student' | 'lecturer' | 'admin'};
+  QrCamera: { role: 'student' | 'lecturer' | 'admin'};
 };
