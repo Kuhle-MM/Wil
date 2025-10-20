@@ -11,14 +11,17 @@ type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
 const AdminDashboard: React.FC = () => {
   const navigation = useNavigation<AuthNavProp>();
-    const route = useRoute<AuthRouteProp>();
-    const { role } = route.params;
-    const createUser = async () => {
-    navigation.navigate('CreateUser', { role });  
-    };
-    const createModule = async () => {
-    navigation.navigate('CreateModule', { role });  
-    };
+  const route = useRoute<AuthRouteProp>();
+  const { role } = route.params;
+  const createUser = async () => {
+  navigation.navigate('CreateUser', { role });  
+  };
+  const createModule = async () => {
+  navigation.navigate('CreateModule', { role });  
+  };
+  const viewModules = async () => {
+  navigation.navigate('Modules', { role });  
+  };
     
   return (
   <View style={styles.scrollContainer}>
@@ -27,17 +30,13 @@ const AdminDashboard: React.FC = () => {
     <TouchableOpacity style={styles.smallButton} onPress={createUser}>
       <Text>Create User</Text>
     </TouchableOpacity>
+    <TouchableOpacity style={styles.smallButton} onPress={viewModules}>
+      <Text>Modules</Text>
+    </TouchableOpacity>
     <TouchableOpacity style={styles.smallButton} onPress={createModule}>
       <Text>Create Module</Text>
     </TouchableOpacity>
 
-    <Text style={styles.header}>QR Code</Text>
-
-    <SvgUri
-      width="200"
-      height="200"
-      uri="https://varsitytracker2025.blob.core.windows.net/qrcodes/jdjones.svg"
-    />
   </View>
 );
 };

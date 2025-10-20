@@ -30,6 +30,11 @@ import CreateModule from './CreateModule.tsx';
 import StudentModules from './StudentModules.tsx';
 import LecturerModules from './LecturerModules.tsx';
 import CreateLesson from './CreateLesson.tsx';
+import LecturerLessons from './LecturerLessons.tsx';
+import LessonActivity from './LessonActivity.tsx';
+import Modules from './Modules.tsx';
+import StudentBottomNav from './BottomNav.tsx';
+import LecturersCalendar from './LecturersCalendar.tsx';
 
 const Stack = createNativeStackNavigator<RootTabParamList>();
 
@@ -129,7 +134,7 @@ const MainTabs: React.FC = () => {
 export default function App() {
   return (
     <NavigationContainer>
-      <StackNav.Navigator screenOptions={{ headerShown: false }}>
+      <StackNav.Navigator screenOptions={{ headerShown: false }} initialRouteName="Auth">
         <StackNav.Screen name="Login" component={LoginScreen} />
         <StackNav.Screen name="CreateUser" component={CreateUser} />
         <StackNav.Screen name="CreateModule" component={CreateModule} />
@@ -137,7 +142,12 @@ export default function App() {
         <StackNav.Screen name="AuthLecturer" component={AuthScreenLect} />
         <StackNav.Screen name="AuthAdmin" component={AuthScreenAdm} />
         <StackNav.Screen name="Main" component={StudentsDashboard} />
-        <StackNav.Screen name="Calendar" component={StudentsCalandar} />
+        <StackNav.Screen name="Calendar">
+        {({ route }: any) => {
+          const role = route.params?.role;
+          return role === 'Lecturer' ? <LecturersCalendar /> : <StudentsCalandar />;
+        }}
+        </StackNav.Screen>
         <StackNav.Screen name="Report" component={StudentsReports} />        
         <StackNav.Screen name="MainLecturer" component={LecturersDashboard} />
         <StackNav.Screen name="MainAdmin" component={AdminsDashboard} />
@@ -146,7 +156,10 @@ export default function App() {
         <StackNav.Screen name="LecturerAttendance" component={LecturerAttendance} />
         <StackNav.Screen name="StudentModules" component={StudentModules} />
         <StackNav.Screen name="LecturerModules" component={LecturerModules} />
+        <StackNav.Screen name="LecturerLessons" component={LecturerLessons} />
         <StackNav.Screen name="CreateLesson" component={CreateLesson} />
+        <StackNav.Screen name="LessonActivity" component={LessonActivity} />
+        <StackNav.Screen name="Modules" component={Modules} />
       </StackNav.Navigator>
     </NavigationContainer>
   );

@@ -1,6 +1,6 @@
 export type RootTabParamList = {
   Login: undefined;
-  Auth: { role: 'student' };
+  Auth: { role: 'student' | 'lecturer' | 'admin' };
   AuthLecturer: { role: 'lecturer' };
   AuthAdmin: { role: 'admin' };
   Main: { role: 'student' | 'lecturer' | 'admin'};
@@ -8,15 +8,20 @@ export type RootTabParamList = {
   MainAdmin: { role: 'student' | 'lecturer' | 'admin'};
   Dashboard: undefined;
   Card: undefined;
-  Report: undefined;
+  Report: { role: 'student' | 'lecturer' | 'admin'};
   ReportLecturer: undefined;
   CreateUser: { role: 'admin' };
   CreateModule: { role: 'admin' };
-  Calendar: undefined;
+  Calendar: { role: 'student' | 'lecturer' | 'admin'};
   LecturerCard: undefined;
-  StudentAttendance: undefined;
+  StudentAttendance: { role: 'student' | 'lecturer' | 'admin'};
   LecturerAttendance: undefined;
-  StudentModules: { role: 'student' };
-  LecturerModules: { role: 'lecturer' };
-  CreateLesson: { role: 'lecturer' };
+  StudentModules: { role: 'student' | 'lecturer' | 'admin'};
+  LecturerModules: { role: 'student' | 'lecturer' | 'admin'};
+  LecturerLessons: { role: 'student' | 'lecturer' | 'admin'};
+  CreateLesson: { role: 'student' | 'lecturer' | 'admin'};
+  LessonActivity: { role: 'student' | 'lecturer' | 'admin'};
+  LessonReports: { role: 'lecturer' };
+  Modules: { role: 'admin' };
+  BottomNav: { role: 'student' | 'lecturer' | 'admin'};
 };
