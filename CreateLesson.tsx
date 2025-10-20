@@ -19,7 +19,7 @@ const CreateLesson: React.FC = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [modules, setModules] = useState<Module[]>([]);
 
-  const lessonTimes = ['08:20', '09:20', '10:20', '12:00', '13:00', '14:00', '15:00'];
+  const lessonTimes = ['08:20', '09:20', '10:20', '12:00', '13:00', '14:00', '15:00', '15:40'];
 
   const handleCreateLesson = async () => {
     if (!studentNumber || !moduleCode || !courseCode || !selectedDate || !selectedTime) {
