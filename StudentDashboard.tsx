@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, ImageBackground, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, Alert, Image, ImageBackground, ActivityIndicator } from 'react-native';
 import { useRoute, CommonActions, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
@@ -111,104 +111,93 @@ const StudentDashboard: React.FC = () => {
   const handleHome = () => navigation.navigate('Main', { role });
   const handleQrCamera = () => navigation.navigate('QrCamera', { role });
 
-  return (
-    <ImageBackground
-      source={require('./assets/images/BackgroundImage.jpg')}
-      style={styles.backgroundImage}
-      resizeMode="cover" 
+  
+return (
+  <ImageBackground
+    source={require('./assets/images/BackgroundImage.jpg')}
+    style={styles.backgroundImage}
+    resizeMode="cover"
+  >
+    {/* Make this scrollable */}
+    <ScrollView 
+      style={styles.scrollContainer} 
+      contentContainerStyle={{ paddingBottom: 100 }} // ensures space above bottom nav
+      showsVerticalScrollIndicator={false}
     >
-      {/* Main Content */}
-      <View style={styles.scrollContainer}> 
-        <Text style={styles.header}> {studentName || 'Student'}'s Dashboard</Text> 
-        <Text style={styles.sectionTitle}>Today’s Modules</Text>
+      <Text style={styles.header}>{studentName || 'Student'}'s Dashboard</Text> 
+      <Text style={styles.sectionTitle}>Today’s Modules</Text>
 
-        <View style={styles.card}>
-          {loadingModules ? (
-            <ActivityIndicator size="large" color="#4caf50" />
-          ) : todaysModules.length === 0 ? (
-            <Text style={styles.cardText}>No modules scheduled for today 🎉</Text>
-          ) : (
-            todaysModules.map((lesson, index) => (
-              <Text key={index} style={styles.cardText}>
-                {lesson.moduleCode} — {new Date(lesson.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </Text>
-            ))
-          )}
-        </View>
-        
-        <Text style={styles.sectionTitle}>Weekly attendance progress</Text>
-        {/* Show progress bar */}
-        <View style={styles.card}>
+      <View style={styles.card}>
+        {loadingModules ? (
+          <ActivityIndicator size="large" color="#4caf50" />
+        ) : todaysModules.length === 0 ? (
+          <Text style={styles.cardText}>No modules scheduled for today 🎉</Text>
+        ) : (
+          todaysModules.map((lesson, index) => (
+            <Text key={index} style={styles.cardText}>
+              {lesson.moduleCode} — {new Date(lesson.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </Text>
+          ))
+        )}
+      </View>
+      
+      <Text style={styles.sectionTitle}>Weekly attendance progress</Text>
+      <View style={styles.card}>
         {loadingProgress ? (
           <ActivityIndicator size="large" color="#4caf50" />
         ) : progressData ? (
           <>
             <Text style={styles.cardText}>
               {progressData.Attended} / {progressData.TotalLessons} lessons attended
-              </Text>
-              <Progress.Bar
-                progress={progressData.AttendancePercentage / 100}
-                width={350}
-                height={20}
-                color="#4caf50"
-                borderRadius={10}
-                style={{ marginTop: 10 }}
-              />
-              <Text style={[styles.cardText, { marginTop: 5 }]}>
-                {progressData.AttendancePercentage.toFixed(2)}%
-              </Text>
-            </>
-          ) : (
-            <Text style={styles.cardText}>No progress data available</Text>
-          )}
-        </View>
-
-        <View style={styles.buttonGrid}>
-          <TouchableOpacity style={styles.gridButton} onPress={handleAttendance}>
-            <Image
-              source={require('./assets/images/clockin.jpg')}
-              style={styles.gridImage}
-              resizeMode="cover"
+            </Text>
+            <Progress.Bar
+              progress={progressData.AttendancePercentage / 100}
+              width={350}
+              height={20}
+              color="#4caf50"
+              borderRadius={10}
+              style={{ marginTop: 10 }}
             />
-            <Text style={styles.gridText}>Clock In</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.gridButton} onPress={handleReport}>
-            <Image
-              source={require('./assets/images/report.jpg')}
-              style={styles.gridImage}
-              resizeMode="cover"
-            />
-            <Text style={styles.gridText}>Report Overview</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.gridButton} onPress={handleCalendar}>
-            <Image
-              source={require('./assets/images/calendar.jpg')}
-              style={styles.gridImage}
-              resizeMode="cover"
-            />
-            <Text style={styles.gridText}>Get Calendar</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.gridButton} onPress={handleModule}>
-            <Image
-              source={require('./assets/images/modules.jpg')}
-              style={styles.gridImage}
-              resizeMode="cover"
-            />
-            <Text style={styles.gridText}>Your Modules</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
-                  <Text>Open Qr Camera</Text>
-                </TouchableOpacity>
-        </View>
+            <Text style={[styles.cardText, { marginTop: 5 }]}>
+              {progressData.AttendancePercentage.toFixed(2)}%
+            </Text>
+          </>
+        ) : (
+          <Text style={styles.cardText}>No progress data available</Text>
+        )}
       </View>
 
-      {/* Bottom navbar */}
-      <StudentBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
-    </ImageBackground>
-  );
+      <View style={styles.buttonGrid}>
+        <TouchableOpacity style={styles.gridButton} onPress={handleAttendance}>
+          <Image source={require('./assets/images/clockin.jpg')} style={styles.gridImage} resizeMode="cover" />
+          <Text style={styles.gridText}>Clock In</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.gridButton} onPress={handleReport}>
+          <Image source={require('./assets/images/report.jpg')} style={styles.gridImage} resizeMode="cover" />
+          <Text style={styles.gridText}>Report Overview</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.gridButton} onPress={handleCalendar}>
+          <Image source={require('./assets/images/calendar.jpg')} style={styles.gridImage} resizeMode="cover" />
+          <Text style={styles.gridText}>Get Calendar</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.gridButton} onPress={handleModule}>
+          <Image source={require('./assets/images/modules.jpg')} style={styles.gridImage} resizeMode="cover" />
+          <Text style={styles.gridText}>Your Modules</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
+          <Text>Open Qr Camera</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+
+    {/* Bottom navbar */}
+    <StudentBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
+  </ImageBackground>
+);
 };
 
 export default StudentDashboard;

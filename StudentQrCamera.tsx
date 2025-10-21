@@ -1,59 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, ScrollView } from 'react-native';
-import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootTabParamList } from './types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
+import { View, Text, Linking, StyleSheet } from 'react-native';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import { RNCamera } from 'react-native-camera';
 
-type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
-type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
-
-const StudentQrCamera: React.FC = () => {
-  
-
+const StudentQrCamera = () => {
+  const onSuccess = (e: any) => {
+    console.log('QR Code Data:', e.data);
+    // You can handle navigation or data processing here
+    Linking.openURL(e.data).catch(err => console.error('Invalid QR', err));
+  };
 
   return (
-    <ScrollView style={styles.scrollContainer}>
-      <Text style={styles.header}>Student QR Code </Text>
-
-      
-    </ScrollView>
+    <View style={styles.container}>
+      <QRCodeScanner
+        onRead={onSuccess}
+        flashMode={RNCamera.Constants.FlashMode.off}
+        topContent={<Text style={styles.centerText}>Scan a QR Code</Text>}
+        bottomContent={<Text style={styles.bottomText}>Point your camera at a QR code</Text>}
+      />
+    </View>
   );
 };
 
-export default StudentQrCamera;
-
 const styles = StyleSheet.create({
-  scrollContainer: {
-    padding: 16,
-    backgroundColor: '#fff',
+  container: { flex: 1 },
+  centerText: {
+    flex: 1,
+    fontSize: 18,
+    padding: 32,
+    color: '#333',
+    textAlign: 'center',
   },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  sectionTitle: {
+  bottomText: {
     fontSize: 16,
-    marginVertical: 8,
-    fontWeight: '500',
-  },
-  card: {
-    width: '100%',
-    padding: 20,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 12,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  cardText: {
-    fontSize: 16,
-  },
-  smallButton: {
-    backgroundColor: '#ddd',
-    padding: 10,
-    borderRadius: 6,
-    marginVertical: 6,
-    alignItems: 'center',
+    color: '#666',
+    marginBottom: 40,
+    textAlign: 'center',
   },
 });
+
+export default StudentQrCamera;
