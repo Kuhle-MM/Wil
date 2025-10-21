@@ -403,7 +403,7 @@ namespace VarsityTrackerApi.Controllers
         [HttpPost("startLesson/{lessonID}")]
         public async Task<IActionResult> StartLesson(string lessonID)
         {
-            // ✅ 1. Fetch Lesson Once
+            // 1. Fetch Lesson Once
             Lesson lesson = null;
             await foreach (var l in _lessonTable.QueryAsync<Lesson>(x => x.lessonID == lessonID))
             {
@@ -416,7 +416,7 @@ namespace VarsityTrackerApi.Controllers
 
             var today = DateTime.UtcNow.Date;
 
-            // ✅ 2. Get Clocked-in Students Today in One Pass
+            // 2. Get Clocked-in Students Today in One Pass
             var clockedInToday = new Dictionary<string, StudentList>();
             await foreach (var s in _waitingList.QueryAsync<StudentList>())
             {
@@ -424,14 +424,14 @@ namespace VarsityTrackerApi.Controllers
                     clockedInToday[s.StudentID] = s;
             }
 
-            // ✅ 3. Get All Students Enrolled in This Module
+            // 3. Get All Students Enrolled in This Module
             var enrolledStudents = new List<string>();
             await foreach (var sm in _studentModuleTable.QueryAsync<StudentModules>(m => m.moduleCode == lesson.moduleCode))
             {
                 enrolledStudents.Add(sm.studentNumber);
             }
 
-            // ✅ 4. Insert Attendance Records (avoid duplicates)
+            // 4. Insert Attendance Records (avoid duplicates)
             foreach (var studentID in enrolledStudents)
             {
                 bool exists = false;
@@ -459,7 +459,7 @@ namespace VarsityTrackerApi.Controllers
                 await _lessonListTable.AddEntityAsync(entry);
             }
 
-            // ✅ 5. Mark Lesson as Started (use Upsert to avoid ETag issues)
+            // 5. Mark Lesson as Started (use Upsert to avoid ETag issues)
             lesson.started = true;
             lesson.startedTime = DateTime.UtcNow;
             await _lessonTable.UpsertEntityAsync(lesson, TableUpdateMode.Replace);
