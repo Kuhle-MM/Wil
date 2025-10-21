@@ -12,7 +12,10 @@ type BottomNavProps = {
 };
 
 const StudentBottomNav: React.FC<BottomNavProps> = ({ navigation, role }) => {
+  if (role === "Student"){
+    
   return (
+    
     <View style={styles.bottomNav}>
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Main', { role })}>
         <Icon name="home-outline" style={[styles.icon, styles.iconBlue]} size={32} color="#064f62" />
@@ -40,6 +43,76 @@ const StudentBottomNav: React.FC<BottomNavProps> = ({ navigation, role }) => {
       </TouchableOpacity>
     </View>
   );
+}
+if (role === "Lecturer"){
+    
+  return (
+    
+    <View style={styles.bottomNav}>
+      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('MainLecturer', { role })}>
+        <Icon name="home-outline" style={[styles.icon, styles.iconBlue]} size={32} color="#064f62" />
+        <Text style={styles.navText}>Home</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('LecturerAttendance')}>
+        <Icon name="time-outline" style={[styles.icon, styles.iconGreen]} size={32} color="#064f62" />
+        <Text style={styles.navText}>Clock In</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('ReportLecturer')}>
+        <Icon name="document-text-outline" style={[styles.icon, styles.iconBlue]} size={32} color="#064f62" />
+        <Text style={styles.navText}>Reports</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Calendar', { role })}>
+        <Icon name="calendar-outline" style={[styles.icon, styles.iconGreen]} size={32} color="#064f62" />
+        <Text style={styles.navText}>Calendar</Text>
+      </TouchableOpacity>
+
+       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('LecturerModules', { role })}>
+        <Icon name="calendar-outline" style={[styles.icon, styles.iconGreen]} size={32} color="#064f62" />
+        <Text style={styles.navText}>Modules</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('LecturerLessons', { role })}>
+        <Icon name="calendar-outline" style={[styles.icon, styles.iconGreen]} size={32} color="#064f62" />
+        <Text style={styles.navText}>Lessons</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Settings', { role })}>
+        <Icon name="settings-outline" style={[styles.icon, styles.iconBlue]} size={32} color="#064f62" />
+        <Text style={styles.navText}>Settings</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+else if (role === "Admin"){
+    
+  return (
+    
+    <View style={styles.bottomNav}>
+      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('MainAdmin', { role })}>
+        <Icon name="home-outline" style={[styles.icon, styles.iconBlue]} size={32} color="#064f62" />
+        <Text style={styles.navText}>Home</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Modules', { role })}>
+        <Icon name="document-text-outline" style={[styles.icon, styles.iconBlue]} size={32} color="#064f62" />
+        <Text style={styles.navText}>Modules</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('CreateModule', { role })}>
+        <Icon name="calendar-outline" style={[styles.icon, styles.iconGreen]} size={32} color="#064f62" />
+        <Text style={styles.navText}>Add a Module</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Settings', { role })}>
+        <Icon name="settings-outline" style={[styles.icon, styles.iconBlue]} size={32} color="#064f62" />
+        <Text style={styles.navText}>Settings</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
 };
 
 export default StudentBottomNav;

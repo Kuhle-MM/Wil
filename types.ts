@@ -8,8 +8,8 @@ export type RootTabParamList = {
   Card: undefined;
   Report: { role: 'student' | 'lecturer' | 'admin'};
   ReportLecturer: undefined;
-  CreateUser: { role: 'admin' };
-  CreateModule: { role: 'admin' };
+  CreateUser: { role: 'student' | 'lecturer' | 'admin' };
+  CreateModule: { role: 'student' | 'lecturer' | 'admin' };
   Calendar: { role: 'student' | 'lecturer' | 'admin'};
   LecturerCard: undefined;
   StudentAttendance: { role: 'student' | 'lecturer' | 'admin'};
@@ -20,6 +20,6 @@ export type RootTabParamList = {
   CreateLesson: { role: 'student' | 'lecturer' | 'admin'};
   LessonActivity: { role: 'student' | 'lecturer' | 'admin'};
   LessonReports: { role: 'lecturer' };
-  Modules: { role: 'admin' };
+  Modules: { role: 'student' | 'lecturer' | 'admin' };
   BottomNav: { role: 'student' | 'lecturer' | 'admin'};
 };

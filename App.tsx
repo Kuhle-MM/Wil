@@ -121,6 +121,20 @@ const MainTabs: React.FC = () => {
     </Tab.Navigator>
   );
 };
+// Main role-based screen
+const Main: React.FC<{ route: { params: { role: 'Student' | 'Lecturer' | 'Admin' } } }> = ({ route }) => {
+  const { role } = route.params;
+
+  if (role === 'Student') return <StudentsDashboard />;
+  if (role === 'Lecturer') return <LecturerDashboard />;
+  if (role === 'Admin') return <AdminsDashboard />;
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>No role specified</Text>
+    </View>
+  );
+};
 
 export default function App() {
   return (
@@ -130,7 +144,7 @@ export default function App() {
         <StackNav.Screen name="CreateUser" component={CreateUser} />
         <StackNav.Screen name="CreateModule" component={CreateModule} />
         <StackNav.Screen name="Auth" component={AuthScreen} /> 
-        <StackNav.Screen name="Main" component={StudentsDashboard} />
+        <StackNav.Screen name="Main" component={Main} />
         <StackNav.Screen name="Calendar">
         {({ route }: any) => {
           const role = route.params?.role;
