@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Alert, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Alert, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 type Report = {
@@ -42,7 +42,6 @@ const LecturerReports: React.FC = () => {
     }
   };
 
-  // Function to update report status
   const updateStatus = async (report: Report, newStatus: string) => {
     try {
       const response = await fetch(
@@ -94,54 +93,60 @@ const LecturerReports: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>View Lesson Report</Text>
+      <Text style={styles.header}>📘 View Lesson Report</Text>
 
-      <Picker
-        selectedValue={selectedReportID}
-        onValueChange={(itemValue) => {
-          setSelectedReportID(itemValue);
-          fetchReport(itemValue);
-        }}
-        style={styles.picker}
-      >
-        <Picker.Item label="Select a Report" value="" />
-        {reports.map((report) => (
-          <Picker.Item
-            key={report.reportID}
-            label={`${report.lessonID}`}
-            value={report.reportID}
-          />
-        ))}
-      </Picker>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={selectedReportID}
+          onValueChange={(itemValue) => {
+            setSelectedReportID(itemValue);
+            fetchReport(itemValue);
+          }}
+          style={styles.picker}
+        >
+          <Picker.Item label="Select a Report" value=""/>
+          {reports.map((report) => (
+            <Picker.Item
+              key={report.reportID}
+              label={`Lesson: ${report.lessonID}`}
+              value={report.reportID}
+            />
+          ))}
+        </Picker>
+      </View>
 
       {loading ? (
-        <ActivityIndicator size="large" color="#007bff" style={{ marginTop: 20 }} />
+        <ActivityIndicator size="large" color="#B8EBD8" style={{ marginTop: 20 }} />
       ) : (
         <FlatList
           data={reportData}
           keyExtractor={(item) => item.rowKey}
           renderItem={({ item }) => (
             <View style={styles.card}>
-              <Text style={styles.cardText}>Lesson ID: {item.lessonID}</Text>
+              <Text style={styles.cardTitle}>Lesson ID: {item.lessonID}</Text>
               <Text style={styles.cardText}>Module: {item.moduleCode}</Text>
               <Text style={styles.cardText}>Student: {item.studentNumber}</Text>
-              <Text style={styles.cardText}>TimeStamp: {item.timestamp}</Text>
+              <Text style={styles.cardText}>Time: {item.timestamp}</Text>
 
               <View style={styles.statusRow}>
                 <Text style={styles.cardText}>Status:</Text>
-                <Picker
-                  selectedValue={item.status}
-                  onValueChange={(value) => updateStatus(item, value)}
-                  style={styles.statusPicker}
-                >
-                  {statusOptions.map((status) => (
-                    <Picker.Item key={status} label={status} value={status} />
-                  ))}
-                </Picker>
+                <View style={styles.statusPickerWrapper}>
+                  <Picker
+                    selectedValue={item.status}
+                    onValueChange={(value) => updateStatus(item, value)}
+                    style={styles.statusPicker}
+                  >
+                    {statusOptions.map((status) => (
+                      <Picker.Item key={status} label={status} value={status} />
+                    ))}
+                  </Picker>
+                </View>
               </View>
             </View>
           )}
-          ListEmptyComponent={<Text style={{ marginTop: 20 }}>No data found.</Text>}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>No reports available. Please select a report.</Text>
+          }
         />
       )}
     </View>
@@ -152,37 +157,86 @@ export default LecturerReports;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    backgroundColor: '#fff',
     flex: 1,
-  },
-  picker: {
-    height: 50,
-    width: '100%',
+    backgroundColor: '#ffffffff', // White background
+    paddingHorizontal: 16,
+    paddingTop: 24,
   },
   header: {
     fontSize: 22,
     fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  pickerContainer: {
+    backgroundColor: '#A4C984', // Grey Buttons
+    borderRadius: 10,
+    paddingHorizontal: 8,
     marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
+    elevation: 3
+  },
+  pickerLesson: {
+    fontWeight: 'bold',
+    fontSize: 20
+  },
+  picker: {
+    height: 50,
+    width: '100%',
+    color: '#333',
+    fontWeight: 'bold',
+    fontSize: 20
   },
   card: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#e4e4e1ff', // Powder Blue card
     padding: 16,
-    borderRadius: 10,
+    borderRadius: 12,
     marginVertical: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 4,
+    color: '#333',
   },
   cardText: {
     fontSize: 16,
+    color: '#444',
+    marginBottom: 2,
   },
   statusRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 8,
+    marginTop: 10,
+    justifyContent: 'space-between',
   },
-  statusPicker: {
-    height: 60,
-    fontSize: 10,
-    width: 150,
-    marginLeft: 8,
+  statusPickerWrapper: {
+  backgroundColor: '#A4C984', // Button color
+  borderRadius: 8,
+  width: 160,
+  height: 50, 
+  justifyContent: 'center',
+  
+},
+statusPicker: {
+  height: 50, // match wrapper height
+  fontSize: 18, // readable size
+  lineHeight: 20, // prevents text clipping
+  color: '#fff', // white text for contrast
+  justifyContent: 'center'
+},
+  emptyText: {
+    marginTop: 20,
+    textAlign: 'center',
+    color: '#ffffffff',
   },
 });
