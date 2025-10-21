@@ -179,47 +179,48 @@ const StudentModules: React.FC = () => {
           </>
         )}
 
-        <Text style={[styles.header, { marginTop: 20 }]}>Add Module</Text>
-        {(() => {
-          const availableModules = allModules.filter(
-            (mod) => !assignedModules.some((assigned) => assigned.code === mod.code)
-          );
+      <Text style={[styles.header, { marginTop: 20 }]}>Add Module</Text>
+      {(() => {
+        const availableModules = allModules.filter(
+          (mod) => !assignedModules.some((assigned) => assigned.code === mod.code)
+        );
 
-          const placeholderLabel =
-            availableModules.length === 0
-              ? "No more modules to choose from"
-              : "Select a Module";
+        const placeholderLabel =
+          availableModules.length === 0
+            ? "No more modules to choose from"
+            : "Select a Module";
 
-          return (
-            <>
-              <Picker
-                selectedValue={selectedModule}
-                onValueChange={(itemValue) => setSelectedModule(itemValue)}
-                style={styles.picker}
-              >
-                <Picker.Item label={placeholderLabel} value="" />
-                {availableModules.map((mod) => (
-                  <Picker.Item
-                    label={`${mod.code} - ${mod.moduleName}`}
-                    value={mod.code}
-                    key={mod.RowKey}
-                  />
-                ))}
-              </Picker>
+        return (
+          <>
+            <Picker
+              selectedValue={selectedModule}
+              onValueChange={(itemValue) => setSelectedModule(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label={placeholderLabel} value="" />
+              {availableModules.map((mod) => (
+                <Picker.Item
+                  label={`${mod.code} - ${mod.moduleName}`}
+                  value={mod.code}
+                  key={mod.RowKey}
+                />
+              ))}
+            </Picker>
 
-              <TouchableOpacity
-                style={[
-                  styles.button,
-                  { opacity: availableModules.length === 0 ? 0.5 : 1 },
-                ]}
-                onPress={AddModule}
-                disabled={availableModules.length === 0}
-              >
-                <Text style={styles.buttonText}>Add Module</Text>
-              </TouchableOpacity>
-            </>
-          );
-        })()}
+            <TouchableOpacity
+              style={[
+                styles.button,
+                { opacity: availableModules.length === 0 ? 0.5 : 1 },
+              ]}
+              onPress={AddModule}
+              disabled={availableModules.length === 0}
+            >
+              <Text style={styles.buttonText}>Add Module</Text>
+            </TouchableOpacity>
+          </>
+        );
+      })()}
+
       </View>
       <StudentBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
     </View>

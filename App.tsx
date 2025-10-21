@@ -31,6 +31,7 @@ import LecturerLessons from './LecturerLessons.tsx';
 import LessonActivity from './LessonActivity.tsx';
 import Modules from './Modules.tsx';
 import StudentBottomNav from './BottomNav.tsx';
+import LecturersCalendar from './LecturersCalendar.tsx';
 
 const Stack = createNativeStackNavigator<RootTabParamList>();
 
@@ -130,7 +131,12 @@ export default function App() {
         <StackNav.Screen name="CreateModule" component={CreateModule} />
         <StackNav.Screen name="Auth" component={AuthScreen} /> 
         <StackNav.Screen name="Main" component={StudentsDashboard} />
-        <StackNav.Screen name="Calendar" component={StudentsCalandar} />
+        <StackNav.Screen name="Calendar">
+        {({ route }: any) => {
+          const role = route.params?.role;
+          return role === 'Lecturer' ? <LecturersCalendar /> : <StudentsCalandar />;
+        }}
+        </StackNav.Screen>
         <StackNav.Screen name="Report" component={StudentsReports} />        
         <StackNav.Screen name="MainLecturer" component={LecturersDashboard} />
         <StackNav.Screen name="MainAdmin" component={AdminsDashboard} />

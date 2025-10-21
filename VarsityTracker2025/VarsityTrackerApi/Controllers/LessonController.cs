@@ -1,18 +1,18 @@
-﻿using Azure.Data.Tables;
+﻿using Azure;
+using Azure.Data.Tables;
 using Azure.Storage.Blobs;
-using Azure;
+using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using QRCoder;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
+using System.Reflection;
 using VarsityTrackerApi.Models.Access;
 using VarsityTrackerApi.Models.Lesson;
-using System.Reflection;
 using VarsityTrackerApi.Models.Module;
 using VarsityTrackerApi.Models.Report;
-using Azure.Storage.Blobs.Models;
-using QRCoder;
-using System.Drawing.Imaging;
-using System.Drawing;
 
 namespace VarsityTrackerApi.Controllers
 {
@@ -213,6 +213,7 @@ namespace VarsityTrackerApi.Controllers
 
             return Ok(new { message = "QR Generated", qrCodeUrl = publicUrl });
         }
+
 
         [HttpPost("clockin/{studentNumber}")]
         public async Task<IActionResult> StudentList(string studentNumber)
@@ -586,6 +587,39 @@ namespace VarsityTrackerApi.Controllers
             catch (RequestFailedException ex)
             {
                 return StatusCode(500, $"Error retrieving timetable: {ex.Message}");
+            }
+        }
+
+        [HttpGet("lecturer_timetable/{lecturerID}")]
+        public async Task<IActionResult> GetLecturerTimetable(string lecturerID)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(lecturerID))
+                    return BadRequest("Lecturer ID is required.");
+
+                // Step 1: Get all lessons for this lecturer
+                var lecturerLessons = new List<Lesson>();
+                var filter = TableClient.CreateQueryFilter<Lesson>(l => l.lecturerID == lecturerID);
+
+                await foreach (var lesson in _lessonTable.QueryAsync<Lesson>(filter))
+                {
+                    lecturerLessons.Add(lesson);
+                }
+
+                if (!lecturerLessons.Any())
+                    return NotFound("No lessons found for this lecturer.");
+
+                // Step 2: Order lessons by date/time
+                var timetable = lecturerLessons
+                    .OrderBy(l => l.date)
+                    .ToList();
+
+                return Ok(timetable);
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error retrieving lecturer timetable: {ex.Message}");
             }
         }
 

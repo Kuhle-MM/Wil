@@ -44,7 +44,8 @@ namespace VarsityTrackerApi.Controllers
                     {
                         return BadRequest($"{module.code.ToUpper()} already exists in the system.");
                     }
-                    if(existingModule.moduleName == module.moduleName)
+
+                    if (existingModule.moduleName == module.moduleName)
                     {
                         return BadRequest($"{module.moduleName} already exists in the system.");
                     }

@@ -13,7 +13,7 @@ namespace VarsityTrackerApi.Models.Module
         public int credits { get; set; }
         public string courseCode { get; set; }
         public int year { get; set; }
-        
+
         //ITableEntity implementation
         public string? PartitionKey
         { get; set; }

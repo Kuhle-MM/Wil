@@ -21,6 +21,7 @@ const CreateModule: React.FC = () => {
     const [year, setYear] = useState('');
 
   const handleCreateModule = async () => {
+
     if (!moduleName || !code || !courseCode || !year || !NQF || !credits) {
       Alert.alert('Missing Fields', 'Please enter all required fields.');
       return; 
@@ -71,7 +72,8 @@ const CreateModule: React.FC = () => {
       <Text style={styles.title}>Create Module</Text>
 
       <TextInput placeholder="Module Name" value={moduleName} onChangeText={setModuleName} style={styles.input} />
-      <TextInput placeholder="Module Code" value={code} onChangeText={setCode} autoCapitalize="none" style={styles.input} />
+      <TextInput placeholder="Module Code" value={code} onChangeText={(text) => setCode(text.toUpperCase())}  style={styles.input} autoCapitalize="characters"/>
+      
       <Picker
         selectedValue={courseCode}
         onValueChange={(itemValue) => setCourseCode(itemValue)}
