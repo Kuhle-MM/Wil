@@ -14,14 +14,11 @@ const Tab = createBottomTabNavigator();
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from './types';
 import AuthScreen from './AuthScreen';
-import AuthScreenLec from './AuthScreenLect.tsx';
 import LecturersDashboard from './LecturerDashboard.tsx';
 import StudentsDashboard from './StudentDashboard';
 import StudentsCalandar from './StudentsCalendar';
 import StudentsReports from './StudentsReports'
-import AuthScreenLect from './AuthScreenLect.tsx';
 import LecturersReports from './LecturerReports.tsx';
-import AuthScreenAdm from './AuthScreenAdm.tsx';
 import CreateUser from './CreateUser.tsx';
 import AdminsDashboard from './AdminDashboard.tsx';
 import StudentAttendances from './StudentAttendance.tsx';
@@ -49,12 +46,6 @@ const LoginScreen: React.FC = () => {
       <Text style={styles.logo}>Tapify</Text>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Auth', { role: 'student' })}>
         <Text style={styles.buttonText}>Login as Student</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AuthLecturer', { role: 'lecturer' })}>
-        <Text style={styles.buttonText}>Login as Lecturer</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AuthAdmin', { role: 'admin' })}>
-        <Text style={styles.buttonText}>Login as Admin</Text>
       </TouchableOpacity>
     </View>
   );
@@ -139,8 +130,6 @@ export default function App() {
         <StackNav.Screen name="CreateUser" component={CreateUser} />
         <StackNav.Screen name="CreateModule" component={CreateModule} />
         <StackNav.Screen name="Auth" component={AuthScreen} /> 
-        <StackNav.Screen name="AuthLecturer" component={AuthScreenLect} />
-        <StackNav.Screen name="AuthAdmin" component={AuthScreenAdm} />
         <StackNav.Screen name="Main" component={StudentsDashboard} />
         <StackNav.Screen name="Calendar">
         {({ route }: any) => {
