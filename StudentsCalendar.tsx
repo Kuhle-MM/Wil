@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Time slots
+// Times for the time column
 const timeSlots = [
-  { start: "08:20", end: "09:10" },
-  { start: "09:20", end: "10:10" },
-  { start: "10:20", end: "11:10" },
-  { start: "11:20", end: "12:00" },
-  { start: "12:00", end: "13:00" },
-  { start: "13:00", end: "13:50" },
-  { start: "14:00", end: "14:50" },
-  { start: "15:00", end: "15:40" },
-  { start: "15:50", end: "16:40" },
+  "08:20 - 09:10",
+  "09:20 - 10:10",
+  "10:20 - 11:10",
+  "11:20 - 12:00",
+  "12:00 - 13:00",
+  "13:00 - 13:50",
+  "14:00 - 14:50",
+  "15:00 - 15:40",
+  "15:50 - 16:40",
 ];
 
 const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri"];
@@ -22,8 +22,7 @@ const DAY_COLUMN_WIDTH = 70;
 type Lesson = {
   lessonID: string;
   moduleCode: string;
-  date: string; // ISO date in UTC
-  durationMinutes?: number;
+  date: string; // ISO date string
 };
 
 const StudentsCalendar: React.FC = () => {
@@ -56,88 +55,93 @@ const StudentsCalendar: React.FC = () => {
     fetchTimetable();
   }, []);
 
-  // Get Monday and Friday of current week
-  const getWeekRange = (date: Date) => {
-    const day = date.getDay(); // 0 = Sun, 1 = Mon
-    const diffToMon = (day + 6) % 7;
-    const monday = new Date(date);
-    monday.setDate(date.getDate() - diffToMon);
+  const getWeekDates = (): { [key: string]: Date } => {
+    const today = new Date();
+    const day = today.getDay();
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - day + 1);
     monday.setHours(0, 0, 0, 0);
 
-    const friday = new Date(monday);
-    friday.setDate(monday.getDate() + 4);
-    friday.setHours(23, 59, 59, 999);
-
-    return { monday, friday };
-  };
-
-  // Format date like "13 Oct"
-  const formatDateSimple = (date: Date) => {
-    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    const day = date.getDate();
-    const month = monthNames[date.getMonth()];
-    return `${day} ${month}`;
-  };
-
-  // Convert HH:MM to minutes
-  const toMinutes = (time: string) => {
-    const [h, m] = time.split(":").map(Number);
-    return h * 60 + m;
-  };
-
-  // Convert UTC string to SA Date object (UTC+2)
-  const getLessonSA = (utcDate: string) => {
-    const lessonUTC = new Date(utcDate);
-    const year = lessonUTC.getUTCFullYear();
-    const month = lessonUTC.getUTCMonth();
-    const day = lessonUTC.getUTCDate();
-    const hours = lessonUTC.getUTCHours();
-    const minutes = lessonUTC.getUTCMinutes();
-    const seconds = lessonUTC.getUTCSeconds();
-
-    return new Date(year, month, day, hours, minutes, seconds);
-  };
-
-  // Get lesson for a specific slot and day
-  const getLessonForSlot = (day: string, slot: { start: string; end: string }) => {
-    const { monday, friday } = getWeekRange(new Date());
-    const slotStartMinutes = toMinutes(slot.start);
-    const slotEndMinutes = toMinutes(slot.end);
-
-    return lessons.find((lesson) => {
-      const lessonSA = getLessonSA(lesson.date);
-
-      if (lessonSA < monday || lessonSA > friday) return false;
-
-      const lessonWeekday = lessonSA.toLocaleDateString("en-US", { weekday: "short" });
-      if (lessonWeekday !== day) return false;
-
-      const lessonStartMinutes = lessonSA.getHours() * 60 + lessonSA.getMinutes();
-      return lessonStartMinutes >= slotStartMinutes && lessonStartMinutes < slotEndMinutes;
+    const weekDates: { [key: string]: Date } = {};
+    weekdays.forEach((dayName, idx) => {
+      const date = new Date(monday);
+      date.setDate(monday.getDate() + idx);
+      weekDates[dayName] = date;
     });
+
+    return weekDates;
   };
 
-  if (loading)
+  const lessonsThisWeek = lessons.filter((lesson) => {
+    const lessonDate = new Date(lesson.date);
+    const weekDates = getWeekDates();
+    return Object.values(weekDates).some(
+      (d) => d.toDateString() === lessonDate.toDateString()
+    );
+  });
+
+  // Map day → slotIndex → lesson
+  const getLessonsMap = () => {
+    const map: { [day: string]: (Lesson | null)[] } = {};
+    weekdays.forEach((day) => {
+      map[day] = Array(timeSlots.length).fill(null);
+    });
+
+    lessonsThisWeek.forEach((lesson) => {
+      const lessonDateUTC = new Date(lesson.date);
+      const lessonDate = new Date(lessonDateUTC.getTime() - 2 * 60 * 60 * 1000); // UTC → SA
+      const lessonWeekday = lessonDate.toLocaleDateString("en-GB", { weekday: "short" });
+      if (!map[lessonWeekday]) return;
+
+      // Determine start slot
+      const lessonHour = lessonDate.getHours();
+      const lessonMin = lessonDate.getMinutes();
+      const lessonTime = `${lessonHour.toString().padStart(2, "0")}:${lessonMin.toString().padStart(2, "0")}`;
+      const startSlotIndex = timeSlots.findIndex((slot) => slot.startsWith(lessonTime));
+
+      if (startSlotIndex >= 0) {
+        // Assume every lesson spans 2 slots
+        map[lessonWeekday][startSlotIndex] = lesson;
+        if (startSlotIndex + 1 < timeSlots.length) {
+          map[lessonWeekday][startSlotIndex + 1] = { ...lesson, lessonID: lesson.lessonID + "_spanned" };
+        }
+      }
+    });
+
+    return map;
+  };
+
+  const lessonsMap = getLessonsMap();
+
+  const formatDay = (date: Date) => {
+    const day = date.getDate();
+    if (day === 1 || day === 21 || day === 31) return `${day}st`;
+    if (day === 2 || day === 22) return `${day}nd`;
+    if (day === 3 || day === 23) return `${day}rd`;
+    return `${day}th`;
+  };
+
+  if (loading) {
     return (
       <View style={styles.center}>
         <ActivityIndicator size="large" color="#007bff" />
       </View>
     );
+  }
 
-  const { monday, friday } = getWeekRange(new Date());
-  const weekHeading = `${formatDateSimple(monday)} - ${formatDateSimple(friday)}`;
+  const weekDates = getWeekDates();
+  const mondayDate = weekDates["Mon"];
+  const fridayDate = weekDates["Fri"];
+  const weekHeadingText = `${formatDay(mondayDate)} - ${formatDay(fridayDate)}`;
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Week heading */}
       <View style={styles.weekHeadingContainer}>
-        <Text style={styles.weekHeadingText}>{weekHeading}</Text>
+        <Text style={styles.weekHeadingText}>{weekHeadingText}</Text>
       </View>
 
-      {/* Calendar */}
       <ScrollView horizontal style={{ flex: 1 }}>
         <View style={{ flexDirection: "column" }}>
-          {/* Header row */}
           <View style={{ flexDirection: "row" }}>
             <View style={[styles.timeCell, { width: TIME_COLUMN_WIDTH }]}>
               <Text style={{ fontWeight: "bold" }}>Time</Text>
@@ -149,25 +153,30 @@ const StudentsCalendar: React.FC = () => {
             ))}
           </View>
 
-          {/* Time rows */}
           <View style={{ flexDirection: "row" }}>
-            {/* Time column */}
             <View>
-              {timeSlots.map((slot) => (
-                <View key={slot.start} style={[styles.timeCell, { width: TIME_COLUMN_WIDTH }]}>
-                  <Text>{`${slot.start} - ${slot.end}`}</Text>
+              {timeSlots.map((time) => (
+                <View key={time} style={[styles.timeCell, { width: TIME_COLUMN_WIDTH }]}>
+                  <Text>{time}</Text>
                 </View>
               ))}
             </View>
 
-            {/* Day columns */}
             {weekdays.map((day) => (
               <View key={day} style={styles.dayColumn}>
-                {timeSlots.map((slot) => {
-                  const lesson = getLessonForSlot(day, slot);
+                {timeSlots.map((_, slotIndex) => {
+                  const lesson = lessonsMap[day][slotIndex];
+                  if (!lesson) return <View key={slotIndex} style={styles.dayCell} />;
+
+                  const isStart = !lesson.lessonID.endsWith("_spanned");
+                  if (!isStart) return null;
+
                   return (
-                    <View key={`${day}-${slot.start}`} style={styles.dayCell}>
-                      {lesson && <Text style={styles.lessonText}>{lesson.moduleCode}</Text>}
+                    <View
+                      key={slotIndex}
+                      style={[styles.dayCell, { minHeight: 50, height: 50 * 2, backgroundColor: "#d1ecf1" }]}
+                    >
+                      <Text style={styles.lessonText}>{lesson.moduleCode}</Text>
                     </View>
                   );
                 })}
@@ -184,38 +193,11 @@ export default StudentsCalendar;
 
 const styles = StyleSheet.create({
   center: { flex: 1, justifyContent: "center", alignItems: "center" },
-  weekHeadingContainer: {
-    padding: 10,
-    alignItems: "center",
-  },
-  weekHeadingText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#007bff",
-  },
-  timeCell: {
-    height: 50,
-    justifyContent: "center",
-    paddingLeft: 10,
-    alignItems: "center",
-    borderWidth: 0.5,
-    borderColor: "#333",
-  },
-  weekdayHeader: {
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 0.5,
-    borderColor: "#333",
-  },
+  weekHeadingContainer: { padding: 10, alignItems: "center" },
+  weekHeadingText: { fontSize: 16, fontWeight: "bold", color: "#007bff" },
+  timeCell: { height: 50, justifyContent: "center", paddingLeft: 10, alignItems: "center", borderWidth: 0.5, borderColor: "#333" },
+  weekdayHeader: { height: 50, justifyContent: "center", alignItems: "center", borderWidth: 0.5, borderColor: "#333" },
   dayColumn: { flexDirection: "column" },
-  dayCell: {
-    width: DAY_COLUMN_WIDTH,
-    height: 50,
-    borderWidth: 0.5,
-    borderColor: "#333",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  lessonText: { fontSize: 12, color: "#004085", fontWeight: "600", textAlign: "center" },
+  dayCell: { width: DAY_COLUMN_WIDTH, minHeight: 50, borderWidth: 0.5, borderColor: "#333", justifyContent: "center", alignItems: "center", paddingVertical: 2 },
+  lessonText: { fontSize: 12, color: "#004085", fontWeight: "600", textAlign: "center", marginVertical: 2 },
 });

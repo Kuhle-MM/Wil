@@ -14,14 +14,11 @@ const Tab = createBottomTabNavigator();
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from './types';
 import AuthScreen from './AuthScreen';
-import AuthScreenLec from './AuthScreenLect.tsx';
 import LecturersDashboard from './LecturerDashboard.tsx';
 import StudentsDashboard from './StudentDashboard';
 import StudentsCalandar from './StudentsCalendar';
 import StudentsReports from './StudentsReports'
-import AuthScreenLect from './AuthScreenLect.tsx';
 import LecturersReports from './LecturerReports.tsx';
-import AuthScreenAdm from './AuthScreenAdm.tsx';
 import CreateUser from './CreateUser.tsx';
 import AdminsDashboard from './AdminDashboard.tsx';
 import StudentAttendances from './StudentAttendance.tsx';
@@ -49,12 +46,6 @@ const LoginScreen: React.FC = () => {
       <Text style={styles.logo}>Tapify</Text>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Auth', { role: 'student' })}>
         <Text style={styles.buttonText}>Login as Student</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AuthLecturer', { role: 'lecturer' })}>
-        <Text style={styles.buttonText}>Login as Lecturer</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AuthAdmin', { role: 'admin' })}>
-        <Text style={styles.buttonText}>Login as Admin</Text>
       </TouchableOpacity>
     </View>
   );
@@ -130,6 +121,20 @@ const MainTabs: React.FC = () => {
     </Tab.Navigator>
   );
 };
+// Main role-based screen
+const Main: React.FC<{ route: { params: { role: 'Student' | 'Lecturer' | 'Admin' } } }> = ({ route }) => {
+  const { role } = route.params;
+
+  if (role === 'Student') return <StudentsDashboard />;
+  if (role === 'Lecturer') return <LecturerDashboard />;
+  if (role === 'Admin') return <AdminsDashboard />;
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>No role specified</Text>
+    </View>
+  );
+};
 
 export default function App() {
   return (
@@ -139,9 +144,7 @@ export default function App() {
         <StackNav.Screen name="CreateUser" component={CreateUser} />
         <StackNav.Screen name="CreateModule" component={CreateModule} />
         <StackNav.Screen name="Auth" component={AuthScreen} /> 
-        <StackNav.Screen name="AuthLecturer" component={AuthScreenLect} />
-        <StackNav.Screen name="AuthAdmin" component={AuthScreenAdm} />
-        <StackNav.Screen name="Main" component={StudentsDashboard} />
+        <StackNav.Screen name="Main" component={Main} />
         <StackNav.Screen name="Calendar">
         {({ route }: any) => {
           const role = route.params?.role;
