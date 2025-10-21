@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, FlatList, Button } from 'react-native';
+import { View, Text, StyleSheet, Alert, FlatList, ActivityIndicator } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 type Report = {
@@ -17,28 +17,22 @@ const LecturerReports: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedReportID, setSelectedReportID] = useState<string>('');
   const [reports, setReports] = useState<Report[]>([]);
-
-  // Here
   const statusOptions = ['Present', 'Absent', 'Late', 'Excused'];
 
-  const fetchReport = async () => {
-    if (!selectedReportID.trim()) {
-      Alert.alert('Error', 'Please select a Report ID.');
+  const fetchReport = async (reportID: string) => {
+    if (!reportID.trim()) {
+      setReportData([]);
       return;
     }
-
     setLoading(true);
-
     try {
       const response = await fetch(
-        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/display_report?ReportID=${selectedReportID}`
+        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/display_report?ReportID=${reportID}`
       );
-
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(errorText);
       }
-
       const data = await response.json();
       setReportData(data);
     } catch (error: any) {
@@ -52,22 +46,16 @@ const LecturerReports: React.FC = () => {
   const updateStatus = async (report: Report, newStatus: string) => {
     try {
       const response = await fetch(
-        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/update_report_status`,
+        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/update_report_status?reportID=${report.reportID}&studentNumber=${report.studentNumber}&newStatus=${newStatus}`,
         {
-          method: 'POST', // or PUT depending on your API
+          method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            reportID: report.reportID,
-            studentNumber: report.studentNumber,
-            status: newStatus
-          })
         }
       );
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(errorText);
       }
-      // Update local state for instant UI feedback
       setReportData((prev) =>
         prev.map((r) =>
           r.reportID === report.reportID && r.studentNumber === report.studentNumber
@@ -75,6 +63,7 @@ const LecturerReports: React.FC = () => {
             : r
         )
       );
+      Alert.alert(`${report.studentNumber}'s status has been updated to "${newStatus}".`);
     } catch (error: any) {
       Alert.alert('Error', error.message || 'Failed to update status.');
     }
@@ -87,12 +76,10 @@ const LecturerReports: React.FC = () => {
         const response = await fetch(
           'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/all_reports'
         );
-
         if (!response.ok) {
           const error = await response.text();
           throw new Error(error);
         }
-
         const data = await response.json();
         setReports(data);
       } catch (error) {
@@ -111,7 +98,10 @@ const LecturerReports: React.FC = () => {
 
       <Picker
         selectedValue={selectedReportID}
-        onValueChange={(itemValue) => setSelectedReportID(itemValue)}
+        onValueChange={(itemValue) => {
+          setSelectedReportID(itemValue);
+          fetchReport(itemValue);
+        }}
         style={styles.picker}
       >
         <Picker.Item label="Select a Report" value="" />
@@ -124,9 +114,8 @@ const LecturerReports: React.FC = () => {
         ))}
       </Picker>
 
-      <Button title="Fetch Report" onPress={fetchReport} />
       {loading ? (
-        <Text style={{ marginTop: 20 }}>Loading...</Text>
+        <ActivityIndicator size="large" color="#007bff" style={{ marginTop: 20 }} />
       ) : (
         <FlatList
           data={reportData}
@@ -137,7 +126,7 @@ const LecturerReports: React.FC = () => {
               <Text style={styles.cardText}>Module: {item.moduleCode}</Text>
               <Text style={styles.cardText}>Student: {item.studentNumber}</Text>
               <Text style={styles.cardText}>TimeStamp: {item.timestamp}</Text>
-              
+
               <View style={styles.statusRow}>
                 <Text style={styles.cardText}>Status:</Text>
                 <Picker
@@ -167,20 +156,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flex: 1,
   },
-  picker: { 
-    height: 50, 
-    width: '100%' 
+  picker: {
+    height: 50,
+    width: '100%',
   },
   header: {
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 12,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 12,
-    borderRadius: 8,
     marginBottom: 12,
   },
   card: {
@@ -193,14 +175,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   statusRow: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  marginTop: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
   },
   statusPicker: {
     height: 60,
     fontSize: 10,
     width: 150,
-    marginLeft: 8, 
+    marginLeft: 8,
   },
 });

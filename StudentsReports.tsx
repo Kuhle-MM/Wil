@@ -12,6 +12,7 @@ type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 type AttendanceRecord = {
   rowKey: string;
   clockInTime: string;
+  studentNumber: string;
   status: string;
 };
 

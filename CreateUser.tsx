@@ -4,6 +4,7 @@ import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
 import { Picker } from '@react-native-picker/picker';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 type AuthRouteProp = RouteProp<RootTabParamList, 'CreateUser'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
@@ -15,6 +16,7 @@ const CreateUser: React.FC = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // ← new state
   const [selectedRole, setSelectedRole] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -37,31 +39,25 @@ const CreateUser: React.FC = () => {
 
     const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Access/create';
 
-      try {
-      const payload = {
-        email,
-        password,
-        role: selectedRole,
-        firstName,
-        lastName
-      };
-  
+    try {
+      const payload = { email, password, role: selectedRole, firstName, lastName };
+
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-  
+
       const resultText = await response.text();
-  
+
       if (!response.ok) {
         Alert.alert('Failed', resultText);
         return;
       }
-  
+
       Alert.alert('Success', resultText);
       navigation.navigate('MainAdmin', { role });
-  
+
     } catch (error) {
       console.error(error);
       Alert.alert('Error', 'Could not connect to the server.');
@@ -72,8 +68,32 @@ const CreateUser: React.FC = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Create User</Text>
 
-      <TextInput placeholder="Email" value={email} onChangeText={setEmail} autoCapitalize="none" style={styles.input} />
-      <TextInput placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        style={styles.input}
+      />
+
+      {/* Password input with eye icon */}
+      <View style={styles.passwordContainer}>
+        <TextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword}
+          style={styles.passwordInput}
+        />
+        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          <Ionicons
+            name={showPassword ? "eye-off" : "eye"}
+            size={24}
+            color="black" // black eye icon
+          />
+        </TouchableOpacity>
+      </View>
+
       <Picker
         selectedValue={selectedRole}
         onValueChange={(itemValue) => setSelectedRole(itemValue)}
@@ -84,6 +104,7 @@ const CreateUser: React.FC = () => {
         <Picker.Item label="Lecturer" value="Lecturer" />
         <Picker.Item label="Admin" value="Admin" />
       </Picker>
+
       <TextInput placeholder="First Name" value={firstName} onChangeText={setFirstName} style={styles.input} />
       <TextInput placeholder="Last Name" value={lastName} onChangeText={setLastName} style={styles.input} />
 
@@ -118,6 +139,20 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     marginBottom: 16
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    marginBottom: 16
+  },
+  passwordInput: {
+    flex: 1,
+    paddingVertical: 12,
+    fontSize: 16
   },
   button: {
     backgroundColor: '#4287f5',

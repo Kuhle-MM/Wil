@@ -69,11 +69,18 @@ const LecturerDashboard: React.FC = () => {
         ) : todaysLessons.length === 0 ? (
           <Text style={styles.cardText}>No lessons scheduled for today 🎉</Text>
         ) : (
-          todaysLessons.map((lesson, index) => (
+          todaysLessons.map((lesson, index) => {
+          const lessonDateUTC = new Date(lesson.date);
+
+          // FIX: Convert UTC to SA time by adding 2 hours
+          const lessonDateSA = new Date(lessonDateUTC.getTime() - 2 * 60 * 60 * 1000);
+
+          return (
             <Text key={index} style={styles.cardText}>
-              {lesson.moduleCode} — {new Date(lesson.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              {lesson.moduleCode} — {lessonDateSA.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </Text>
-          ))
+          );
+        })
         )}
       </View>
 
