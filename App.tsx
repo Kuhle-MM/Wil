@@ -32,6 +32,7 @@ import LessonActivity from './LessonActivity.tsx';
 import Modules from './Modules.tsx';
 import StudentBottomNav from './BottomNav.tsx';
 import LecturersCalendar from './LecturersCalendar.tsx';
+import Settings from './Settings.tsx';
 
 const Stack = createNativeStackNavigator<RootTabParamList>();
 
@@ -163,6 +164,7 @@ export default function App() {
         <StackNav.Screen name="CreateLesson" component={CreateLesson} />
         <StackNav.Screen name="LessonActivity" component={LessonActivity} />
         <StackNav.Screen name="Modules" component={Modules} />
+        <StackNav.Screen name="Settings" component={Settings} /> 
       </StackNav.Navigator>
     </NavigationContainer>
   );

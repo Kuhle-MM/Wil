@@ -86,7 +86,7 @@ const Modules: React.FC = () => {
         ) : (
           <FlatList
             data={allModules}
-            keyExtractor={(item) => item.RowKey}
+            keyExtractor={(item, index) => item.RowKey?.toString() || index.toString()}
             renderItem={renderModule}
             contentContainerStyle={styles.listContainer}
           />
@@ -96,6 +96,7 @@ const Modules: React.FC = () => {
           <Text style={styles.addButtonText}>＋ Add Module</Text>
         </TouchableOpacity>
       </View>
+
       <AdminBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
     </ImageBackground>
   );
@@ -112,7 +113,6 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     padding: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
   },
   headerCard: {
     backgroundColor: '#064f62',
