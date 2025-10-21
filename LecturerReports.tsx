@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Alert, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { RootTabParamList } from './types';
+import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { View, Text, StyleSheet, Alert, FlatList, ActivityIndicator, TouchableOpacity, ImageBackground, } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import LecturerBottomNav from './BottomNav.tsx';
+
+type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
+type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
 type Report = {
   reportID: string;
@@ -18,6 +25,10 @@ const LecturerReports: React.FC = () => {
   const [selectedReportID, setSelectedReportID] = useState<string>('');
   const [reports, setReports] = useState<Report[]>([]);
   const statusOptions = ['Present', 'Absent', 'Late', 'Excused'];
+
+  const navigation = useNavigation<AuthNavProp>();
+  const route = useRoute<AuthRouteProp>();
+  const { role } = route.params ?? { role: "lecturer" };
 
   const fetchReport = async (reportID: string) => {
     if (!reportID.trim()) {
@@ -92,7 +103,12 @@ const LecturerReports: React.FC = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+          source={require('./assets/images/BackgroundImage.jpg')}
+          style={styles.backgroundImage}
+          resizeMode="cover"
+        >
+      <View style={styles.container}>
       <Text style={styles.header}>📘 View Lesson Report</Text>
 
       <View style={styles.pickerContainer}>
@@ -150,12 +166,17 @@ const LecturerReports: React.FC = () => {
         />
       )}
     </View>
+    <LecturerBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
+    </ImageBackground>
+    
+    
   );
 };
 
 export default LecturerReports;
 
 const styles = StyleSheet.create({
+  backgroundImage: { flex: 1, width: '100%', height: '100%', backgroundColor: '#FFFFFF' },
   container: {
     flex: 1,
     backgroundColor: '#ffffffff', // White background

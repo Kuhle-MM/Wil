@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
@@ -19,7 +29,8 @@ const AuthScreen: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLoginUser = async () => {
-    const endpoint = 'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Access/login'; 
+    const endpoint =
+      'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Access/login';
 
     try {
       const response = await fetch(endpoint, {
@@ -39,20 +50,26 @@ const AuthScreen: React.FC = () => {
       const idNumber = email.split('@')[0];
       const userRole = json.role as 'student' | 'lecturer' | 'admin';
       const userName = json.name || idNumber;
-      await AsyncStorage.setItem('userSession', JSON.stringify({
-        studentNumber: idNumber,
-        role: userRole, 
-        token: json.token || null,
-        email,
-        name: userName
-      }));
+
+      await AsyncStorage.setItem(
+        'userSession',
+        JSON.stringify({
+          studentNumber: idNumber,
+          role: userRole,
+          token: json.token || null,
+          email,
+          name: userName,
+        })
+      );
 
       Alert.alert('Success', json.message);
 
-      if (userRole.toLowerCase() === 'student') navigation.navigate('Main', { role: userRole });
-      else if (userRole.toLowerCase() === 'lecturer') navigation.navigate('MainLecturer', { role: userRole });
-      else if (userRole.toLowerCase() === 'admin') navigation.navigate('MainAdmin', { role: userRole });
-
+      if (userRole.toLowerCase() === 'student')
+        navigation.navigate('Main', { role: userRole });
+      else if (userRole.toLowerCase() === 'lecturer')
+        navigation.navigate('MainLecturer', { role: userRole });
+      else if (userRole.toLowerCase() === 'admin')
+        navigation.navigate('MainAdmin', { role: userRole });
     } catch (error) {
       console.error(error);
       Alert.alert('Error', 'Could not connect to the server.');
@@ -61,45 +78,54 @@ const AuthScreen: React.FC = () => {
 
   return (
     <ImageBackground
-      source={require('./assets/images/BackgroundImage.jpg')}
+      source={require('./assets/images/login.jpg')}
       style={styles.backgroundImage}
+      imageStyle={{ transform: [{ scale: 1 }] }} // 🔍 Zoom image slightly
       resizeMode="cover"
     >
-      <View style={styles.container}>
-        <Text style={styles.title}>Login</Text>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <View style={styles.innerBox}>
+          <Text style={styles.title}>Welcome Back</Text>
+          <Text style={styles.subtitle}>Log in to continue</Text>
 
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          style={styles.input}
-        />
-
-        <View style={styles.passwordContainer}>
           <TextInput
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={!showPassword}
-            style={styles.passwordInput}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            style={styles.input}
+            placeholderTextColor="#AEACAB"
           />
-          <TouchableOpacity
-            onPress={() => setShowPassword(!showPassword)}
-            style={styles.eyeIconContainer}
-          >
-            <Ionicons
-              name={showPassword ? 'eye-off' : 'eye'}
-              size={24}
-              color="black"
+
+          <View style={styles.passwordContainer}>
+            <TextInput
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              style={styles.passwordInput}
+              placeholderTextColor="#AEACAB"
             />
+            <TouchableOpacity
+              onPress={() => setShowPassword(!showPassword)}
+              style={styles.eyeIconContainer}
+            >
+              <Ionicons
+                name={showPassword ? 'eye-off' : 'eye'}
+                size={22}
+                color="#064F62"
+              />
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity style={styles.button} onPress={handleLoginUser}>
+            <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
         </View>
-
-        <TouchableOpacity style={styles.button} onPress={handleLoginUser}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     </ImageBackground>
   );
 };
@@ -107,30 +133,63 @@ const AuthScreen: React.FC = () => {
 export default AuthScreen;
 
 const styles = StyleSheet.create({
-  backgroundImage: { flex: 1, width: '100%', height: '100%' },
-  container: { flex: 1, padding: 16, justifyContent: 'center' },
-  title: { fontSize: 40, marginBottom: 20, fontWeight: 'bold', textAlign: 'center' },
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  innerBox: {
+    width: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)', 
+    borderRadius: 16,
+    padding: 25,
+    shadowColor: '#064F62',
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 6,
+  },
+  title: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#064F62', // midnight green
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#6BBFE4', // sky blue accent
+    marginBottom: 24,
+  },
   input: {
-    fontSize: 20,
-    borderWidth: 2,
-    backgroundColor: '#fff',
-    borderColor: 'black',
+    fontSize: 18,
+    borderWidth: 1.5,
+    backgroundColor: '#f0f8faff', 
+    borderColor: '#AEACAB', // silver
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 10,
     marginBottom: 16,
+    color: '#064F62',
   },
   passwordContainer: {
     position: 'relative',
-    marginBottom: 16,
+    marginBottom: 20,
   },
   passwordInput: {
-    fontSize: 20,
-    borderWidth: 2,
-    backgroundColor: '#fff',
-    borderColor: 'black',
+    fontSize: 18,
+    borderWidth: 1.5,
+    backgroundColor: '#f0f8faff',
+    borderColor: '#AEACAB',
     padding: 12,
-    borderRadius: 8,
-    paddingRight: 45, 
+    borderRadius: 10,
+    paddingRight: 45,
+    color: '#064F62',
   },
   eyeIconContainer: {
     position: 'absolute',
@@ -138,6 +197,16 @@ const styles = StyleSheet.create({
     top: '50%',
     transform: [{ translateY: -12 }],
   },
-  button: { backgroundColor: '#4287f5', padding: 14, borderRadius: 8, alignItems: 'center' },
-  buttonText: { fontSize: 20, color: '#fff', fontWeight: 'bold' },
+  button: {
+    backgroundColor: '#A4C984', // pistachio green
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    fontSize: 20,
+    color: '#064F62', // dark text
+    fontWeight: 'bold',
+  },
 });
