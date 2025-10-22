@@ -1,8 +1,6 @@
 export type RootTabParamList = {
   Login: undefined;
   Auth: { role: 'student' | 'lecturer' | 'admin' };
-  AuthLecturer: { role: 'lecturer' };
-  AuthAdmin: { role: 'admin' };
   Main: { role: 'student' | 'lecturer' | 'admin'};
   MainLecturer: { role: 'student' | 'lecturer' | 'admin'};
   MainAdmin: { role: 'student' | 'lecturer' | 'admin'};
@@ -10,8 +8,8 @@ export type RootTabParamList = {
   Card: undefined;
   Report: { role: 'student' | 'lecturer' | 'admin'};
   ReportLecturer: undefined;
-  CreateUser: { role: 'admin' };
-  CreateModule: { role: 'admin' };
+  CreateUser: { role: 'student' | 'lecturer' | 'admin' };
+  CreateModule: { role: 'student' | 'lecturer' | 'admin' };
   Calendar: { role: 'student' | 'lecturer' | 'admin'};
   LecturerCard: undefined;
   StudentAttendance: { role: 'student' | 'lecturer' | 'admin'};
@@ -22,7 +20,8 @@ export type RootTabParamList = {
   CreateLesson: { role: 'student' | 'lecturer' | 'admin'};
   LessonActivity: { role: 'student' | 'lecturer' | 'admin'};
   LessonReports: { role: 'lecturer' };
-  Modules: { role: 'admin' };
+  Modules: { role: 'student' | 'lecturer' | 'admin' };
+  Settings: { role: 'student' | 'lecturer' | 'admin'};
   BottomNav: { role: 'student' | 'lecturer' | 'admin'};
   BLEReceiver: { role?: string }; 
 };
