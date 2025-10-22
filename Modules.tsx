@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity, TextInput, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  ActivityIndicator,
+  FlatList,
+  ImageBackground,
+} from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
-import { Picker } from '@react-native-picker/picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AdminBottomNav from './BottomNav.tsx';
 
 type AuthRouteProp = RouteProp<RootTabParamList, 'Modules'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
@@ -42,77 +50,146 @@ const Modules: React.FC = () => {
   }, []);
 
   const AddModule = () => {
-    navigation.navigate('CreateModule', { role }); 
+    navigation.navigate('CreateModule', { role });
   };
 
   const renderModule = ({ item }: { item: Module }) => (
-    <View style={styles.reportRow}>
-      <Text style={styles.cell}>{item.code}</Text>
-      <Text style={styles.cell}>{item.moduleName}</Text>
+    <View style={styles.moduleCard}>
+      <Text style={styles.moduleCode}>{item.code}</Text>
+      <Text style={styles.moduleName}>{item.moduleName}</Text>
     </View>
   );
 
   if (loadingModules) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#000" />
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#064f62" />
+        <Text style={styles.loadingText}>Loading modules...</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>All Modules</Text>
-      {allModules.length === 0 ? (
-        <Text>No modules found.</Text>
-      ) : (
-        <>
-          <View style={styles.tableHeader}>
-            <Text style={[styles.cell, styles.headerCell]}>Module Code</Text>
-            <Text style={[styles.cell, styles.headerCell]}>Module Name</Text>
-          </View>
+    <ImageBackground
+      source={require('./assets/images/BackgroundImage.jpg')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <View style={styles.headerCard}>
+          <Text style={styles.headerTitle}>📚 All Modules</Text>
+          <Text style={styles.headerSubtitle}>Manage and view all registered modules</Text>
+        </View>
+
+        {allModules.length === 0 ? (
+          <Text style={styles.noDataText}>No modules found.</Text>
+        ) : (
           <FlatList
             data={allModules}
-            keyExtractor={(item) => item.RowKey}
+            keyExtractor={(item, index) => item.RowKey?.toString() || index.toString()}
             renderItem={renderModule}
+            contentContainerStyle={styles.listContainer}
           />
-        </>
-      )}
-      <TouchableOpacity style={styles.button} onPress={AddModule}>
-        <Text style={styles.buttonText}>Add Module</Text>
-      </TouchableOpacity>
-    </View>
+        )}
+
+        <TouchableOpacity style={styles.addButton} onPress={AddModule}>
+          <Text style={styles.addButtonText}>＋ Add Module</Text>
+        </TouchableOpacity>
+      </View>
+
+      <AdminBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
+    </ImageBackground>
   );
 };
 
 export default Modules;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#fff' },
-  header: { fontSize: 24, fontWeight: 'bold', marginBottom: 12 },
-  tableHeader: {
-    flexDirection: 'row',
-    borderBottomWidth: 2,
-    borderBottomColor: '#000',
-    paddingBottom: 8,
-    marginBottom: 8,
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
-  reportRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+  overlay: {
+    flex: 1,
+    padding: 16,
   },
-  cell: { flex: 1, fontSize: 16 },
-  headerCell: { fontWeight: 'bold' },
-  picker: { height: 50, width: '100%' },
-  button: {
-    backgroundColor: '#4287f5',
-    padding: 14,
-    borderRadius: 8,
+  headerCard: {
+    backgroundColor: '#064f62',
+    borderRadius: 16,
+    padding: 20,
     alignItems: 'center',
-    marginTop: 12,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 5,
   },
-  buttonText: { color: '#fff', fontWeight: 'bold' },
+  headerTitle: {
+    fontSize: 26,
+    color: '#fff',
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  headerSubtitle: {
+    fontSize: 15,
+    color: '#d8f3dc',
+  },
+  listContainer: {
+    paddingBottom: 20,
+  },
+  moduleCard: {
+    backgroundColor: '#A4C984',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  moduleCode: {
+    fontSize: 18,
+    color: '#064f62',
+    fontWeight: 'bold',
+  },
+  moduleName: {
+    fontSize: 16,
+    color: '#2e2e2e',
+    marginTop: 4,
+  },
+  noDataText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#444',
+    marginTop: 20,
+  },
+  addButton: {
+    backgroundColor: '#064f62',
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 16,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  addButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f4f4f4',
+  },
+  loadingText: {
+    color: '#064f62',
+    fontSize: 16,
+    marginTop: 8,
+  },
 });
