@@ -64,8 +64,46 @@ const LecturerDashboard: React.FC = () => {
   const handleAttendance = () => navigation.navigate('LecturerAttendance');
   const handleModule = () => navigation.navigate('LecturerModules', { role });
   const handleLesson = () => navigation.navigate('LecturerLessons', { role });
+  const handleQrCamera = () => navigation.navigate('QrCamera', { role });
 
   return (
+    <ScrollView style={styles.scrollContainer}>
+      <Text style={styles.header}>Dashboard</Text>
+      <Text style={styles.sectionTitle}>Today’s Modules</Text>
+
+      <View style={styles.card}>
+        {loadingLessons ? (
+          <ActivityIndicator size="large" color="#4caf50" />
+        ) : todaysLessons.length === 0 ? (
+          <Text style={styles.cardText}>No lessons scheduled for today 🎉</Text>
+        ) : (
+          todaysLessons.map((lesson, index) => (
+            <Text key={index} style={styles.cardText}>
+              {lesson.moduleCode} — {new Date(lesson.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </Text>
+          ))
+        )}
+      </View>
+
+      <TouchableOpacity style={styles.smallButton} onPress={handleReport}>
+        <Text>Report Overview</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.smallButton} onPress={handleCalendar}>
+        <Text>Timetable</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.smallButton} onPress={handleAttendance}>
+        <Text>Clock In</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.smallButton} onPress={handleModule}>
+        <Text>Your Modules</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.smallButton} onPress={handleLesson}>
+        <Text>Your Lessons</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
+        <Text>Open Qr Camera</Text>
+      </TouchableOpacity>
+    </ScrollView>
     <ImageBackground
       source={require('./assets/images/BackgroundImage.jpg')}
       style={styles.backgroundImage}
