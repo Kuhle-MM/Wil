@@ -1,24 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  Alert,
+  TouchableOpacity,
+  StyleSheet,
+  ImageBackground,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
+import { useRoute, useNavigation, RouteProp } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootTabParamList } from "./types";
+import LecturerBottomNav from "./BottomNav.tsx";
+
+type AuthRouteProp = RouteProp<RootTabParamList, "Auth">;
+type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
 type Module = {
   moduleCode: string;
   courseCode: string;
 };
 
+
 const CreateLesson: React.FC = () => {
   const [studentNumber, setStudentNumber] = useState<string>('');
   const [moduleCode, setModuleCode] = useState('');
   const [courseCode, setCourseCode] = useState('');
-  const [date, setDate] = useState(''); // final ISO string for API
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string>(''); 
+  const [selectedTime, setSelectedTime] = useState<string>('');
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [modules, setModules] = useState<Module[]>([]);
 
+    const navigation = useNavigation<AuthNavProp>();
+  const route = useRoute<AuthRouteProp>();
+  const { role } = route.params ?? { role: "lecturer" }; // fallback
   const lessonTimes = ['08:20', '09:20', '10:20', '12:00', '13:00', '14:00', '15:00', '15:40'];
 
   const handleCreateLesson = async () => {
@@ -27,13 +44,11 @@ const CreateLesson: React.FC = () => {
       return;
     }
 
-    // Combine date and selected time into ISO string
     const [hours, minutes] = selectedTime.split(':').map(Number);
     const combinedDate = new Date(selectedDate);
     combinedDate.setHours(hours);
     combinedDate.setMinutes(minutes);
     combinedDate.setSeconds(0);
-    setDate(combinedDate.toISOString());
 
     try {
       const response = await fetch(
@@ -104,79 +119,136 @@ const CreateLesson: React.FC = () => {
     fetchModules();
   }, [studentNumber]);
 
+
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Create Lesson</Text>
+    <ImageBackground
+      source={require('./assets/images/background_2.jpg')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <View style={styles.card}>
+          <Text style={styles.header}>Create Lesson</Text>
 
-      {/* Module Picker */}
-      <Picker
-        selectedValue={moduleCode}
-        onValueChange={(value) => setModuleCode(value)}
-        style={styles.input}
-      >
-        <Picker.Item label="Select a module" value="" />
-        {modules.map((mod) => (
-          <Picker.Item key={mod.moduleCode} label={mod.moduleCode} value={mod.moduleCode} />
-        ))}
-      </Picker>
+          <Picker
+            selectedValue={moduleCode}
+            onValueChange={(value) => setModuleCode(value)}
+            style={styles.input}
+          >
+            <Picker.Item label="Select a Module" value="" />
+            {modules.map((mod) => (
+              <Picker.Item key={mod.moduleCode} label={mod.moduleCode} value={mod.moduleCode} />
+            ))}
+          </Picker>
 
-      {/* Course Picker */}
-      <Picker
-        selectedValue={courseCode}
-        onValueChange={(value) => setCourseCode(value)}
-        style={styles.input}
-      >
-        <Picker.Item label="Select Course Code" value="" />
-        <Picker.Item label="BCAD0701" value="BCAD0701" />
-      </Picker>
+          <Picker
+            selectedValue={courseCode}
+            onValueChange={(value) => setCourseCode(value)}
+            style={styles.input}
+          >
+            <Picker.Item label="Select Course Code" value="" />
+            <Picker.Item label="BCAD0701" value="BCAD0701" />
+          </Picker>
 
-      {/* Date Picker */}
-      <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.input}>
-        <Text>{selectedDate ? selectedDate.toDateString() : 'Select Date'}</Text>
-      </TouchableOpacity>
-      {showDatePicker && (
-        <DateTimePicker
-          value={selectedDate || new Date()}
-          mode="date"
-          display="default"
-          onChange={handleDateChange}
-        />
-      )}
+          <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.input}>
+            <Text style={styles.inputText}>
+              {selectedDate ? selectedDate.toDateString() : 'Select Date'}
+            </Text>
+          </TouchableOpacity>
 
-      {/* Time Picker */}
-      <Picker
-        selectedValue={selectedTime}
-        onValueChange={(value) => setSelectedTime(value)}
-        style={styles.input}
-      >
-        <Picker.Item label="Select Time" value="" />
-        {lessonTimes.map((time) => (
-          <Picker.Item key={time} label={time} value={time} />
-        ))}
-      </Picker>
+          {showDatePicker && (
+            <DateTimePicker
+              value={selectedDate || new Date()}
+              mode="date"
+              display="default"
+              onChange={handleDateChange}
+            />
+          )}
 
-      <Button title="Create Lesson" onPress={handleCreateLesson} />
-    </View>
+          <Picker
+            selectedValue={selectedTime}
+            onValueChange={(value) => setSelectedTime(value)}
+            style={styles.input}
+          >
+            <Picker.Item label="Select Time" value="" />
+            {lessonTimes.map((time) => (
+              <Picker.Item key={time} label={time} value={time} />
+            ))}
+          </Picker>
+
+          <TouchableOpacity style={styles.button} onPress={handleCreateLesson}>
+            <Text style={styles.buttonText}>Create Lesson</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <LecturerBottomNav
+        navigation={navigation}
+        role={role as "student" | "lecturer" | "admin"}
+      />
+    </ImageBackground>
   );
 };
 
 export default CreateLesson;
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    backgroundColor: '#fff',
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  card: {
+    backgroundColor: 'white', // snow
+    borderRadius: 16,
+    padding: 20,
+    width: 320,
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 10,
+    elevation: 8,
   },
   header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
+    fontSize: 26,
+    fontWeight: '700',
+    color: '#064f62ff',
+    marginBottom: 20,
+    textAlign: 'center',
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
+    backgroundColor: '#a4c984ff', // pistachio
+    borderRadius: 10,
+    marginBottom: 15,
+    paddingHorizontal: 10,
+    height: 50,
+    justifyContent: 'center',
+  },
+  inputText: {
+    color: '#064f62ff',
+    fontSize: 16,
+  },
+  button: {
+    backgroundColor: '#6bbfe4ff', // sky blue
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
+    elevation: 6,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
