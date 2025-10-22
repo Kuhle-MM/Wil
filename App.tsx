@@ -15,6 +15,7 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from './types';
 import AuthScreen from './AuthScreen';
 import AuthScreenLec from './AuthScreenLect.tsx';
+import BLEReceiver from './BLEReceiver.tsx';
 import LecturersDashboard from './LecturerDashboard.tsx';
 import StudentsDashboard from './StudentDashboard';
 import StudentsCalandar from './StudentsCalendar';
@@ -160,6 +161,7 @@ export default function App() {
         <StackNav.Screen name="CreateLesson" component={CreateLesson} />
         <StackNav.Screen name="LessonActivity" component={LessonActivity} />
         <StackNav.Screen name="Modules" component={Modules} />
+        <StackNav.Screen name="BLEReceiver" component={BLEReceiver} />{/* //////////////////////////////////////// */}
       </StackNav.Navigator>
     </NavigationContainer>
   );

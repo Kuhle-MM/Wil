@@ -109,6 +109,8 @@ const StudentDashboard: React.FC = () => {
   const handleAttendance = () => navigation.navigate('StudentAttendance',  { role });
   const handleModule = () => navigation.navigate('StudentModules', { role });
   const handleHome = () => navigation.navigate('Main', { role });
+  const handleBLE = () => navigation.navigate('BLEReceiver', {role});////////////////////////////////////////////////////////
+
 
   return (
     <ImageBackground
@@ -180,6 +182,11 @@ const StudentDashboard: React.FC = () => {
             />
             <Text style={styles.gridText}>Report Overview</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={styles.gridButton} onPress={handleBLE}>{/* //////////////////////////////////////// */}
+           
+            <Text style={styles.gridText}>Open BLE Scanner</Text>
+          </TouchableOpacity>{/* //////////////////////////////////////// */}
 
           <TouchableOpacity style={styles.gridButton} onPress={handleCalendar}>
             <Image
