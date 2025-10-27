@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, Alert, Image, ImageBackground, ActivityIndicator } from 'react-native';
-import { useRoute, CommonActions, useNavigation, RouteProp } from '@react-navigation/native';
 import {
   View,
   Text,
+  ScrollView,
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Image,
   ImageBackground,
   ActivityIndicator,
-  ScrollView,
 } from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -27,7 +26,11 @@ const StudentDashboard: React.FC = () => {
   const { role } = route.params;
 
   const [studentName, setStudentName] = useState<string>('');
-  const [progressData, setProgressData] = useState<{ Attended: number; TotalLessons: number; AttendancePercentage: number } | null>(null);
+  const [progressData, setProgressData] = useState<{
+    Attended: number;
+    TotalLessons: number;
+    AttendancePercentage: number;
+  } | null>(null);
   const [loadingProgress, setLoadingProgress] = useState(true);
   const [todaysModules, setTodaysModules] = useState<any[]>([]);
   const [loadingModules, setLoadingModules] = useState(true);
@@ -103,100 +106,12 @@ const StudentDashboard: React.FC = () => {
     fetchStudentDetails();
   }, []);
 
+  // Navigation Handlers
   const handleReport = () => navigation.navigate('Report', { role });
   const handleCalendar = () => navigation.navigate('Calendar', { role });
   const handleAttendance = () => navigation.navigate('StudentAttendance', { role });
   const handleModule = () => navigation.navigate('StudentModules', { role });
-  const handleHome = () => navigation.navigate('Main', { role });
   const handleQrCamera = () => navigation.navigate('QrCamera', { role });
-
-  
-return (
-  <ImageBackground
-    source={require('./assets/images/BackgroundImage.jpg')}
-    style={styles.backgroundImage}
-    resizeMode="cover"
-  >
-    {/* Make this scrollable */}
-    <ScrollView 
-      style={styles.scrollContainer} 
-      contentContainerStyle={{ paddingBottom: 100 }} // ensures space above bottom nav
-      showsVerticalScrollIndicator={false}
-    >
-      <Text style={styles.header}>{studentName || 'Student'}'s Dashboard</Text> 
-      <Text style={styles.sectionTitle}>Today’s Modules</Text>
-
-      <View style={styles.card}>
-        {loadingModules ? (
-          <ActivityIndicator size="large" color="#4caf50" />
-        ) : todaysModules.length === 0 ? (
-          <Text style={styles.cardText}>No modules scheduled for today 🎉</Text>
-        ) : (
-          todaysModules.map((lesson, index) => (
-            <Text key={index} style={styles.cardText}>
-              {lesson.moduleCode} — {new Date(lesson.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-            </Text>
-          ))
-        )}
-      </View>
-      
-      <Text style={styles.sectionTitle}>Weekly attendance progress</Text>
-      <View style={styles.card}>
-        {loadingProgress ? (
-          <ActivityIndicator size="large" color="#4caf50" />
-        ) : progressData ? (
-          <>
-            <Text style={styles.cardText}>
-              {progressData.Attended} / {progressData.TotalLessons} lessons attended
-            </Text>
-            <Progress.Bar
-              progress={progressData.AttendancePercentage / 100}
-              width={350}
-              height={20}
-              color="#4caf50"
-              borderRadius={10}
-              style={{ marginTop: 10 }}
-            />
-            <Text style={[styles.cardText, { marginTop: 5 }]}>
-              {progressData.AttendancePercentage.toFixed(2)}%
-            </Text>
-          </>
-        ) : (
-          <Text style={styles.cardText}>No progress data available</Text>
-        )}
-      </View>
-
-      <View style={styles.buttonGrid}>
-        <TouchableOpacity style={styles.gridButton} onPress={handleAttendance}>
-          <Image source={require('./assets/images/clockin.jpg')} style={styles.gridImage} resizeMode="cover" />
-          <Text style={styles.gridText}>Clock In</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.gridButton} onPress={handleReport}>
-          <Image source={require('./assets/images/report.jpg')} style={styles.gridImage} resizeMode="cover" />
-          <Text style={styles.gridText}>Report Overview</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.gridButton} onPress={handleCalendar}>
-          <Image source={require('./assets/images/calendar.jpg')} style={styles.gridImage} resizeMode="cover" />
-          <Text style={styles.gridText}>Get Calendar</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.gridButton} onPress={handleModule}>
-          <Image source={require('./assets/images/modules.jpg')} style={styles.gridImage} resizeMode="cover" />
-          <Text style={styles.gridText}>Your Modules</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
-          <Text>Open Qr Camera</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
-
-    {/* Bottom navbar */}
-    <StudentBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
-  </ImageBackground>
-);
 
   return (
     <ImageBackground
@@ -204,9 +119,14 @@ return (
       style={styles.backgroundImage}
       resizeMode="cover"
     >
-      <ScrollView style={styles.scrollContainer}>
-        <Text style={styles.header}>📙 Your Dashboard</Text>
+      <ScrollView
+        style={styles.scrollContainer}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.header}>{studentName || 'Student'}'s Dashboard</Text>
 
+        {/* Today’s Modules */}
         <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>Today’s Modules</Text>
           {loadingModules ? (
@@ -214,19 +134,19 @@ return (
           ) : todaysModules.length === 0 ? (
             <Text style={styles.cardText}>No modules scheduled for today 🎉</Text>
           ) : (
-            todaysModules.map((lesson, index) => {
-              const lessonUTC = new Date(lesson.date);
-              const lessonSA = new Date(lessonUTC.getTime() - 2 * 60 * 60 * 1000);
-              const lessonTime = lessonSA.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-              return (
-                <Text key={index} style={styles.cardText}>
-                  {lesson.moduleCode} — {lessonTime}
-                </Text>
-              );
-            })
+            todaysModules.map((lesson, index) => (
+              <Text key={index} style={styles.cardText}>
+                {lesson.moduleCode} —{' '}
+                {new Date(lesson.date).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </Text>
+            ))
           )}
         </View>
 
+        {/* Weekly Attendance Progress */}
         <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>Weekly Attendance Progress</Text>
           {loadingProgress ? (
@@ -238,11 +158,11 @@ return (
               </Text>
               <Progress.Bar
                 progress={progressData.AttendancePercentage / 100}
-                width={330}
+                width={290}
                 height={18}
                 color="#064f62"
                 borderRadius={8}
-                style={{ marginTop: 10 }}
+                style={{ marginTop: 10, justifyContent: 'center' }}
               />
               <Text style={[styles.cardText, { marginTop: 5 }]}>
                 {progressData.AttendancePercentage.toFixed(2)}%
@@ -253,6 +173,7 @@ return (
           )}
         </View>
 
+        {/* Buttons Grid */}
         <View style={styles.buttonGrid}>
           <TouchableOpacity style={styles.gridButton} onPress={handleAttendance}>
             <Text style={styles.gridEmoji}>⏰</Text>
@@ -273,10 +194,18 @@ return (
             <Text style={styles.gridEmoji}>📘</Text>
             <Text style={styles.gridLabel}>Your Modules</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
+            <Text style={styles.qrText}>Open QR Camera</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
 
-      <StudentBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
+      {/* Bottom Navigation */}
+      <StudentBottomNav
+        navigation={navigation}
+        role={role as 'student' | 'lecturer' | 'admin'}
+      />
     </ImageBackground>
   );
 };
@@ -294,20 +223,6 @@ const styles = StyleSheet.create({
     marginTop: 60,
     marginBottom: 30,
   },
-  headerCard: {
-    backgroundColor: '#064f62',
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 20,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 6,
-    elevation: 5,
-  },
-  headerTitle: { color: '#fff', fontSize: 28, fontWeight: 'bold', marginBottom: 5 },
-  subHeader: { color: '#d8f3dc', fontSize: 18 },
   sectionCard: {
     backgroundColor: '#A4C984',
     borderRadius: 14,
@@ -326,7 +241,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
   },
-  cardText: { color: '#000', fontSize: 17, fontWeight: '500', textAlign: 'center' },
+  cardText: {
+    color: '#000',
+    fontSize: 17,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
   buttonGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -350,4 +270,13 @@ const styles = StyleSheet.create({
   },
   gridEmoji: { fontSize: 30, color: '#fff', marginBottom: 8 },
   gridLabel: { fontSize: 18, fontWeight: 'bold', color: '#fff' },
+  smallButton: {
+    width: '100%',
+    backgroundColor: '#A4C984',
+    borderRadius: 12,
+    padding: 14,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  qrText: { color: '#064f62', fontSize: 16, fontWeight: '600' },
 });

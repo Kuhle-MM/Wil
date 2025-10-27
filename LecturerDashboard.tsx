@@ -67,50 +67,13 @@ const LecturerDashboard: React.FC = () => {
   const handleQrCamera = () => navigation.navigate('QrCamera', { role });
 
   return (
-    <ScrollView style={styles.scrollContainer}>
-      <Text style={styles.header}>Dashboard</Text>
-      <Text style={styles.sectionTitle}>Today’s Modules</Text>
-
-      <View style={styles.card}>
-        {loadingLessons ? (
-          <ActivityIndicator size="large" color="#4caf50" />
-        ) : todaysLessons.length === 0 ? (
-          <Text style={styles.cardText}>No lessons scheduled for today 🎉</Text>
-        ) : (
-          todaysLessons.map((lesson, index) => (
-            <Text key={index} style={styles.cardText}>
-              {lesson.moduleCode} — {new Date(lesson.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-            </Text>
-          ))
-        )}
-      </View>
-
-      <TouchableOpacity style={styles.smallButton} onPress={handleReport}>
-        <Text>Report Overview</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.smallButton} onPress={handleCalendar}>
-        <Text>Timetable</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.smallButton} onPress={handleAttendance}>
-        <Text>Clock In</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.smallButton} onPress={handleModule}>
-        <Text>Your Modules</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.smallButton} onPress={handleLesson}>
-        <Text>Your Lessons</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
-        <Text>Open Qr Camera</Text>
-      </TouchableOpacity>
-    </ScrollView>
     <ImageBackground
       source={require('./assets/images/BackgroundImage.jpg')}
       style={styles.backgroundImage}
       resizeMode="cover"
     >
-      <ScrollView style={styles.scrollContainer}>
-        <Text style={styles.header}>📙Dashboard</Text>
+      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+        <Text style={styles.header}>📙 {lecturerName}'s Dashboard</Text>
 
         <Text style={styles.sectionTitle}>Today’s Lessons</Text>
         <View style={styles.card}>
@@ -158,11 +121,16 @@ const LecturerDashboard: React.FC = () => {
             <Text style={styles.gridTextEmoji}>📖</Text>
             <Text style={styles.gridText}>Your Lessons</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.gridButton, styles.fullWidthButton]} onPress={handleQrCamera}>
+            <Text style={styles.gridTextEmoji}>📷</Text>
+            <Text style={styles.gridText}>Open QR Camera</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-      <LecturerBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
-    </ImageBackground>
 
+      <LecturerBottomNav navigation={navigation} role={role as 'lecturer'} />
+    </ImageBackground>
   );
 };
 
@@ -184,7 +152,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     fontWeight: '600',
     color: '#838282ff',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   card: {
     width: '100%',
@@ -230,15 +198,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     paddingVertical: 6,
-    paddingHorizontal: 4,
   },
   gridTextEmoji: {
     color: '#FFFFFF',
     fontSize: 28,
-    fontWeight: 'bold',
     textAlign: 'center',
-    paddingVertical: 6,
-    paddingHorizontal: 4,
   },
   fullWidthButton: {
     width: '100%',

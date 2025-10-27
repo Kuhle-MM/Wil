@@ -1,48 +1,46 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Alert } from 'react-native';
-import QRCodeScanner from 'react-native-qrcode-scanner';
-import { RNCamera } from 'react-native-camera';
+import React, { useState } from "react";
+import { View, Text, StyleSheet, ActivityIndicator, Alert } from "react-native";
+import QRCodeScanner from "react-native-qrcode-scanner";
+import { RNCamera } from "react-native-camera";
 
-// Replace this with your actual API endpoint base
-const API_BASE_URL = "https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson";
+const API_BASE_URL =
+  "https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api";
 
 const StudentQrCamera = ({ studentNumber }: { studentNumber: string }) => {
   const [loading, setLoading] = useState(false);
 
   const onSuccess = async (e: any) => {
-    const lessonId = e.data.trim(); // QR code contains lessonId
-    console.log("Scanned Lesson ID:", lessonId);
+    const qrText = e.data?.trim();
+    console.log("Scanned QR:", qrText);
 
-    if (!lessonId) {
-      Alert.alert("Invalid QR Code", "No lesson ID found in QR code.");
+    if (!qrText) {
+      Alert.alert("Invalid QR Code", "No data found in QR code.");
       return;
     }
 
     try {
       setLoading(true);
+      const url = `${API_BASE_URL}/scanQRCode`;
 
-      const url = `${API_BASE_URL}/clockin/${studentNumber}`;
-      console.log("Calling API:", url);
-
-      // Example body (adjust if your backend expects JSON or query parameters)
       const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ lessonId }), // send lessonId in body
+        body: JSON.stringify({
+          QRText: qrText, // must match backend request
+          StudentID: studentNumber, // backend expects this field
+        }),
       });
 
+      const text = await response.text();
+      console.log("API response:", text);
+
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error("API error:", errorText);
-        throw new Error(errorText || "Clock-in failed");
+        throw new Error(text || "Clock-in failed");
       }
 
-      const data = await response.json();
-      console.log("Clock-in success:", data);
-
-      Alert.alert("Clock-in Successful", `You have been clocked in for lesson ${lessonId}`);
+      Alert.alert("Clock-in Successful", "You have been clocked in successfully!");
     } catch (error: any) {
       console.error("Clock-in error:", error);
       Alert.alert("Error", error.message || "Could not clock in. Please try again.");
@@ -61,6 +59,8 @@ const StudentQrCamera = ({ studentNumber }: { studentNumber: string }) => {
       ) : (
         <QRCodeScanner
           onRead={onSuccess}
+          reactivate={true} // allow reuse
+          reactivateTimeout={2000}
           flashMode={RNCamera.Constants.FlashMode.auto}
           topContent={<Text style={styles.centerText}>Scan the QR code for your lesson</Text>}
           bottomContent={<Text style={styles.bottomText}>Make sure the code fits in the box</Text>}

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
-  FlatList,
+  SectionList,
   ImageBackground,
 } from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
@@ -20,9 +20,14 @@ type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
 type AttendanceRecord = {
   rowKey: string;
-  clockInTime: string; // original ISO string from API
+  clockInTime: string;
   studentNumber: string;
   status: 'Present' | 'Absent' | string;
+};
+
+type SectionData = {
+  title: string;
+  data: AttendanceRecord[];
 };
 
 const StudentsReports: React.FC = () => {
@@ -30,7 +35,7 @@ const StudentsReports: React.FC = () => {
   const route = useRoute<AuthRouteProp>();
   const { role } = route.params;
 
-  const [data, setData] = useState<AttendanceRecord[]>([]);
+  const [sections, setSections] = useState<SectionData[]>([]);
   const [loading, setLoading] = useState(true);
 
   const getStudentId = async (): Promise<string | null> => {
@@ -60,8 +65,9 @@ const StudentsReports: React.FC = () => {
           throw new Error(text || 'Failed to fetch attendance report.');
         }
 
-        const result = await response.json();
-        setData(result);
+        const result: AttendanceRecord[] = await response.json();
+        const grouped = groupByDate(result);
+        setSections(grouped);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred.';
         Alert.alert('Error', errorMessage);
@@ -73,7 +79,41 @@ const StudentsReports: React.FC = () => {
     fetchReport();
   }, []);
 
-  // Format date to "10 Oct 2025 - 08:20"
+  // Function to group records by Today, Yesterday, Earlier
+  const groupByDate = (records: AttendanceRecord[]): SectionData[] => {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    const todayStr = today.toDateString();
+    const yesterdayStr = yesterday.toDateString();
+
+    const groups: Record<string, AttendanceRecord[]> = {
+      Today: [],
+      Yesterday: [],
+      Earlier: [],
+    };
+
+    records.forEach((rec) => {
+      const recDate = new Date(rec.clockInTime);
+      const recDateStr = recDate.toDateString();
+
+      if (recDateStr === todayStr) groups.Today.push(rec);
+      else if (recDateStr === yesterdayStr) groups.Yesterday.push(rec);
+      else groups.Earlier.push(rec);
+    });
+
+    return Object.entries(groups)
+      .filter(([_, data]) => data.length > 0)
+      .map(([title, data]) => ({
+        title,
+        data: data.sort(
+          (a, b) =>
+            new Date(b.clockInTime).getTime() - new Date(a.clockInTime).getTime()
+        ),
+      }));
+  };
+
   const formatDateTime = (dateStr: string) => {
     const date = new Date(dateStr);
     const day = date.getDate();
@@ -108,36 +148,41 @@ const StudentsReports: React.FC = () => {
     </View>
   );
 
+  const renderSectionHeader = ({ section: { title } }: { section: SectionData }) => (
+    <Text style={styles.sectionHeader}>{title}</Text>
+  );
+
   return (
     <ImageBackground
       source={require('./assets/images/BackgroundImage.jpg')}
       style={styles.background}
     >
       <View style={styles.mainContainer}>
-      <View style={styles.contentWrapper}>
-        <Text style={styles.header}>Attendance Report</Text>
+        <View style={styles.contentWrapper}>
+          <Text style={styles.header}>Attendance Report</Text>
 
-        {loading ? (
-          <ActivityIndicator size="large" color="#064f62" style={{ marginTop: 40 }} />
-        ) : data.length === 0 ? (
-          <Text style={styles.noData}>No attendance records found.</Text>
-        ) : (
-          <FlatList
-            data={data}
-            keyExtractor={(item) => item.rowKey}
-            renderItem={renderItem}
-            contentContainerStyle={{ paddingBottom: 140 }}
+          {loading ? (
+            <ActivityIndicator size="large" color="#064f62" style={{ marginTop: 40 }} />
+          ) : sections.length === 0 ? (
+            <Text style={styles.noData}>No attendance records found.</Text>
+          ) : (
+            <SectionList
+              sections={sections}
+              keyExtractor={(item) => item.rowKey}
+              renderItem={renderItem}
+              renderSectionHeader={renderSectionHeader}
+              contentContainerStyle={{ paddingBottom: 140 }}
+            />
+          )}
+        </View>
+
+        <View style={styles.navContainer}>
+          <StudentBottomNav
+            navigation={navigation}
+            role={role as 'student' | 'lecturer' | 'admin'}
           />
-        )}
+        </View>
       </View>
-
-      <View style={styles.navContainer}>
-        <StudentBottomNav
-          navigation={navigation}
-          role={role as 'student' | 'lecturer' | 'admin'}
-        />
-      </View>
-    </View>
     </ImageBackground>
   );
 };
@@ -146,7 +191,7 @@ export default StudentsReports;
 
 const styles = StyleSheet.create({
   background: { flex: 1 },
-  mainContainer: { flex: 1, paddingTop: 60 }, 
+  mainContainer: { flex: 1, paddingTop: 60 },
   contentWrapper: { flex: 1, paddingHorizontal: 20 },
   navContainer: { position: 'absolute', bottom: 0, width: '100%' },
   header: {
@@ -156,13 +201,20 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
+  sectionHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#064f62',
+    marginBottom: 10,
+    marginTop: 20,
+  },
   card: {
     backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: '#064f62',
     borderRadius: 12,
     padding: 16,
-    marginBottom: 12,
+    marginBottom: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 6,

@@ -33,7 +33,7 @@ const CreateLesson: React.FC = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [modules, setModules] = useState<Module[]>([]);
 
-    const navigation = useNavigation<AuthNavProp>();
+  const navigation = useNavigation<AuthNavProp>();
   const route = useRoute<AuthRouteProp>();
   const { role } = route.params ?? { role: "lecturer" }; // fallback
   const lessonTimes = ['08:20', '09:20', '10:20', '12:00', '13:00', '14:00', '15:00', '15:40'];
