@@ -14,4 +14,10 @@ namespace VarsityTrackerApi.Models.Lesson
         public ETag ETag { get; set; }
         public DateTimeOffset? Timestamp { get; set; }
     }
+
+     public class QRScanRequest
+ {
+     public string? QRText { get; set; }
+     public string? StudentID { get; set; }
+ }
 }

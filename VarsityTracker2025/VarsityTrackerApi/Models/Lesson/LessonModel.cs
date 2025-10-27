@@ -6,5 +6,6 @@
         public string courseCode { get; set; }
         public string moduleCode { get; set; }
         public string lecturerID { get; set; }
+        public string classroom { get; set; }
     }
 }

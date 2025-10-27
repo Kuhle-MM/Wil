@@ -1,125 +1,129 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import React from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ImageBackground,
+} from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
+import LecturerBottomNav from "./BottomNav.tsx";
 
-
-type AuthRouteProp = RouteProp<RootTabParamList, 'LecturerLessons'>;
+type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
 const LecturerLessons: React.FC = () => {
   const navigation = useNavigation<AuthNavProp>();
-    const route = useRoute<AuthRouteProp>();
-    const { role } = route.params;
-    const handleLesson = async () => {
-    navigation.navigate('CreateLesson', { role });  
-    };
-    const handleActivity = async () => {
-    navigation.navigate('LessonActivity', { role });  
-    };
-    
+  const route = useRoute<AuthRouteProp>();
+  const { role } = route.params;
+
+  const handleLesson = async () => {
+    navigation.navigate('CreateLesson', { role });
+  };
+
+  const handleActivity = async () => {
+    navigation.navigate('LessonActivity', { role });
+  };
+
   return (
-    <View style={styles.scrollContainer}>
-        <Text style={styles.header}>Dashboard</Text>
-        <Text style={styles.sectionTitle}>Lecturer's Lessons</Text>
-        <TouchableOpacity style={styles.smallButton} onPress={handleLesson}><Text>Create Lesson</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.smallButton} onPress={handleActivity}><Text>Lesson Activity</Text></TouchableOpacity>
+    <ImageBackground
+      source={require('./assets/images/BackgroundImage.jpg')} 
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <Text style={styles.header}>📋 Lessons</Text>
+        <Text style={styles.subHeader}>Manage your lessons easily</Text>
+
+        <View style={styles.cardContainer}>
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Create Lesson</Text>
+            <TouchableOpacity style={styles.button} onPress={handleLesson}>
+              <Text style={styles.buttonText}>Go</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Lesson Activity</Text>
+            <TouchableOpacity style={styles.button} onPress={handleActivity}>
+              <Text style={styles.buttonText}>View</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
+      <LecturerBottomNav
+        navigation={navigation}
+        role={role as "student" | "lecturer" | "admin"}
+      />
+    </ImageBackground>
   );
 };
 
 export default LecturerLessons;
 
 const styles = StyleSheet.create({
-  centeredContainer: {
+  background: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: '#f9f0f0ff', // snow fallback if no image
+  },
+  container: {
+    flex: 1,
     alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  scrollContainer: {
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  logo: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    marginBottom: 40,
+    paddingTop: 80,
+    paddingHorizontal: 16,
   },
   header: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: 16,
+    color: '#064f62ff', // midnight green
+    marginBottom: 8,
   },
   subHeader: {
-    fontSize: 18,
-    marginVertical: 8,
-  },
-  sectionTitle: {
     fontSize: 16,
-    marginVertical: 8,
-    fontWeight: '500',
+    color: '#6bbfe4ff', // sky blue
+    marginBottom: 20,
+  },
+  cardContainer: {
+    width: '100%',
+    alignItems: 'center',
   },
   card: {
-    width: '100%',
-    padding: 20,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 12,
-    marginBottom: 16,
+    backgroundColor: '#a4c984ff', // pistachio
+    width: 260, // fixed width
+    height: 160,
+    borderRadius: 20,
+    marginVertical: 12,
     alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 4,
   },
-  cardText: {
-    fontSize: 16,
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#064f62ff',
+    marginBottom: 10,
   },
   button: {
-    backgroundColor: '#ccc',
-    padding: 12,
-    width: 200,
-    borderRadius: 8,
-    marginVertical: 8,
+    backgroundColor: '#6bbfe4ff', // sky blue
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    borderRadius: 12,
     alignItems: 'center',
-  },
-  smallButton: {
-    backgroundColor: '#ddd',
-    padding: 10,
-    borderRadius: 6,
-    marginVertical: 6,
-    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
     fontSize: 16,
-  },
-  reportRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
-  },
-  roleSelector: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 12,
-  },
-  roleButton: {
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 8,
-    width: '48%',
-    alignItems: 'center',
-  },
-  roleSelected: {
-    backgroundColor: '#cce5ff',
-    borderColor: '#007bff',
   },
 });
