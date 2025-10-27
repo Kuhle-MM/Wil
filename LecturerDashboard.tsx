@@ -67,102 +67,93 @@ const LecturerDashboard: React.FC = () => {
   const handleQrCamera = () => navigation.navigate('QrCamera', { role });
 
   return (
-    <ScrollView style={styles.scrollContainer}>
-      <Text style={styles.header}>Dashboard</Text>
-      <Text style={styles.sectionTitle}>Today’s Modules</Text>
+    <View style={{ flex: 1 }}>
+      <ImageBackground
+        source={require('./assets/images/BackgroundImage.jpg')}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      >
+        <ScrollView style={styles.scrollContainer}>
+          <Text style={styles.header}>📙Dashboard</Text>
 
-      <View style={styles.card}>
-        {loadingLessons ? (
-          <ActivityIndicator size="large" color="#4caf50" />
-        ) : todaysLessons.length === 0 ? (
-          <Text style={styles.cardText}>No lessons scheduled for today 🎉</Text>
-        ) : (
-          todaysLessons.map((lesson, index) => (
-            <Text key={index} style={styles.cardText}>
-              {lesson.moduleCode} — {new Date(lesson.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-            </Text>
-          ))
-        )}
-      </View>
+          <Text style={styles.sectionTitle}>Today’s Lessons</Text>
+          <View style={styles.card}>
+            {loadingLessons ? (
+              <ActivityIndicator size="large" color="#6B9B89" />
+            ) : todaysLessons.length === 0 ? (
+              <Text style={styles.cardText}>No lessons scheduled for today 🎉</Text>
+            ) : (
+              todaysLessons.map((lesson, index) => {
+                const lessonUTC = new Date(lesson.date);
+                const lessonSA = new Date(lessonUTC.getTime() - 2 * 60 * 60 * 1000);
+                const lessonTime = lessonSA.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      <TouchableOpacity style={styles.smallButton} onPress={handleReport}>
-        <Text>Report Overview</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.smallButton} onPress={handleCalendar}>
-        <Text>Timetable</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.smallButton} onPress={handleAttendance}>
-        <Text>Clock In</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.smallButton} onPress={handleModule}>
-        <Text>Your Modules</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.smallButton} onPress={handleLesson}>
-        <Text>Your Lessons</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
-        <Text>Open Qr Camera</Text>
-      </TouchableOpacity>
-    </ScrollView>
-    <ImageBackground
-      source={require('./assets/images/BackgroundImage.jpg')}
-      style={styles.backgroundImage}
-      resizeMode="cover"
-    >
-      <ScrollView style={styles.scrollContainer}>
-        <Text style={styles.header}>📙Dashboard</Text>
+                return (
+                  <Text key={index} style={styles.cardText}>
+                    {lesson.moduleCode} — {lessonTime}
+                  </Text>
+                );
+              })
+            )}
+          </View>
 
-        <Text style={styles.sectionTitle}>Today’s Lessons</Text>
-        <View style={styles.card}>
-          {loadingLessons ? (
-            <ActivityIndicator size="large" color="#6B9B89" />
-          ) : todaysLessons.length === 0 ? (
-            <Text style={styles.cardText}>No lessons scheduled for today 🎉</Text>
-          ) : (
-            todaysLessons.map((lesson, index) => {
-              const lessonUTC = new Date(lesson.date);
-              const lessonSA = new Date(lessonUTC.getTime() - 2 * 60 * 60 * 1000);
-              const lessonTime = lessonSA.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-              return (
-                <Text key={index} style={styles.cardText}>
-                  {lesson.moduleCode} — {lessonTime}
-                </Text>
-              );
-            })
-          )}
-        </View>
-
-        <View style={styles.buttonGrid}>
-          <TouchableOpacity style={styles.gridButton} onPress={handleReport}>
-            <Text style={styles.gridTextEmoji}>📊</Text>
-            <Text style={styles.gridText}>Report Overview</Text>
+          {/* Action Buttons */}
+          <TouchableOpacity style={styles.smallButton} onPress={handleReport}>
+            <Text>Report Overview</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleCalendar}>
+            <Text>Timetable</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleAttendance}>
+            <Text>Clock In</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleModule}>
+            <Text>Your Modules</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleLesson}>
+            <Text>Your Lessons</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
+            <Text>Open Qr Camera</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.gridButton} onPress={handleCalendar}>
-            <Text style={styles.gridTextEmoji}>🗓️</Text>
-            <Text style={styles.gridText}>Timetable</Text>
-          </TouchableOpacity>
+          {/* Button Grid */}
+          <View style={styles.buttonGrid}>
+            <TouchableOpacity style={styles.gridButton} onPress={handleReport}>
+              <Text style={styles.gridTextEmoji}>📊</Text>
+              <Text style={styles.gridText}>Report Overview</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity style={styles.gridButton} onPress={handleAttendance}>
-            <Text style={styles.gridTextEmoji}>⏰</Text>
-            <Text style={styles.gridText}>Clock In</Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.gridButton} onPress={handleCalendar}>
+              <Text style={styles.gridTextEmoji}>🗓️</Text>
+              <Text style={styles.gridText}>Timetable</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity style={styles.gridButton} onPress={handleModule}>
-            <Text style={styles.gridTextEmoji}>📘</Text>
-            <Text style={styles.gridText}>Your Modules</Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.gridButton} onPress={handleAttendance}>
+              <Text style={styles.gridTextEmoji}>⏰</Text>
+              <Text style={styles.gridText}>Clock In</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.gridButton, styles.fullWidthButton]} onPress={handleLesson}>
-            <Text style={styles.gridTextEmoji}>📖</Text>
-            <Text style={styles.gridText}>Your Lessons</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-      <LecturerBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
-    </ImageBackground>
+            <TouchableOpacity style={styles.gridButton} onPress={handleModule}>
+              <Text style={styles.gridTextEmoji}>📘</Text>
+              <Text style={styles.gridText}>Your Modules</Text>
+            </TouchableOpacity>
 
+            <TouchableOpacity
+              style={[styles.gridButton, styles.fullWidthButton]}
+              onPress={handleLesson}
+            >
+              <Text style={styles.gridTextEmoji}>📖</Text>
+              <Text style={styles.gridText}>Your Lessons</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+        <LecturerBottomNav
+          navigation={navigation}
+          role={role as 'student' | 'lecturer' | 'admin'}
+        />
+      </ImageBackground>
+    </View>
   );
 };
 
@@ -184,7 +175,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     fontWeight: '600',
     color: '#838282ff',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   card: {
     width: '100%',
@@ -203,6 +194,13 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  smallButton: {
+    backgroundColor: '#6B9B89',
+    padding: 10,
+    marginVertical: 6,
+    borderRadius: 8,
+    alignItems: 'center',
   },
   buttonGrid: {
     flexDirection: 'row',
