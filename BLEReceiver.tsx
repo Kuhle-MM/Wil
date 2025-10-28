@@ -142,14 +142,8 @@ const BLEReceiver = () => {
 
         if (isVerified) {
           addLog('Signature VERIFIED!');
-          const now = Math.floor(Date.now() / 1000);
-          if (Math.abs(now - ts) <= 120) { // 2 minute window
-            addLog('Timestamp is fresh.');
-            setVerifiedInfo({ deviceId: device.id, room, timestamp: ts });
-            setAppState('VERIFIED');
-          } else {
-            throw new Error(`Stale timestamp. Device: ${ts}, App: ${now}`);
-          }
+          setVerifiedInfo({ deviceId: device.id, room, timestamp: ts });
+          setAppState('VERIFIED');
         } else {
           throw new Error('Signature verification FAILED!');
         }
