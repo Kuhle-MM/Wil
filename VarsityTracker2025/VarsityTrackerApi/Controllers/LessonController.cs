@@ -292,109 +292,120 @@ namespace VarsityTrackerApi.Controllers
         //    return Ok(new { message = "Clock-in successful!" });
         //}
 
-        [HttpPost("clockin/{studentNumber}")]
-        public async Task<IActionResult> StudentList(string studentNumber)
+        [HttpPost("clockin/{studentNumber}/{lessonID}")]
+        public async Task<IActionResult> StudentList(string studentNumber, string lessonID)
         {
-            // Find the student
-            Students student = null;
-            await foreach (var s in _studentTable.QueryAsync<Students>(s => s.studentNumber == studentNumber.ToUpper()))
+            try
             {
-                student = s;
-                break;
-            }
+                if (_studentTable == null || _lessonTable == null || _lessonListTable == null)
+                    return StatusCode(500, new { success = false, message = "Storage tables not initialized." });
 
-            if (student == null)
-                return NotFound("Student not found.");
-
-            var now = DateTime.UtcNow;
-            var today = now.Date;
-
-            // Add to waiting list
-            var studentList = new StudentList
-            {
-                PartitionKey = "StudentList",
-                RowKey = Guid.NewGuid().ToString(),
-                StudentID = student.studentNumber,
-                ClockInTime = now,
-                ClockOutTime = null
-            };
-
-            await _waitingList.AddEntityAsync(studentList);
-
-            // Find an active lesson that started today
-            Lesson lesson = null;
-            var todayStart = DateTime.UtcNow.Date;
-            var todayEnd = todayStart.AddDays(1);
-
-            await foreach (var s in _lessonTable.QueryAsync<Lesson>(s =>
-                s.started == true && s.date >= todayStart && s.date < todayEnd))
-            {
-                lesson = s;
-                break;
-            }
-
-            // Check if the student is already in the LessonList
-            LessonList existingEntry = null;
-            await foreach (var entry in _lessonListTable.QueryAsync<LessonList>(l =>
-                l.LessonID == lesson.lessonID && l.StudentID == student.studentNumber))
-            {
-                existingEntry = entry;
-                break;
-            }
-
-            if (existingEntry == null)
-            {
-                // Add new LessonList record if none exists
-                var addStudent = new LessonList
+                // Find the student (case-insensitive)
+                Students student = null;
+                var lookupStudentNumber = studentNumber?.ToUpper();
+                await foreach (var s in _studentTable.QueryAsync<Students>(s => s.studentNumber == lookupStudentNumber))
                 {
-                    PartitionKey = "LessonList",
-                    RowKey = Guid.NewGuid().ToString(),
-                    LessonID = lesson.lessonID,
-                    StudentID = student.studentNumber,
-                    LessonDate = lesson.date,
-                    ClockInTime = now,
-                    ClockOutTime = null
-                };
+                    student = s;
+                    break;
+                }
 
-                await _lessonListTable.AddEntityAsync(addStudent);
+                if (student == null)
+                    return NotFound(new { success = false, message = "Student not found." });
+
+                var now = DateTime.UtcNow;
+                var todayStart = now.Date;
+                var todayEnd = todayStart.AddDays(1);
+
+                // Find an active lesson that started today
+                Lesson lesson = null;
+                await foreach (var s in _lessonTable.QueryAsync<Lesson>(s =>
+                    s.started == true && s.date >= todayStart && s.date < todayEnd && s.lessonID == lessonID))
+                {
+                    lesson = s;
+                    break;
+                }
+
+                if (lesson == null)
+                    return NotFound(new { success = false, message = "Lesson not found or not active today." });
+
+                // Check if the student is already in the LessonList for this lesson
+                LessonList existingEntry = null;
+                await foreach (var entry in _lessonListTable.QueryAsync<LessonList>(l =>
+                    l.LessonID == lesson.lessonID && l.StudentID == student.studentNumber))
+                {
+                    existingEntry = entry;
+                    break;
+                }
+
+                if (existingEntry != null && existingEntry.ClockInTime.HasValue && existingEntry.ClockOutTime == null)
+                {
+                    return BadRequest(new { success = false, message = "Student already clocked in for this lesson." });
+                }
+
+                if (existingEntry == null)
+                {
+                    // Add new LessonList record if none exists
+                    var addStudent = new LessonList
+                    {
+                        PartitionKey = "LessonList",
+                        RowKey = Guid.NewGuid().ToString(),
+                        LessonID = lesson.lessonID,
+                        StudentID = student.studentNumber,
+                        LessonDate = lesson.date,
+                        ClockInTime = now,
+                        ClockOutTime = null
+                    };
+
+                    await _lessonListTable.AddEntityAsync(addStudent);
+                }
+                else
+                {
+                    // Update existing LessonList record's clock-in time
+                    existingEntry.ClockInTime = now;
+                    existingEntry.ClockOutTime = null;
+                    await _lessonListTable.UpdateEntityAsync(existingEntry, existingEntry.ETag, TableUpdateMode.Replace);
+                }
+
+                return Ok(new
+                {
+                    success = true,
+                    message = $"Student {studentNumber} clocked in successfully.",
+                    lessonID = lesson.lessonID,
+                    clockInTime = now
+                });
             }
-            else
+            catch (Exception ex)
             {
-                // Update existing LessonList record's clock-in time
-                existingEntry.ClockInTime = now;
-                existingEntry.ClockOutTime = null;  // Optional: reset clock-out time if you want
-
-                await _lessonListTable.UpdateEntityAsync(existingEntry, existingEntry.ETag, TableUpdateMode.Replace);
+                // Log the exception (replace with your logging infrastructure)
+                return StatusCode(500, new { success = false, message = "An error occurred while clocking in.", detail = ex.Message });
             }
-
-            return Ok($"Student with ID: {studentList.StudentID} clocked in successfully.");
         }
 
-        [HttpPost("clockoutStudent/{studentNumber}")]
-        public async Task<IActionResult> StudentListClockout(string studentNumber)
-        {
-            var today = DateTime.UtcNow.Date;
+        //[HttpPost("clockoutStudent/{studentNumber}")]
+        //public async Task<IActionResult> StudentListClockout(string studentNumber)
+        //{
+        //    var today = DateTime.UtcNow.Date;
 
-            StudentList recordToUpdate = null;
+        //    StudentList recordToUpdate = null;
 
-            await foreach (var record in _waitingList.QueryAsync<StudentList>(r =>
-                r.PartitionKey == "StudentList" &&
-                r.StudentID == studentNumber &&
-                r.ClockInTime >= today))
-            {
-                recordToUpdate = record;
-                break;
-            }
+        //    await foreach (var record in _waitingList.QueryAsync<StudentList>(r =>
+        //        r.PartitionKey == "StudentList" &&
+        //        r.StudentID == studentNumber &&
+        //        r.ClockInTime >= today))
+        //    {
+        //        recordToUpdate = record;
+        //        break;
+        //    }
 
-            if (recordToUpdate.ClockInTime == null || recordToUpdate == null)
-                return NotFound("No active clock-in found for today.");
+        //    if (recordToUpdate.ClockInTime == null || recordToUpdate == null)
+        //        return NotFound("No active clock-in found for today.");
 
-            recordToUpdate.ClockOutTime = DateTime.UtcNow;
+        //    recordToUpdate.ClockOutTime = DateTime.UtcNow;
 
-            await _waitingList.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
+        //    await _waitingList.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
 
-            return Ok(new { success = true, message = "Student clocked out." });
-        }
+        //    return Ok(new { success = true, message = "Student clocked out." });
+        //}
 
         [HttpPost("startLesson/{lessonID}")]
         public async Task<IActionResult> StartLesson(string lessonID)
@@ -427,7 +438,7 @@ namespace VarsityTrackerApi.Controllers
                 enrolledStudents.Add(sm.studentNumber);
             }
 
-            // 4. Insert Attendance Records (avoid duplicates)
+            // 4. Insert Attendance Records 
             foreach (var studentID in enrolledStudents)
             {
                 bool exists = false;
@@ -455,7 +466,7 @@ namespace VarsityTrackerApi.Controllers
                 await _lessonListTable.AddEntityAsync(entry);
             }
 
-            // 5. Mark Lesson as Started (use Upsert to avoid ETag issues)
+            // 5. Mark Lesson as Started 
             lesson.started = true;
             lesson.startedTime = DateTime.UtcNow;
             await _lessonTable.UpsertEntityAsync(lesson, TableUpdateMode.Replace);
