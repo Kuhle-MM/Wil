@@ -741,5 +741,26 @@ namespace VarsityTrackerApi.Controllers
                 return StatusCode(500, $"Error updating report: {ex.Message}");
             }
         }
+
+        [HttpGet("all_lessons")]
+        public async Task<IActionResult> GetAllLessons()
+        {
+            try
+            {
+                var lessonsList = new List<Lesson>();
+
+                // Query all lessons
+                await foreach (var lesson in _lessonTable.QueryAsync<Lesson>())
+                {
+                    lessonsList.Add(lesson);
+                }
+
+                return Ok(lessonsList);
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error retrieving lessons: {ex.Message}");
+            }
+        }
     }
 }
