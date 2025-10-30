@@ -101,25 +101,20 @@ const LecturerDashboard: React.FC = () => {
             <Text style={styles.gridTextEmoji}>📊</Text>
             <Text style={styles.gridText}>Report Overview</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.gridButton} onPress={handleCalendar}>
-            <Text style={styles.gridTextEmoji}>🗓️</Text>
-            <Text style={styles.gridText}>Timetable</Text>
+          <TouchableOpacity style={styles.smallButton} onPress={handleCalendar}>
+            <Text>Timetable</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.gridButton} onPress={handleAttendance}>
-            <Text style={styles.gridTextEmoji}>⏰</Text>
-            <Text style={styles.gridText}>Clock In</Text>
+          <TouchableOpacity style={styles.smallButton} onPress={handleAttendance}>
+            <Text>Clock In</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.gridButton} onPress={handleModule}>
-            <Text style={styles.gridTextEmoji}>📘</Text>
-            <Text style={styles.gridText}>Your Modules</Text>
+          <TouchableOpacity style={styles.smallButton} onPress={handleModule}>
+            <Text>Your Modules</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity style={[styles.gridButton, styles.fullWidthButton]} onPress={handleLesson}>
-            <Text style={styles.gridTextEmoji}>📖</Text>
-            <Text style={styles.gridText}>Your Lessons</Text>
+          <TouchableOpacity style={styles.smallButton} onPress={handleLesson}>
+            <Text>Your Lessons</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
+            <Text>Open Qr Camera</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.gridButton, styles.fullWidthButton]} onPress={handleQrCamera}>
@@ -171,6 +166,13 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  smallButton: {
+    backgroundColor: '#6B9B89',
+    padding: 10,
+    marginVertical: 6,
+    borderRadius: 8,
+    alignItems: 'center',
   },
   buttonGrid: {
     flexDirection: 'row',
