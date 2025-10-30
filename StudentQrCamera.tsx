@@ -1,70 +1,48 @@
-import React, { useState, useRef } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
-import QRCodeScanner from "react-native-qrcode-scanner";
-import { RNCamera } from "react-native-camera";
+import React, { useRef, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import { RNCamera } from 'react-native-camera';
 
-const API_BASE_URL =
-  "https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson";
+// Extend the type definition to include ref
+declare module 'react-native-qrcode-scanner' {
+  interface RNQRCodeScannerProps {
+    ref?: any;
+  }
+}
 
-const StudentQrCamera = ({ studentNumber }: { studentNumber: string }) => {
-  const [loading, setLoading] = useState(false);
-  const [scanning, setScanning] = useState(true);
-  const [message, setMessage] = useState("Searching for QR code...");
+const StudentQrCamera: React.FC = () => {
   const scannerRef = useRef<QRCodeScanner>(null);
-
-  const resetScanner = () => {
-    setScanning(true);
-    setMessage("Searching for QR code...");
-    scannerRef.current?.reactivate();
-  };
+  const [scanned, setScanned] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onSuccess = async (e: any) => {
-    const lessonId = e?.data?.trim();
-    setScanning(false);
+    if (scanned) return; // prevent multiple scans
 
-    if (!lessonId) {
-      Alert.alert("Invalid QR Code", "No lesson ID found in QR code.");
-      setMessage("No QR code detected. Try again.");
-      return;
-    }
+    setScanned(true);
+    setLoading(true);
 
     try {
-      setLoading(true);
-      setMessage("Processing clock-in...");
+      const lessonId = e.data;
+      console.log('Scanned QR Code:', lessonId);
 
-      const url = `${API_BASE_URL}/clockin/${studentNumber}`;
-      console.log("Calling API:", url);
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lessonId }),
+      // Example: Call your backend clock-in endpoint
+      const response = await fetch(`https://your-api-endpoint.com/api/clockin/${lessonId}`, {
+        method: 'POST',
       });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("API error:", errorText);
-        throw new Error(errorText || "Clock-in failed");
+      if (response.ok) {
+        Alert.alert('✅ Success', 'Clock-in successful!');
+      } else {
+        Alert.alert('⚠️ Error', 'Failed to clock in. Please try again.');
       }
-
-      const data = await response.json();
-      console.log("Clock-in success:", data);
-
-      Alert.alert("✅ Clock-in Successful", `You have been clocked in for lesson ${lessonId}`);
-      setMessage(`Clock-in successful for lesson ${lessonId}`);
-    } catch (error: any) {
-      console.error("Clock-in error:", error);
-      Alert.alert("❌ Error", error.message || "Could not clock in. Please try again.");
-      setMessage("Clock-in failed. Please try again.");
+    } catch (error) {
+      console.error(error);
+      Alert.alert('❌ Error', 'An unexpected error occurred.');
     } finally {
       setLoading(false);
+      // Reactivate scanner for another scan
+      setTimeout(() => setScanned(false), 2000);
+      scannerRef.current?.reactivate();
     }
   };
 
@@ -72,93 +50,63 @@ const StudentQrCamera = ({ studentNumber }: { studentNumber: string }) => {
     <View style={styles.container}>
       {loading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#0066cc" />
-          <Text style={styles.loadingText}>Clocking you in...</Text>
+          <ActivityIndicator size="large" color="#333" />
+          <Text style={styles.loadingText}>Processing...</Text>
         </View>
       ) : (
-        <>
-          <QRCodeScanner
-            ref={scannerRef}
-            onRead={onSuccess}
-            reactivate={false}
-            fadeIn={true}
-            flashMode={RNCamera.Constants.FlashMode.auto}
-            topContent={<Text style={styles.centerText}>{message}</Text>}
-            bottomContent={
-              <View style={styles.bottomContainer}>
-                <Text style={styles.bottomText}>Align the QR code within the frame</Text>
-                {!scanning && (
-                  <TouchableOpacity style={styles.buttonRescan} onPress={resetScanner}>
-                    <Text style={styles.buttonText}>🔄 Re-Scan</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            }
-          />
-
-          {scanning && (
-            <View style={styles.overlay}>
-              <ActivityIndicator size="large" color="#0066cc" />
-              <Text style={styles.overlayText}>Looking for QR code...</Text>
-            </View>
-          )}
-        </>
+        <QRCodeScanner
+          onRead={onSuccess}
+          reactivate={false}
+          fadeIn={true}
+          showMarker={true}
+          flashMode={RNCamera.Constants.FlashMode.auto}
+          topContent={<Text style={styles.instructionText}>📷 Align the QR code within the frame</Text>}
+          bottomContent={
+            <TouchableOpacity style={styles.button} onPress={() => scannerRef.current?.reactivate()}>
+              <Text style={styles.buttonText}>Tap to Scan Again</Text>
+            </TouchableOpacity>
+          }
+          // @ts-ignore: ref is supported at runtime
+          ref={scannerRef}
+        />
       )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
-  centerText: {
-    fontSize: 18,
-    padding: 24,
-    color: "#333",
-    textAlign: "center",
+  container: {
+    flex: 1,
+    backgroundColor: '#000',
   },
-  bottomContainer: {
-    alignItems: "center",
-    marginBottom: 30,
-  },
-  bottomText: {
+  instructionText: {
+    color: '#fff',
     fontSize: 16,
-    color: "#666",
-    textAlign: "center",
-    marginBottom: 10,
+    textAlign: 'center',
+    padding: 16,
+  },
+  button: {
+    backgroundColor: '#3B82F6',
+    padding: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
   loadingContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
   },
   loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: "#333",
-  },
-  overlay: {
-    position: "absolute",
-    top: "45%",
-    left: 0,
-    right: 0,
-    alignItems: "center",
-  },
-  overlayText: {
-    color: "#0066cc",
-    fontSize: 16,
-    marginTop: 10,
-  },
-  buttonRescan: {
-    backgroundColor: "#0066cc",
-    paddingVertical: 10,
-    paddingHorizontal: 25,
-    borderRadius: 10,
-    marginTop: 8,
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
+    color: '#fff',
+    fontSize: 18,
+    marginTop: 12,
   },
 });
 
