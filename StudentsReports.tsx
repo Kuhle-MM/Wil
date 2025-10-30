@@ -1,10 +1,19 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Alert, ActivityIndicator, FlatList } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+  SectionList,
+  ImageBackground,
+} from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
 import StudentBottomNav from './BottomNav.tsx';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
@@ -13,7 +22,12 @@ type AttendanceRecord = {
   rowKey: string;
   clockInTime: string;
   studentNumber: string;
-  status: string;
+  status: 'Present' | 'Absent' | string;
+};
+
+type SectionData = {
+  title: string;
+  data: AttendanceRecord[];
 };
 
 const StudentsReports: React.FC = () => {
@@ -21,7 +35,7 @@ const StudentsReports: React.FC = () => {
   const route = useRoute<AuthRouteProp>();
   const { role } = route.params;
 
-  const [data, setData] = useState<AttendanceRecord[]>([]);
+  const [sections, setSections] = useState<SectionData[]>([]);
   const [loading, setLoading] = useState(true);
 
   const getStudentId = async (): Promise<string | null> => {
@@ -51,8 +65,9 @@ const StudentsReports: React.FC = () => {
           throw new Error(text || 'Failed to fetch attendance report.');
         }
 
-        const result = await response.json();
-        setData(result);
+        const result: AttendanceRecord[] = await response.json();
+        const grouped = groupByDate(result);
+        setSections(grouped);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred.';
         Alert.alert('Error', errorMessage);
@@ -64,60 +79,151 @@ const StudentsReports: React.FC = () => {
     fetchReport();
   }, []);
 
+  // Function to group records by Today, Yesterday, Earlier
+  const groupByDate = (records: AttendanceRecord[]): SectionData[] => {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    const todayStr = today.toDateString();
+    const yesterdayStr = yesterday.toDateString();
+
+    const groups: Record<string, AttendanceRecord[]> = {
+      Today: [],
+      Yesterday: [],
+      Earlier: [],
+    };
+
+    records.forEach((rec) => {
+      const recDate = new Date(rec.clockInTime);
+      const recDateStr = recDate.toDateString();
+
+      if (recDateStr === todayStr) groups.Today.push(rec);
+      else if (recDateStr === yesterdayStr) groups.Yesterday.push(rec);
+      else groups.Earlier.push(rec);
+    });
+
+    return Object.entries(groups)
+      .filter(([_, data]) => data.length > 0)
+      .map(([title, data]) => ({
+        title,
+        data: data.sort(
+          (a, b) =>
+            new Date(b.clockInTime).getTime() - new Date(a.clockInTime).getTime()
+        ),
+      }));
+  };
+
+  const formatDateTime = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'short' });
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${day} ${month} ${year} - ${hours}:${minutes}`;
+  };
+
   const renderItem = ({ item }: { item: AttendanceRecord }) => (
-    <View style={styles.reportRow}>
-      <Text>{item.clockInTime}</Text>
-      <Text>{item.status}</Text>
+    <View style={styles.card}>
+      <View style={styles.cardRow}>
+        <Text style={styles.clockTime}>{formatDateTime(item.clockInTime)}</Text>
+        <View style={styles.statusContainer}>
+          <Icon
+            name={item.status === 'Present' ? 'checkmark-circle' : 'close-circle'}
+            size={24}
+            color={item.status === 'Present' ? '#4CAF50' : '#E53935'}
+            style={{ marginRight: 6 }}
+          />
+          <Text
+            style={[
+              styles.statusText,
+              { color: item.status === 'Present' ? '#4CAF50' : '#E53935' },
+            ]}
+          >
+            {item.status}
+          </Text>
+        </View>
+      </View>
     </View>
   );
 
+  const renderSectionHeader = ({ section: { title } }: { section: SectionData }) => (
+    <Text style={styles.sectionHeader}>{title}</Text>
+  );
+
   return (
-    <View style={styles.container}>
-      <View style={styles.scrollContainer}>
-        <Text style={styles.header}>Report</Text>
-        <Text style={styles.subHeader}>MONTH ▼</Text>
+    <ImageBackground
+      source={require('./assets/images/BackgroundImage.jpg')}
+      style={styles.background}
+    >
+      <View style={styles.mainContainer}>
+        <View style={styles.contentWrapper}>
+          <Text style={styles.header}>Attendance Report</Text>
 
-        {loading ? (
-          <ActivityIndicator size="large" color="#000000" />
-        ) : (
-          <FlatList
-            data={data}
-            keyExtractor={(item) => item.rowKey}
-            renderItem={renderItem}
+          {loading ? (
+            <ActivityIndicator size="large" color="#064f62" style={{ marginTop: 40 }} />
+          ) : sections.length === 0 ? (
+            <Text style={styles.noData}>No attendance records found.</Text>
+          ) : (
+            <SectionList
+              sections={sections}
+              keyExtractor={(item) => item.rowKey}
+              renderItem={renderItem}
+              renderSectionHeader={renderSectionHeader}
+              contentContainerStyle={{ paddingBottom: 140 }}
+            />
+          )}
+        </View>
+
+        <View style={styles.navContainer}>
+          <StudentBottomNav
+            navigation={navigation}
+            role={role as 'student' | 'lecturer' | 'admin'}
           />
-        )}
+        </View>
       </View>
-
-      <StudentBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
-    </View>
+    </ImageBackground>
   );
 };
 
 export default StudentsReports;
 
 const styles = StyleSheet.create({
-  container: {
-  flex: 1,             
-  backgroundColor: '#fff',
-  },
-  scrollContainer: {
-    flex: 1,              
-    padding: 16,
-  },
+  background: { flex: 1 },
+  mainContainer: { flex: 1, paddingTop: 60 },
+  contentWrapper: { flex: 1, paddingHorizontal: 20 },
+  navContainer: { position: 'absolute', bottom: 0, width: '100%' },
   header: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 12,
+    color: '#064f62',
+    marginBottom: 15,
+    textAlign: 'center',
   },
-  subHeader: {
-    fontSize: 16,
-    marginBottom: 8,
+  sectionHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#064f62',
+    marginBottom: 10,
+    marginTop: 20,
   },
-  reportRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+  card: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#064f62',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 4,
   },
+  cardRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  clockTime: { fontSize: 16, fontWeight: '600', color: '#064f62' },
+  statusContainer: { flexDirection: 'row', alignItems: 'center' },
+  statusText: { fontSize: 16, fontWeight: 'bold' },
+  noData: { fontSize: 16, color: '#aaa', textAlign: 'center', marginTop: 20 },
 });

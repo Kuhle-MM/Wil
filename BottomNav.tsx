@@ -44,7 +44,7 @@ const StudentBottomNav: React.FC<BottomNavProps> = ({ navigation, role }) => {
     </View>
   );
 }
-if (role === "Lecturer"){
+else if (role === "Lecturer"){
     
   return (
     
@@ -54,24 +54,14 @@ if (role === "Lecturer"){
         <Text style={styles.navText}>Home</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('LecturerAttendance')}>
-        <Icon name="time-outline" style={[styles.icon, styles.iconGreen]} size={32} color="#064f62" />
-        <Text style={styles.navText}>Clock In</Text>
-      </TouchableOpacity>
-
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('ReportLecturer')}>
-        <Icon name="document-text-outline" style={[styles.icon, styles.iconBlue]} size={32} color="#064f62" />
+        <Icon name="document-text-outline" style={[styles.icon, styles.iconGreen]} size={32} color="#064f62" />
         <Text style={styles.navText}>Reports</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Calendar', { role })}>
-        <Icon name="calendar-outline" style={[styles.icon, styles.iconGreen]} size={32} color="#064f62" />
+        <Icon name="calendar-outline" style={[styles.icon, styles.iconBlue]} size={32} color="#064f62" />
         <Text style={styles.navText}>Calendar</Text>
-      </TouchableOpacity>
-
-       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('LecturerModules', { role })}>
-        <Icon name="calendar-outline" style={[styles.icon, styles.iconGreen]} size={32} color="#064f62" />
-        <Text style={styles.navText}>Modules</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('LecturerLessons', { role })}>
@@ -97,17 +87,17 @@ else if (role === "Admin"){
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Modules', { role })}>
-        <Icon name="document-text-outline" style={[styles.icon, styles.iconBlue]} size={32} color="#064f62" />
+        <Icon name="document-text-outline" style={[styles.icon, styles.iconGreen]} size={32} color="#064f62" />
         <Text style={styles.navText}>Modules</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('CreateModule', { role })}>
-        <Icon name="calendar-outline" style={[styles.icon, styles.iconGreen]} size={32} color="#064f62" />
+        <Icon name="calendar-outline" style={[styles.icon, styles.iconBlue]} size={32} color="#064f62" />
         <Text style={styles.navText}>Add a Module</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Settings', { role })}>
-        <Icon name="settings-outline" style={[styles.icon, styles.iconBlue]} size={32} color="#064f62" />
+        <Icon name="settings-outline" style={[styles.icon, styles.iconGreen]} size={32} color="#064f62" />
         <Text style={styles.navText}>Settings</Text>
       </TouchableOpacity>
     </View>

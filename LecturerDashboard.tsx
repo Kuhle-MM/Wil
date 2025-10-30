@@ -64,6 +64,7 @@ const LecturerDashboard: React.FC = () => {
   const handleAttendance = () => navigation.navigate('LecturerAttendance');
   const handleModule = () => navigation.navigate('LecturerModules', { role });
   const handleLesson = () => navigation.navigate('LecturerLessons', { role });
+  const handleQrCamera = () => navigation.navigate('QrCamera', { role });
 
   return (
     <ImageBackground
@@ -71,8 +72,8 @@ const LecturerDashboard: React.FC = () => {
       style={styles.backgroundImage}
       resizeMode="cover"
     >
-      <ScrollView style={styles.scrollContainer}>
-        <Text style={styles.header}>📙Dashboard</Text>
+      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+        <Text style={styles.header}>📙 {lecturerName}'s Dashboard</Text>
 
         <Text style={styles.sectionTitle}>Today’s Lessons</Text>
         <View style={styles.card}>
@@ -120,11 +121,16 @@ const LecturerDashboard: React.FC = () => {
             <Text style={styles.gridTextEmoji}>📖</Text>
             <Text style={styles.gridText}>Your Lessons</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.gridButton, styles.fullWidthButton]} onPress={handleQrCamera}>
+            <Text style={styles.gridTextEmoji}>📷</Text>
+            <Text style={styles.gridText}>Open QR Camera</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-      <LecturerBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
-    </ImageBackground>
 
+      <LecturerBottomNav navigation={navigation} role={role as 'lecturer'} />
+    </ImageBackground>
   );
 };
 
@@ -146,7 +152,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     fontWeight: '600',
     color: '#838282ff',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   card: {
     width: '100%',
@@ -192,15 +198,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     paddingVertical: 6,
-    paddingHorizontal: 4,
   },
   gridTextEmoji: {
     color: '#FFFFFF',
     fontSize: 28,
-    fontWeight: 'bold',
     textAlign: 'center',
-    paddingVertical: 6,
-    paddingHorizontal: 4,
   },
   fullWidthButton: {
     width: '100%',

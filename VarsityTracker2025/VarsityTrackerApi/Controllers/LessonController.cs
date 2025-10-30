@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Reflection;
+using VarsityTrackerApi.Models;
 using VarsityTrackerApi.Models.Access;
 using VarsityTrackerApi.Models.Lesson;
 using VarsityTrackerApi.Models.Module;
@@ -31,6 +32,7 @@ namespace VarsityTrackerApi.Controllers
         private readonly TableClient _lessonListTable;
         private readonly BlobServiceClient _blobServiceClient;
         private readonly string _containerName = "qrcodes";
+        private readonly TableClient _attendanceTable;
 
         public LessonController(IOptions<AzureTableStorageSettings> storageOptions)
         {
@@ -44,6 +46,7 @@ namespace VarsityTrackerApi.Controllers
             _reportsTable = new TableClient(_connectionString, "Reports");
             _studentModuleTable = new TableClient(_connectionString, "StudentModules");
             _lessonListTable = new TableClient(_connectionString, "LessonList");
+            _attendanceTable = new TableClient(_connectionString, "Attendance");
         }
 
         [HttpPost("create_lesson")]
@@ -76,8 +79,8 @@ namespace VarsityTrackerApi.Controllers
 
             await foreach (var existingLesson in _lessonTable.QueryAsync<Lesson>())
             {
-                if (existingLesson.date == lesson.date && existingLesson.moduleCode == lesson.moduleCode)
-                    return BadRequest($"Lesson with ID: {existingLesson.lessonID} already exists for {lesson.date}.");
+                if (existingLesson.date == lesson.date && existingLesson.moduleCode == lesson.moduleCode && existingLesson.classroom == lesson.classroom.ToUpper())
+                    return BadRequest($"Lesson with ID: {existingLesson.lessonID} already exists for {lesson.date} in {lesson.classroom.ToUpper()}.");
             }
 
             var lessons = new List<Lesson>();
@@ -99,63 +102,380 @@ namespace VarsityTrackerApi.Controllers
                 moduleCode = lesson.moduleCode,
                 courseCode = lesson.courseCode,
                 date = specifiedDate,
+                classroom = lesson.classroom.ToUpper(),
                 started = false,
                 finished = false
             };
 
             await _lessonTable.AddEntityAsync(newLesson);
+            //// --- QR Code Generation (sharp 200x200) ---
+            //string qrText = $"LessonID:{newLesson.lessonID}|Module:{newLesson.moduleCode}|Course:{newLesson.courseCode}|Date:{newLesson.date:O}";
+            //using var qrGenerator = new QRCodeGenerator();
+            //using var qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
+            //using var qrCode = new QRCode(qrCodeData);
 
-            // --- QR Code Generation (sharp 200x200) ---
-            string qrText = $"LessonID:{newLesson.lessonID}|Module:{newLesson.moduleCode}|Course:{newLesson.courseCode}|Date:{newLesson.date:O}";
-            using var qrGenerator = new QRCodeGenerator();
-            using var qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
-            using var qrCode = new QRCode(qrCodeData);
+            //int moduleCount = qrCodeData.ModuleMatrix.Count;
+            //int pixelsPerModule = Math.Max(1, 200 / moduleCount); // guard against 0
 
-            int moduleCount = qrCodeData.ModuleMatrix.Count;
-            int pixelsPerModule = 200 / moduleCount;
+            //using Bitmap qrBitmap = qrCode.GetGraphic(pixelsPerModule, Color.Black, Color.White, drawQuietZones: false);
 
-            using Bitmap qrBitmap = qrCode.GetGraphic(pixelsPerModule, Color.Black, Color.White, drawQuietZones: false);
+            //Bitmap finalQr = new Bitmap(200, 200);
+            //using (Graphics g = Graphics.FromImage(finalQr))
+            //{
+            //    g.Clear(Color.White);
+            //    int offsetX = (200 - qrBitmap.Width) / 2;
+            //    int offsetY = (200 - qrBitmap.Height) / 2;
+            //    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            //    g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+            //    g.DrawImage(qrBitmap, offsetX, offsetY, qrBitmap.Width, qrBitmap.Height);
+            //}
 
-            Bitmap finalQr = new Bitmap(200, 200);
-            using (Graphics g = Graphics.FromImage(finalQr))
-            {
-                g.Clear(Color.White);
-                int offsetX = (200 - qrBitmap.Width) / 2;
-                int offsetY = (200 - qrBitmap.Height) / 2;
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-                g.DrawImage(qrBitmap, offsetX, offsetY, qrBitmap.Width, qrBitmap.Height);
-            }
+            //using var ms = new MemoryStream();
+            //var encoder = ImageCodecInfo.GetImageEncoders().First(c => c.MimeType == "image/jpeg");
+            //var encoderParams = new EncoderParameters(1);
+            //encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 50L);
 
-            using var ms = new MemoryStream();
-            var encoder = ImageCodecInfo.GetImageEncoders().First(c => c.MimeType == "image/jpeg");
-            var encoderParams = new EncoderParameters(1);
-            encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 50L);
+            //finalQr.Save(ms, encoder, encoderParams);
+            //ms.Position = 0;
 
-            finalQr.Save(ms, encoder, encoderParams);
-            ms.Position = 0;
+            //var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+            //await containerClient.CreateIfNotExistsAsync();
 
-            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
-            await containerClient.CreateIfNotExistsAsync();
-            await containerClient.SetAccessPolicyAsync(PublicAccessType.Blob);
+            //// If your storage account disallows public access, SetAccessPolicyAsync may fail.
+            //// Catch and ignore so we don't fail the whole call; the blob URI will still be returned.
+            //try
+            //{
+            //    await containerClient.SetAccessPolicyAsync(PublicAccessType.Blob);
+            //}
+            //catch (RequestFailedException)
+            //{
+            //    // ignore - account might prohibit public access; consider using SAS for access in production
+            //}
 
-            string fileName = $"{lessonID}_{DateTime.UtcNow.Ticks}.jpeg";
-            var blobClient = containerClient.GetBlobClient(fileName);
-            await blobClient.UploadAsync(ms, overwrite: true);
+            //// Overwrite file every time: lessonID.jpeg
+            //string fileName = $"{lessonID}.jpeg";
+            //var blobClient = containerClient.GetBlobClient(fileName);
+            //ms.Position = 0;
+            //await blobClient.UploadAsync(ms, overwrite: true);
 
-            // Save QR URL back to lesson
-            newLesson.qrUrl = blobClient.Uri.ToString();
-            await _lessonTable.UpdateEntityAsync(newLesson, newLesson.ETag, TableUpdateMode.Replace);
+            //// Save QR URL back to lesson — use Upsert so we don't need an in-memory ETag
+            //newLesson.qrUrl = blobClient.Uri.ToString();
+            await _lessonTable.UpsertEntityAsync(newLesson, TableUpdateMode.Replace);
 
-            return Ok(new
-            {
-                message = $"Lesson {lessonID} created successfully.",
-                qrCodeUrl = newLesson.qrUrl
-            });
+            return Ok($"Lesson {lessonID} created successfully.");
         }
 
-        [HttpPost("generateQRCode/{lessonID}")]
-        public async Task<IActionResult> GenerateLessonQRCode(string lessonID)
+        //[HttpPost("generateQRCode/{lessonID}")]
+        //public async Task<IActionResult> GenerateLessonQRCode(string lessonID)
+        //{
+        //    Lesson lesson = null;
+        //    await foreach (var l in _lessonTable.QueryAsync<Lesson>(x => x.lessonID == lessonID))
+        //    {
+        //        lesson = l;
+        //        break;
+        //    }
+
+        //    if (lesson == null)
+        //        return NotFound("Lesson not found");
+
+        //    string qrText = $"LessonID:{lesson.lessonID}|Module:{lesson.moduleCode}|Course:{lesson.courseCode}|Date:{lesson.date:O}";
+
+        //    using var qrGenerator = new QRCodeGenerator();
+        //    using var qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
+        //    using var qrCode = new QRCode(qrCodeData);
+
+        //    int moduleCount = qrCodeData.ModuleMatrix.Count;
+        //    int pixelsPerModule = Math.Max(1, 200 / moduleCount);
+
+        //    using Bitmap qrBitmap = qrCode.GetGraphic(pixelsPerModule, Color.Black, Color.White, drawQuietZones: false);
+
+        //    Bitmap finalQr = new Bitmap(200, 200);
+        //    using (Graphics g = Graphics.FromImage(finalQr))
+        //    {
+        //        g.Clear(Color.White);
+        //        int offsetX = (200 - qrBitmap.Width) / 2;
+        //        int offsetY = (200 - qrBitmap.Height) / 2;
+        //        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+        //        g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+        //        g.DrawImage(qrBitmap, offsetX, offsetY, qrBitmap.Width, qrBitmap.Height);
+        //    }
+
+        //    using var ms = new MemoryStream();
+        //    var encoder = ImageCodecInfo.GetImageEncoders().First(c => c.MimeType == "image/jpeg");
+        //    var encoderParams = new EncoderParameters(1);
+        //    encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 50L);
+
+        //    finalQr.Save(ms, encoder, encoderParams);
+        //    ms.Position = 0;
+
+        //    var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+        //    await containerClient.CreateIfNotExistsAsync();
+        //    try
+        //    {
+        //        await containerClient.SetAccessPolicyAsync(PublicAccessType.Blob);
+        //    }
+        //    catch (RequestFailedException)
+        //    {
+        //        // ignore if public access blocked at account level
+        //    }
+
+        //    // Overwrite the canonical file name for the lesson
+        //    string fileName = $"{lesson.lessonID}.jpeg";
+        //    var blobClient = containerClient.GetBlobClient(fileName);
+        //    ms.Position = 0;
+        //    await blobClient.UploadAsync(ms, overwrite: true);
+
+        //    string publicUrl = blobClient.Uri.ToString();
+
+        //    // Persist qrUrl back to lesson using Upsert (no ETag required)
+        //    lesson.qrUrl = publicUrl;
+        //    await _lessonTable.UpsertEntityAsync(lesson, TableUpdateMode.Replace);
+
+        //    return Ok(new { message = "QR Generated", qrCodeUrl = publicUrl });
+        //}
+
+        //[HttpPost("scanQRCode")]
+        //public async Task<IActionResult> ScanQRCode([FromBody] QRScanRequest request)
+        //{
+        //    if (string.IsNullOrWhiteSpace(request.QRText))
+        //        return BadRequest("QRText is required.");
+
+        //    if (string.IsNullOrWhiteSpace(request.StudentID))
+        //        return BadRequest("StudentID is required.");
+
+        //    // Parse QR Format: LessonID:xyz|Module:abc|Course:def|Date:...
+        //    var parts = request.QRText.Split('|', StringSplitOptions.RemoveEmptyEntries);
+        //    var data = parts.ToDictionary(
+        //        p => p.Split(':', 2)[0],
+        //        p => p.Split(':', 2)[1]
+        //    );
+
+        //    if (!data.ContainsKey("LessonID"))
+        //        return BadRequest("QRText does not contain LessonID.");
+
+        //    string lessonID = data["LessonID"];
+
+        //    // Find lesson
+        //    Lesson lesson = null;
+        //    await foreach (var l in _lessonTable.QueryAsync<Lesson>(x => x.lessonID == lessonID))
+        //    {
+        //        lesson = l;
+        //        break;
+        //    }
+
+        //    if (lesson == null)
+        //        return NotFound("Invalid QR - lesson not found.");
+
+        //    if (!lesson.started)
+        //        return BadRequest("Lesson has not started yet.");
+        //    if (lesson.finished)
+        //        return BadRequest("Lesson has already ended.");
+
+        //    // Check attendance table for duplicates
+        //    await foreach (var a in _attendanceTable.QueryAsync<Attendance>(x => x.lessonID == lessonID && x.studentID == request.StudentID))
+        //    {
+        //        return BadRequest("Already clocked-in.");
+        //    }
+
+        //    // Create attendance record
+        //    var attendance = new Attendance
+        //    {
+        //        PartitionKey = "Attendance",
+        //        RowKey = Guid.NewGuid().ToString(),
+        //        lessonID = lessonID,
+        //        studentID = request.StudentID,
+        //        timestamp = DateTime.UtcNow
+        //    };
+
+        //    await _attendanceTable.AddEntityAsync(attendance);
+
+        //    return Ok(new { message = "Clock-in successful!" });
+        //}
+
+        [HttpPost("clockin/{studentNumber}/{lessonID}")]
+        public async Task<IActionResult> StudentList(string studentNumber, string lessonID)
+        {
+            try
+            {
+                if (_studentTable == null || _lessonTable == null || _lessonListTable == null)
+                    return StatusCode(500, new { success = false, message = "Storage tables not initialized." });
+
+                // Find the student (case-insensitive)
+                Students student = null;
+                var lookupStudentNumber = studentNumber?.ToUpper();
+                await foreach (var s in _studentTable.QueryAsync<Students>(s => s.studentNumber == lookupStudentNumber))
+                {
+                    student = s;
+                    break;
+                }
+
+                if (student == null)
+                    return NotFound(new { success = false, message = "Student not found." });
+
+                var now = DateTime.UtcNow;
+                var todayStart = now.Date;
+                var todayEnd = todayStart.AddDays(1);
+
+                // Find an active lesson that started today
+                Lesson lesson = null;
+                await foreach (var s in _lessonTable.QueryAsync<Lesson>(s =>
+                    s.started == true && s.date >= todayStart && s.date < todayEnd && s.lessonID == lessonID))
+                {
+                    lesson = s;
+                    break;
+                }
+
+                if (lesson == null)
+                    return NotFound(new { success = false, message = "Lesson not found or not active today." });
+
+                // Check if the student is already in the LessonList for this lesson
+                LessonList existingEntry = null;
+                await foreach (var entry in _lessonListTable.QueryAsync<LessonList>(l =>
+                    l.LessonID == lesson.lessonID && l.StudentID == student.studentNumber))
+                {
+                    existingEntry = entry;
+                    break;
+                }
+
+                if (existingEntry != null && existingEntry.ClockInTime.HasValue && existingEntry.ClockOutTime == null)
+                {
+                    return BadRequest(new { success = false, message = "Student already clocked in for this lesson." });
+                }
+
+                if (existingEntry == null)
+                {
+                    // Add new LessonList record if none exists
+                    var addStudent = new LessonList
+                    {
+                        PartitionKey = "LessonList",
+                        RowKey = Guid.NewGuid().ToString(),
+                        LessonID = lesson.lessonID,
+                        StudentID = student.studentNumber,
+                        LessonDate = lesson.date,
+                        ClockInTime = now,
+                        ClockOutTime = null
+                    };
+
+                    await _lessonListTable.AddEntityAsync(addStudent);
+                }
+                else
+                {
+                    // Update existing LessonList record's clock-in time
+                    existingEntry.ClockInTime = now;
+                    existingEntry.ClockOutTime = null;
+                    await _lessonListTable.UpdateEntityAsync(existingEntry, existingEntry.ETag, TableUpdateMode.Replace);
+                }
+
+                return Ok(new
+                {
+                    success = true,
+                    message = $"Student {studentNumber} clocked in successfully.",
+                    lessonID = lesson.lessonID,
+                    clockInTime = now
+                });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (replace with your logging infrastructure)
+                return StatusCode(500, new { success = false, message = "An error occurred while clocking in.", detail = ex.Message });
+            }
+        }
+
+        //[HttpPost("clockoutStudent/{studentNumber}")]
+        //public async Task<IActionResult> StudentListClockout(string studentNumber)
+        //{
+        //    var today = DateTime.UtcNow.Date;
+
+        //    StudentList recordToUpdate = null;
+
+        //    await foreach (var record in _waitingList.QueryAsync<StudentList>(r =>
+        //        r.PartitionKey == "StudentList" &&
+        //        r.StudentID == studentNumber &&
+        //        r.ClockInTime >= today))
+        //    {
+        //        recordToUpdate = record;
+        //        break;
+        //    }
+
+        //    if (recordToUpdate.ClockInTime == null || recordToUpdate == null)
+        //        return NotFound("No active clock-in found for today.");
+
+        //    recordToUpdate.ClockOutTime = DateTime.UtcNow;
+
+        //    await _waitingList.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
+
+        //    return Ok(new { success = true, message = "Student clocked out." });
+        //}
+
+        [HttpPost("startLesson/{lessonID}")]
+        public async Task<IActionResult> StartLesson(string lessonID)
+        {
+            // 1. Fetch Lesson Once
+            Lesson lesson = null;
+            await foreach (var l in _lessonTable.QueryAsync<Lesson>(x => x.lessonID == lessonID))
+            {
+                lesson = l;
+                break;
+            }
+
+            if (lesson == null)
+                return NotFound("Lesson not found.");
+
+            var today = DateTime.UtcNow.Date;
+
+            // 2. Get Clocked-in Students Today in One Pass
+            var clockedInToday = new Dictionary<string, StudentList>();
+            await foreach (var s in _waitingList.QueryAsync<StudentList>())
+            {
+                if (s.ClockInTime.HasValue && s.ClockInTime.Value.Date == today)
+                    clockedInToday[s.StudentID] = s;
+            }
+
+            // 3. Get All Students Enrolled in This Module
+            var enrolledStudents = new List<string>();
+            await foreach (var sm in _studentModuleTable.QueryAsync<StudentModules>(m => m.moduleCode == lesson.moduleCode))
+            {
+                enrolledStudents.Add(sm.studentNumber);
+            }
+
+            // 4. Insert Attendance Records 
+            foreach (var studentID in enrolledStudents)
+            {
+                bool exists = false;
+                await foreach (var existingEntry in _lessonListTable.QueryAsync<LessonList>(l => l.LessonID == lesson.lessonID && l.StudentID == studentID))
+                {
+                    exists = true;
+                    break;
+                }
+
+                if (exists) continue;
+
+                var clocked = clockedInToday.TryGetValue(studentID, out var waitingEntry) ? waitingEntry : null;
+
+                var entry = new LessonList
+                {
+                    PartitionKey = "LessonList",
+                    RowKey = Guid.NewGuid().ToString(),
+                    LessonID = lesson.lessonID,
+                    StudentID = studentID,
+                    LessonDate = lesson.date,
+                    ClockInTime = clocked?.ClockInTime,
+                    ClockOutTime = clocked?.ClockOutTime
+                };
+
+                await _lessonListTable.AddEntityAsync(entry);
+            }
+
+            // 5. Mark Lesson as Started 
+            lesson.started = true;
+            lesson.startedTime = DateTime.UtcNow;
+            await _lessonTable.UpsertEntityAsync(lesson, TableUpdateMode.Replace);
+
+            return Ok(new { success = true, message = "Lesson started. Students registered." });
+        }
+
+        [HttpGet("getQRCode/{lessonID}")]
+        public async Task<IActionResult> GetQRCode(string lessonID)
         {
             Lesson lesson = null;
             await foreach (var l in _lessonTable.QueryAsync<Lesson>(x => x.lessonID == lessonID))
@@ -167,235 +487,10 @@ namespace VarsityTrackerApi.Controllers
             if (lesson == null)
                 return NotFound("Lesson not found");
 
-            string qrText = $"LessonID:{lesson.lessonID}|Module:{lesson.moduleCode}|Course:{lesson.courseCode}|Date:{lesson.date:O}";
+            if (string.IsNullOrEmpty(lesson.qrUrl))
+                return NotFound("QR code not generated yet for this lesson");
 
-            using var qrGenerator = new QRCodeGenerator();
-            using var qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
-            using var qrCode = new QRCode(qrCodeData);
-
-            int moduleCount = qrCodeData.ModuleMatrix.Count;
-            int pixelsPerModule = 200 / moduleCount;
-
-            using Bitmap qrBitmap = qrCode.GetGraphic(pixelsPerModule, Color.Black, Color.White, drawQuietZones: false);
-
-            Bitmap finalQr = new Bitmap(200, 200);
-            using (Graphics g = Graphics.FromImage(finalQr))
-            {
-                g.Clear(Color.White);
-                int offsetX = (200 - qrBitmap.Width) / 2;
-                int offsetY = (200 - qrBitmap.Height) / 2;
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-                g.DrawImage(qrBitmap, offsetX, offsetY, qrBitmap.Width, qrBitmap.Height);
-            }
-
-            using var ms = new MemoryStream();
-            var encoder = ImageCodecInfo.GetImageEncoders().First(c => c.MimeType == "image/jpeg");
-            var encoderParams = new EncoderParameters(1);
-            encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 50L);
-
-            finalQr.Save(ms, encoder, encoderParams);
-            ms.Position = 0;
-
-            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
-            await containerClient.CreateIfNotExistsAsync();
-            await containerClient.SetAccessPolicyAsync(PublicAccessType.Blob);
-
-            string fileName = $"{lesson.lessonID}_{DateTime.UtcNow.Ticks}.jpeg";
-            var blobClient = containerClient.GetBlobClient(fileName);
-            await blobClient.UploadAsync(ms, overwrite: true);
-
-            string publicUrl = blobClient.Uri.ToString();
-
-            // Save URL back to lesson entity
-            lesson.qrUrl = publicUrl;
-            await _lessonTable.UpdateEntityAsync(lesson, lesson.ETag, TableUpdateMode.Replace);
-
-            return Ok(new { message = "QR Generated", qrCodeUrl = publicUrl });
-        }
-
-
-        [HttpPost("clockin/{studentNumber}")]
-        public async Task<IActionResult> StudentList(string studentNumber)
-        {
-            // Find the student
-            Students student = null;
-            await foreach (var s in _studentTable.QueryAsync<Students>(s => s.studentNumber == studentNumber.ToUpper()))
-            {
-                student = s;
-                break;
-            }
-
-            if (student == null)
-                return NotFound("Student not found.");
-
-            var now = DateTime.UtcNow;
-            var today = now.Date;
-
-            // Add to waiting list
-            var studentList = new StudentList
-            {
-                PartitionKey = "StudentList",
-                RowKey = Guid.NewGuid().ToString(),
-                StudentID = student.studentNumber,
-                ClockInTime = now,
-                ClockOutTime = null
-            };
-
-            await _waitingList.AddEntityAsync(studentList);
-
-            // Find an active lesson that started today
-            Lesson lesson = null;
-            var todayStart = DateTime.UtcNow.Date;
-            var todayEnd = todayStart.AddDays(1);
-
-            await foreach (var s in _lessonTable.QueryAsync<Lesson>(s =>
-                s.started == true && s.date >= todayStart && s.date < todayEnd))
-            {
-                lesson = s;
-                break;
-            }
-
-            // Check if the student is already in the LessonList
-            LessonList existingEntry = null;
-            await foreach (var entry in _lessonListTable.QueryAsync<LessonList>(l =>
-                l.LessonID == lesson.lessonID && l.StudentID == student.studentNumber))
-            {
-                existingEntry = entry;
-                break;
-            }
-
-            if (existingEntry == null)
-            {
-                // Add new LessonList record if none exists
-                var addStudent = new LessonList
-                {
-                    PartitionKey = "LessonList",
-                    RowKey = Guid.NewGuid().ToString(),
-                    LessonID = lesson.lessonID,
-                    StudentID = student.studentNumber,
-                    LessonDate = lesson.date,
-                    ClockInTime = now,
-                    ClockOutTime = null
-                };
-
-                await _lessonListTable.AddEntityAsync(addStudent);
-            }
-            else
-            {
-                // Update existing LessonList record's clock-in time
-                existingEntry.ClockInTime = now;
-                existingEntry.ClockOutTime = null;  // Optional: reset clock-out time if you want
-
-                await _lessonListTable.UpdateEntityAsync(existingEntry, existingEntry.ETag, TableUpdateMode.Replace);
-            }
-
-            return Ok($"Student with ID: {studentList.StudentID} clocked in successfully.");
-        }
-
-        [HttpPost("clockoutStudent/{studentNumber}")]
-        public async Task<IActionResult> StudentListClockout(string studentNumber)
-        {
-            var today = DateTime.UtcNow.Date;
-
-            StudentList recordToUpdate = null;
-
-            await foreach (var record in _waitingList.QueryAsync<StudentList>(r =>
-                r.PartitionKey == "StudentList" &&
-                r.StudentID == studentNumber &&
-                r.ClockInTime >= today))
-            {
-                recordToUpdate = record;
-                break;
-            }
-
-            if (recordToUpdate.ClockInTime == null || recordToUpdate == null)
-                return NotFound("No active clock-in found for today.");
-
-            recordToUpdate.ClockOutTime = DateTime.UtcNow;
-
-            await _waitingList.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
-
-            return Ok(new { success = true, message = "Student clocked out." });
-        }
-
-        [HttpPost("startLesson/{lessonID}")]
-        public async Task<IActionResult> StartLesson(string lessonID)
-        {
-            // Retrieve the lesson
-            Lesson lesson = null;
-            await foreach (var s in _lessonTable.QueryAsync<Lesson>(s => s.lessonID == lessonID))
-            {
-                lesson = s;
-                break;
-            }
-
-            if (lesson == null)
-                return NotFound("Lesson not found.");
-
-            var today = DateTime.UtcNow.Date;
-
-            // Build a dictionary of students who have clocked in today
-            var waitingDict = new Dictionary<string, StudentList>();
-            await foreach (var wl in _waitingList.QueryAsync<StudentList>())
-            {
-                if (wl.ClockInTime.HasValue && wl.ClockInTime.Value.Date == today)
-                {
-                    waitingDict[wl.StudentID] = wl;
-                }
-            }
-
-            // Get all student IDs enrolled in the lesson's module
-            var eligibleStudentIDs = new HashSet<string>();
-            await foreach (var f in _studentModuleTable.QueryAsync<StudentModules>(m => m.moduleCode == lesson.moduleCode))
-            {
-                eligibleStudentIDs.Add(f.studentNumber);
-            }
-
-            // Track already added students to prevent duplicates
-            var addedStudents = new HashSet<string>();
-
-            foreach (var studentID in eligibleStudentIDs)
-            {
-                if (addedStudents.Contains(studentID))
-                    continue;
-
-                // Check if student clocked in
-                var isClockedIn = waitingDict.TryGetValue(studentID, out var clockedInStudent);
-
-                var lessonListEntry = new LessonList
-                {
-                    PartitionKey = "LessonList",
-                    RowKey = Guid.NewGuid().ToString(),
-                    LessonID = lesson.lessonID,
-                    StudentID = studentID,
-                    LessonDate = lesson.date,
-                    ClockInTime = isClockedIn ? clockedInStudent.ClockInTime : null,
-                    ClockOutTime = isClockedIn ? clockedInStudent.ClockOutTime : null
-                };
-
-                await _lessonListTable.AddEntityAsync(lessonListEntry);
-                addedStudents.Add(studentID);
-            }
-
-            // Update lesson as started
-            Lesson recordToUpdate = null;
-            await foreach (var record in _lessonTable.QueryAsync<Lesson>(r =>
-                r.PartitionKey == "Lessons" && r.lessonID == lessonID))
-            {
-                recordToUpdate = record;
-                break;
-            }
-
-            if (recordToUpdate == null)
-                return NotFound("No active lesson for today.");
-
-            recordToUpdate.started = true;
-            recordToUpdate.startedTime = DateTime.UtcNow;
-
-            await _lessonTable.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
-
-            return Ok(new { success = true, message = "Lesson has started and students have been registered." });
+            return Ok(new { lessonID = lesson.lessonID, qrCodeUrl = lesson.qrUrl });
         }
 
         [HttpPost("endLesson/{lessonID}")]
@@ -425,7 +520,8 @@ namespace VarsityTrackerApi.Controllers
                 if (student.ClockInTime != null && student.ClockOutTime == null)
                 {
                     student.ClockOutTime = DateTime.UtcNow;
-                    await _lessonListTable.UpdateEntityAsync(student, student.ETag, TableUpdateMode.Replace);
+                    // Update using Upsert to avoid any ETag issues
+                    await _lessonListTable.UpsertEntityAsync(student, TableUpdateMode.Replace);
                 }
 
                 // Determine status based on presence
@@ -439,32 +535,22 @@ namespace VarsityTrackerApi.Controllers
                     lessonID = lesson.lessonID,
                     studentNumber = student.StudentID,
                     status = status,
-                    moduleCode = lesson.moduleCode
+                    moduleCode = lesson.moduleCode,
                 };
 
-                // Avoid duplicate reports 
+                // Add report
                 await _reportsTable.AddEntityAsync(report);
 
                 // Remove from LessonList
-                await _lessonListTable.DeleteEntityAsync(student.PartitionKey, student.RowKey);
+                if (!string.IsNullOrEmpty(student.PartitionKey) && !string.IsNullOrEmpty(student.RowKey))
+                {
+                    await _lessonListTable.DeleteEntityAsync(student.PartitionKey, student.RowKey);
+                }
             }
 
-            // Mark lesson as finished
-            Lesson recordToUpdate = null;
-            await foreach (var record in _lessonTable.QueryAsync<Lesson>(r =>
-                r.PartitionKey == "Lessons" &&
-                r.lessonID == lessonID))
-            {
-                recordToUpdate = record;
-                break;
-            }
-
-            if (recordToUpdate == null)
-                return NotFound("Lesson record could not be found for update.");
-
-            recordToUpdate.finished = true;
-
-            await _lessonTable.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
+            // Mark lesson as finished (use Upsert to avoid ETag mismatch)
+            lesson.finished = true;
+            await _lessonTable.UpsertEntityAsync(lesson, TableUpdateMode.Replace);
 
             return Ok(new { success = true, message = "Lesson has ended and student statuses recorded." });
         }
@@ -653,6 +739,27 @@ namespace VarsityTrackerApi.Controllers
             catch (RequestFailedException ex)
             {
                 return StatusCode(500, $"Error updating report: {ex.Message}");
+            }
+        }
+
+        [HttpGet("all_lessons")]
+        public async Task<IActionResult> GetAllLessons()
+        {
+            try
+            {
+                var lessonsList = new List<Lesson>();
+
+                // Query all lessons
+                await foreach (var lesson in _lessonTable.QueryAsync<Lesson>())
+                {
+                    lessonsList.Add(lesson);
+                }
+
+                return Ok(lessonsList);
+            }
+            catch (RequestFailedException ex)
+            {
+                return StatusCode(500, $"Error retrieving lessons: {ex.Message}");
             }
         }
     }
