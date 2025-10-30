@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, PermissionsAndroid, Platform, Vibration } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 
@@ -15,42 +15,87 @@ const StudentQrCamera: React.FC = () => {
   const [scanned, setScanned] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const onSuccess = async (e: any) => {
-    if (scanned) return; // prevent multiple scans
-
-    setScanned(true);
-    setLoading(true);
-
-    try {
-      const lessonId = e.data;
-      console.log('Scanned QR Code:', lessonId);
-
-      // Example: Call your backend clock-in endpoint
-      const response = await fetch(`https://your-api-endpoint.com/api/clockin/${lessonId}`, {
-        method: 'POST',
-      });
-
-      if (response.ok) {
-        Alert.alert('✅ Success', 'Clock-in successful!');
-      } else {
-        Alert.alert('⚠️ Error', 'Failed to clock in. Please try again.');
+  // Ask only for CAMERA permission — no VIBRATE needed
+  useEffect(() => {
+    const requestCameraPermission = async () => {
+      if (Platform.OS === 'android') {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+            {
+              title: 'Camera Permission',
+              message: 'This app requires camera access to scan QR codes.',
+              buttonNeutral: 'Ask Me Later',
+              buttonNegative: 'Cancel',
+              buttonPositive: 'OK',
+            }
+          );
+          if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+            Alert.alert('Permission Denied', 'Camera permission is required to scan QR codes.');
+          }
+        } catch (err) {
+          console.warn(err);
+        }
       }
-    } catch (error) {
-      console.error(error);
-      Alert.alert('❌ Error', 'An unexpected error occurred.');
-    } finally {
-      setLoading(false);
-      // Reactivate scanner for another scan
-      setTimeout(() => setScanned(false), 2000);
-      scannerRef.current?.reactivate();
+    };
+
+    requestCameraPermission();
+  }, []);
+
+  const onSuccess = async (e: any) => {
+  if (scanned) return; // prevent multiple scans
+
+  setScanned(true);
+  setLoading(true);
+  Vibration.vibrate(100); // Vibrate on scan
+
+  try {
+    const lessonId = e.data?.trim();
+
+    // Check if scanned data is valid (e.g., non-empty, numeric, or matching expected pattern)
+    if (!lessonId) { 
+      Alert.alert(
+        'Invalid QR Code',
+        'The scanned QR code is not recognized as a valid lesson.\nPlease scan valid QR code.'
+      );
+      return;
     }
-  };
+
+    console.log('Scanned QR Code:', lessonId);
+
+    // Calling clock-in endpoint
+    const response = await fetch(`https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/clockin/ST10101010/${lessonId}`, {
+      method: 'POST',
+    });
+
+    if (response.ok) {
+      Alert.alert('Success!', `Clock-in successful for lesson ID: ${lessonId}`);
+    } else if (response.status === 404) {
+      Alert.alert('Lesson Not Found', `No lesson found with ID: ${lessonId}. Please check the QR code.`);
+    } else if (response.status === 409) {
+      Alert.alert('Already Clocked In', `You have already clocked in for lesson ID: ${lessonId}.`);
+    } else {
+      Alert.alert('Clock-in Failed', 'Server could not process the request. Please try again.');
+    }
+  } catch (error: any) {
+    console.error('QR Scan Error:', error);
+    Alert.alert(
+      'Scan Error',
+      `An error occurred while processing the QR code: ${error.message || 'Unknown error'}`
+    );
+  } finally {
+    setLoading(false);
+    // Reactivate scanner after delay
+    setTimeout(() => setScanned(false), 2000);
+    scannerRef.current?.reactivate();
+  }
+};
 
   return (
     <View style={styles.container}>
       {loading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#333" />
+          <ActivityIndicator size="large" color="#3B82F6" />
           <Text style={styles.loadingText}>Processing...</Text>
         </View>
       ) : (
@@ -60,13 +105,12 @@ const StudentQrCamera: React.FC = () => {
           fadeIn={true}
           showMarker={true}
           flashMode={RNCamera.Constants.FlashMode.auto}
-          topContent={<Text style={styles.instructionText}>📷 Align the QR code within the frame</Text>}
+          topContent={<Text style={styles.instructionText}>Align the QR code within the frame</Text>}
           bottomContent={
             <TouchableOpacity style={styles.button} onPress={() => scannerRef.current?.reactivate()}>
               <Text style={styles.buttonText}>Tap to Scan Again</Text>
             </TouchableOpacity>
           }
-          // @ts-ignore: ref is supported at runtime
           ref={scannerRef}
         />
       )}
