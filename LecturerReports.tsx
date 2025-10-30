@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Alert, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { RootTabParamList } from './types';
+import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  FlatList,
+  ActivityIndicator,
+  ImageBackground,
+} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import LecturerBottomNav from "./BottomNav.tsx";
 
 type Report = {
   reportID: string;
@@ -11,6 +23,8 @@ type Report = {
   rowKey: string;
   timestamp: string;
 };
+type AuthRouteProp = RouteProp<RootTabParamList, "Auth">;
+type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
 const LecturerReports: React.FC = () => {
   const [reportData, setReportData] = useState<Report[]>([]);
@@ -18,6 +32,10 @@ const LecturerReports: React.FC = () => {
   const [selectedReportID, setSelectedReportID] = useState<string>('');
   const [reports, setReports] = useState<Report[]>([]);
   const statusOptions = ['Present', 'Absent', 'Late', 'Excused'];
+
+  const navigation = useNavigation<AuthNavProp>();
+  const route = useRoute<AuthRouteProp>();
+  const { role } = route.params ?? { role: "lecturer" };
 
   const fetchReport = async (reportID: string) => {
     if (!reportID.trim()) {
@@ -29,10 +47,7 @@ const LecturerReports: React.FC = () => {
       const response = await fetch(
         `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/display_report?ReportID=${reportID}`
       );
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText);
-      }
+      if (!response.ok) throw new Error(await response.text());
       const data = await response.json();
       setReportData(data);
     } catch (error: any) {
@@ -46,15 +61,9 @@ const LecturerReports: React.FC = () => {
     try {
       const response = await fetch(
         `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/update_report_status?reportID=${report.reportID}&studentNumber=${report.studentNumber}&newStatus=${newStatus}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-        }
+        { method: 'PUT', headers: { 'Content-Type': 'application/json' } }
       );
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText);
-      }
+      if (!response.ok) throw new Error(await response.text());
       setReportData((prev) =>
         prev.map((r) =>
           r.reportID === report.reportID && r.studentNumber === report.studentNumber
@@ -75,10 +84,7 @@ const LecturerReports: React.FC = () => {
         const response = await fetch(
           'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/all_reports'
         );
-        if (!response.ok) {
-          const error = await response.text();
-          throw new Error(error);
-        }
+        if (!response.ok) throw new Error(await response.text());
         const data = await response.json();
         setReports(data);
       } catch (error) {
@@ -92,73 +98,94 @@ const LecturerReports: React.FC = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>📘 View Lesson Report</Text>
+    <ImageBackground
+      source={require('./assets/images/BackgroundImage.jpg')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.mainContainer}>
+        {/* Content Section */}
+        <View style={styles.content}>
+          <Text style={styles.header}>📘 View Lesson Report</Text>
 
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={selectedReportID}
-          onValueChange={(itemValue) => {
-            setSelectedReportID(itemValue);
-            fetchReport(itemValue);
-          }}
-          style={styles.picker}
-        >
-          <Picker.Item label="Select a Report" value=""/>
-          {reports.map((report) => (
-            <Picker.Item
-              key={report.reportID}
-              label={`Lesson: ${report.lessonID}`}
-              value={report.reportID}
-            />
-          ))}
-        </Picker>
-      </View>
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={selectedReportID}
+              onValueChange={(itemValue) => {
+                setSelectedReportID(itemValue);
+                fetchReport(itemValue);
+              }}
+              style={styles.picker}
+            >
+              <Picker.Item label="Select a Report" value="" />
+              {reports.map((report) => (
+                <Picker.Item
+                  key={report.reportID}
+                  label={`Lesson: ${report.lessonID}`}
+                  value={report.reportID}
+                />
+              ))}
+            </Picker>
+          </View>
 
-      {loading ? (
-        <ActivityIndicator size="large" color="#B8EBD8" style={{ marginTop: 20 }} />
-      ) : (
-        <FlatList
-          data={reportData}
-          keyExtractor={(item) => item.rowKey}
-          renderItem={({ item }) => (
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>Lesson ID: {item.lessonID}</Text>
-              <Text style={styles.cardText}>Module: {item.moduleCode}</Text>
-              <Text style={styles.cardText}>Student: {item.studentNumber}</Text>
-              <Text style={styles.cardText}>Time: {item.timestamp}</Text>
+          {loading ? (
+            <ActivityIndicator size="large" color="#A4C984" style={{ marginTop: 20 }} />
+          ) : (
+            <FlatList
+              data={reportData}
+              keyExtractor={(item) => item.rowKey}
+              renderItem={({ item }) => (
+                <View style={styles.card}>
+                  <Text style={styles.cardTitle}>Lesson ID: {item.lessonID}</Text>
+                  <Text style={styles.cardText}>Module: {item.moduleCode}</Text>
+                  <Text style={styles.cardText}>Student: {item.studentNumber}</Text>
+                  <Text style={styles.cardText}>Time: {item.timestamp}</Text>
 
-              <View style={styles.statusRow}>
-                <Text style={styles.cardText}>Status:</Text>
-                <View style={styles.statusPickerWrapper}>
-                  <Picker
-                    selectedValue={item.status}
-                    onValueChange={(value) => updateStatus(item, value)}
-                    style={styles.statusPicker}
-                  >
-                    {statusOptions.map((status) => (
-                      <Picker.Item key={status} label={status} value={status} />
-                    ))}
-                  </Picker>
+                  <View style={styles.statusRow}>
+                    <Text style={styles.cardText}>Status:</Text>
+                    <View style={styles.statusPickerWrapper}>
+                      <Picker
+                        selectedValue={item.status}
+                        onValueChange={(value) => updateStatus(item, value)}
+                        style={styles.statusPicker}
+                      >
+                        {statusOptions.map((status) => (
+                          <Picker.Item key={status} label={status} value={status} />
+                        ))}
+                      </Picker>
+                    </View>
+                  </View>
                 </View>
-              </View>
-            </View>
+              )}
+              ListEmptyComponent={
+                <Text style={styles.emptyText}>
+                  No reports available. Please select a report.
+                </Text>
+              }
+            />
           )}
-          ListEmptyComponent={
-            <Text style={styles.emptyText}>No reports available. Please select a report.</Text>
-          }
-        />
-      )}
-    </View>
+        </View>
+
+        {/* ✅ Fixed Nav Bar at Bottom */}
+        <View style={styles.navContainer}>
+          <LecturerBottomNav
+            navigation={navigation}
+            role={role as "student" | "lecturer" | "admin"}
+          />
+        </View>
+      </View>
+    </ImageBackground>
   );
 };
 
 export default LecturerReports;
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: { flex: 1, width: '100%', height: '100%' },
+  mainContainer: { flex: 1, justifyContent: 'space-between' },
+  content: {
     flex: 1,
-    backgroundColor: '#ffffffff', // White background
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     paddingHorizontal: 16,
     paddingTop: 24,
   },
@@ -170,7 +197,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   pickerContainer: {
-    backgroundColor: '#A4C984', // Grey Buttons
+    backgroundColor: '#A4C984',
     borderRadius: 10,
     paddingHorizontal: 8,
     marginBottom: 12,
@@ -178,41 +205,24 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 3,
-    elevation: 3
+    elevation: 3,
   },
-  pickerLesson: {
-    fontWeight: 'bold',
-    fontSize: 20
-  },
-  picker: {
-    height: 50,
-    width: '100%',
-    color: '#333',
-    fontWeight: 'bold',
-    fontSize: 20
-  },
+  picker: { height: 50, width: '100%', color: '#333', fontWeight: 'bold', fontSize: 18 },
   card: {
-    backgroundColor: '#e4e4e1ff', // Powder Blue card
+    backgroundColor: '#e4e4e1',
     padding: 16,
     borderRadius: 12,
     marginVertical: 8,
+    alignSelf: 'center',
+    width: 320,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 4,
   },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 4,
-    color: '#333',
-  },
-  cardText: {
-    fontSize: 16,
-    color: '#444',
-    marginBottom: 2,
-  },
+  cardTitle: { fontSize: 18, fontWeight: '600', marginBottom: 4, color: '#333' },
+  cardText: { fontSize: 16, color: '#444', marginBottom: 2 },
   statusRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -220,23 +230,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   statusPickerWrapper: {
-  backgroundColor: '#A4C984', // Button color
-  borderRadius: 8,
-  width: 160,
-  height: 50, 
-  justifyContent: 'center',
-  
-},
-statusPicker: {
-  height: 50, // match wrapper height
-  fontSize: 18, // readable size
-  lineHeight: 20, // prevents text clipping
-  color: '#fff', // white text for contrast
-  justifyContent: 'center'
-},
-  emptyText: {
-    marginTop: 20,
-    textAlign: 'center',
-    color: '#ffffffff',
+    backgroundColor: '#A4C984',
+    borderRadius: 8,
+    width: 160,
+    height: 50,
+    justifyContent: 'center',
+  },
+  statusPicker: { height: 50, color: '#fff', justifyContent: 'center' },
+  emptyText: { marginTop: 20, textAlign: 'center', color: '#555' },
+  navContainer: {
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
   },
 });

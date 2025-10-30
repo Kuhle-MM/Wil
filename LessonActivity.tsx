@@ -1,7 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, StyleSheet, Text, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  Alert,
+  TouchableOpacity,
+  StyleSheet,
+  ImageBackground,
+  ActivityIndicator,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
+import { useRoute, useNavigation, RouteProp } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootTabParamList } from "./types";
+import LecturerBottomNav from "./BottomNav.tsx";
+
+type AuthRouteProp = RouteProp<RootTabParamList, "Auth">;
+type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
 type Lessons = {
   rowKey: string;
@@ -16,6 +31,9 @@ const LessonActivity: React.FC = () => {
   const [lessonStarted, setLessonStarted] = useState(false);
   const [lessons, setLessons] = useState<Lessons[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation<AuthNavProp>();
+  const route = useRoute<AuthRouteProp>();
+  const { role } = route.params ?? { role: "lecturer" }; // fallback
 
   useEffect(() => {
     const loadLecturerIDAndLessons = async () => {
@@ -37,8 +55,6 @@ const LessonActivity: React.FC = () => {
         }
 
         const data = await response.json();
-
-        // Add local 'started' property if not already present
         const lessonsWithStatus = data.map((lesson: Lessons) => ({
           ...lesson,
           started: lesson.started ?? false,
@@ -72,9 +88,7 @@ const LessonActivity: React.FC = () => {
       Alert.alert('Success', result.message);
 
       setLessons(prev =>
-        prev.map(l =>
-          l.lessonID === lessonID ? { ...l, started: true } : l
-        )
+        prev.map(l => (l.lessonID === lessonID ? { ...l, started: true } : l))
       );
       setLessonStarted(true);
     } catch {
@@ -99,9 +113,7 @@ const LessonActivity: React.FC = () => {
       Alert.alert('Success', result.message);
 
       setLessons(prev =>
-        prev.map(l =>
-          l.lessonID === lessonID ? { ...l, started: false } : l
-        )
+        prev.map(l => (l.lessonID === lessonID ? { ...l, started: false } : l))
       );
       setLessonStarted(false);
     } catch {
@@ -115,53 +127,125 @@ const LessonActivity: React.FC = () => {
     setLessonStarted(lesson?.started ?? false);
   };
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#6bbfe4ff" />
+      </View>
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Manage Lesson</Text>
+    <ImageBackground
+      source={require('./assets/images/background_2.jpg')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <View style={styles.card}>
+          <Text style={styles.header}>Lesson Manager</Text>
 
-      <Picker
-        selectedValue={selectedLessonID}
-        onValueChange={onLessonSelect}
-        style={styles.picker}
-      >
-        <Picker.Item label="Select a Lesson" value="" />
-        {lessons.map(lesson => (
-          <Picker.Item
-            key={lesson.lessonID}
-            label={`${lesson.lessonID} (${lesson.moduleCode})`}
-            value={lesson.lessonID}
-          />
-        ))}
-      </Picker>
+          <Picker
+            selectedValue={selectedLessonID}
+            onValueChange={onLessonSelect}
+            style={styles.picker}
+          >
+            <Picker.Item label="Select a Lesson" value="" />
+            {lessons.map(lesson => (
+              <Picker.Item
+                key={lesson.lessonID}
+                label={`${lesson.lessonID} (${lesson.moduleCode})`}
+                value={lesson.lessonID}
+              />
+            ))}
+          </Picker>
 
-      <Button
-        title={lessonStarted ? 'End Lesson' : 'Begin Lesson'}
-        onPress={() => {
-          if (!selectedLessonID) {
-            Alert.alert('Error', 'Please select a lesson first.');
-            return;
-          }
-
-          if (!lessonStarted) startLesson(selectedLessonID);
-          else endLesson(selectedLessonID);
-        }}
+          <TouchableOpacity
+            style={[
+              styles.button,
+              { backgroundColor: lessonStarted ? '#f44336' : '#6bbfe4ff' },
+            ]}
+            onPress={() => {
+              if (!selectedLessonID) {
+                Alert.alert('Error', 'Please select a lesson first.');
+                return;
+              }
+              if (!lessonStarted) startLesson(selectedLessonID);
+              else endLesson(selectedLessonID);
+            }}
+          >
+            <Text style={styles.buttonText}>
+              {lessonStarted ? 'End Lesson' : 'Begin Lesson'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <LecturerBottomNav
+        navigation={navigation}
+        role={role as "student" | "lecturer" | "admin"}
       />
-    </View>
+    </ImageBackground>
   );
 };
 
 export default LessonActivity;
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    backgroundColor: '#fff',
+  background: {
     flex: 1,
   },
-  picker: { height: 50, width: '100%' },
+  overlay: {
+    flex: 1,// semi-transparent midnight green
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  card: {
+    backgroundColor: 'white', 
+    borderRadius: 16,
+    padding: 20,
+    width: 320, // fixed width
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 10,
+    elevation: 8,
+    alignItems: 'center',
+  },
   header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
+    fontSize: 26,
+    fontWeight: '700',
+    color: '#064f62ff', // midnight green
+    marginBottom: 20,
+  },
+  picker: {
+    height: 50,
+    width: '100%',
+    backgroundColor: '#a4c984ff', // pistachio
+    borderRadius: 12,
+    marginBottom: 25,
+    color: '#064f62ff',
+  },
+  button: {
+    width: '100%',
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
+    elevation: 6,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f9f0f0ff',
   },
 });
