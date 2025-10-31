@@ -6,19 +6,15 @@ import {
 import { BleManager, State as BleState, Device } from 'react-native-ble-plx';
 import { Buffer } from 'buffer';
 
-
 import 'react-native-get-random-values';
 
-
 global.Buffer = Buffer;
-
 
 // ================== CONFIG ==================
 // These UUIDs MUST match your NotifyBeacon.ino file
 const SERVICE_UUID = "12345678-1234-1234-1234-1234567890ab";
 const CHARACTERISTIC_UUID = "abcd1234-5678-90ab-cdef-1234567890ab";
 // =====================================================
-
 
 // Types
 type AppState = 'IDLE' | 'SCANNING' | 'CONNECTING' | 'READING' | 'READ_SUCCESS' | 'ERROR';
@@ -28,15 +24,12 @@ interface ReadInfo {
   message: string;
 }
 
-
 const SimpleNotifyReceiver = () => {
   const [logs, setLogs] = useState<string[]>([]);
   const [appState, setAppState] = useState<AppState>('IDLE');
   const [readInfo, setReadInfo] = useState<ReadInfo | null>(null);
 
-
   const bleManager = useMemo(() => new BleManager(), []);
-
 
   useEffect(() => {
     return () => {
@@ -54,7 +47,6 @@ const SimpleNotifyReceiver = () => {
 
   const requestPermissionsIfNeeded = async () => {
     if (Platform.OS === 'android') {
-      // You must also add <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> to your AndroidManifest.xml
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         { title: 'Location Permission', message: 'BLE needs location access', buttonPositive: 'OK', buttonNegative: 'Cancel' }
@@ -64,13 +56,11 @@ const SimpleNotifyReceiver = () => {
     return true;
   };
 
-
   const startScanAndRead = async () => {
     setAppState('IDLE');
     setLogs([]);
     setReadInfo(null);
     addLog('Starting scan...');
-
 
     const okPerm = await requestPermissionsIfNeeded();
     if (!okPerm) {
@@ -79,14 +69,12 @@ const SimpleNotifyReceiver = () => {
       return;
     }
 
-
     const bleState = await bleManager.state();
     if (bleState !== BleState.PoweredOn) {
       addLog(`Bluetooth is not enabled. Current state: ${bleState}`);
       setAppState('ERROR');
       return;
     }
-
 
     setAppState('SCANNING');
     addLog(`Scanning for service: ${SERVICE_UUID}`);
@@ -98,7 +86,6 @@ const SimpleNotifyReceiver = () => {
         return;
       }
       if (!device) return;
-
 
       // Stop scanning once we have a device
       bleManager.stopDeviceScan();
@@ -114,16 +101,14 @@ const SimpleNotifyReceiver = () => {
         await connectedDevice.discoverAllServicesAndCharacteristics();
         addLog('Services discovered.');
 
-
         setAppState('READING');
         addLog('Reading characteristic...');
         const characteristic = await connectedDevice.readCharacteristicForService(SERVICE_UUID, CHARACTERISTIC_UUID);
         if (!characteristic?.value) throw new Error("Characteristic value is null.");
-       
+        
         // Decode the value from Base64 to a readable string
         const message = Buffer.from(characteristic.value, 'base64').toString('utf-8');
         addLog(`Received data: "${message}"`);
-
 
         // Success!
         setReadInfo({
@@ -132,7 +117,6 @@ const SimpleNotifyReceiver = () => {
           message: message
         });
         setAppState('READ_SUCCESS');
-
 
       } catch (e: any) {
         addLog(`Error: ${e?.message ?? e}`);
@@ -211,6 +195,5 @@ const styles = StyleSheet.create({
   logContainer: { flex: 1, backgroundColor: '#0D1117', margin: 16, borderRadius: 8 },
   logText: { fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace', fontSize: 12, color: '#C9D1D9', padding: 12 }
 });
-
 
 export default SimpleNotifyReceiver;
