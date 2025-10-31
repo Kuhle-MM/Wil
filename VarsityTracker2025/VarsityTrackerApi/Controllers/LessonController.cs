@@ -381,31 +381,31 @@ namespace VarsityTrackerApi.Controllers
             }
         }
 
-        //[HttpPost("clockoutStudent/{studentNumber}")]
-        //public async Task<IActionResult> StudentListClockout(string studentNumber)
-        //{
-        //    var today = DateTime.UtcNow.Date;
+        [HttpPost("clockoutStudent/{studentNumber}")]
+        public async Task<IActionResult> StudentListClockout(string studentNumber)
+        {
+            var today = DateTime.UtcNow.Date;
 
-        //    StudentList recordToUpdate = null;
+            StudentList recordToUpdate = null;
 
-        //    await foreach (var record in _waitingList.QueryAsync<StudentList>(r =>
-        //        r.PartitionKey == "StudentList" &&
-        //        r.StudentID == studentNumber &&
-        //        r.ClockInTime >= today))
-        //    {
-        //        recordToUpdate = record;
-        //        break;
-        //    }
+            await foreach (var record in _lessonListTable.QueryAsync<StudentList>(r =>
+                r.PartitionKey == "LessonList" &&
+                r.StudentID == studentNumber &&
+                r.ClockInTime >= today))
+            {
+                recordToUpdate = record;
+                break;
+            }
 
-        //    if (recordToUpdate.ClockInTime == null || recordToUpdate == null)
-        //        return NotFound("No active clock-in found for today.");
+            if (recordToUpdate.ClockInTime == null || recordToUpdate == null)
+                return NotFound("No active clock-in found for today.");
 
-        //    recordToUpdate.ClockOutTime = DateTime.UtcNow;
+            recordToUpdate.ClockOutTime = DateTime.UtcNow;
 
-        //    await _waitingList.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
+            await _lessonListTable.UpdateEntityAsync(recordToUpdate, recordToUpdate.ETag, TableUpdateMode.Replace);
 
-        //    return Ok(new { success = true, message = "Student clocked out." });
-        //}
+            return Ok(new { success = true, message = "Student clocked out." });
+        }
 
         [HttpPost("startLesson/{lessonID}")]
         public async Task<IActionResult> StartLesson(string lessonID)
