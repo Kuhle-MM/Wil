@@ -10,7 +10,7 @@ import {
   ImageBackground,
   ActivityIndicator,
 } from 'react-native';
-import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import { useRoute, useNavigation, RouteProp, CommonActions } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -130,7 +130,7 @@ const StudentDashboard: React.FC = () => {
         <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>Today’s Modules</Text>
           {loadingModules ? (
-            <ActivityIndicator size="large" color="#064f62" />
+            <ActivityIndicator size="large" color="#4caf50" />
           ) : todaysModules.length === 0 ? (
             <Text style={styles.cardText}>No modules scheduled for today 🎉</Text>
           ) : (
@@ -150,11 +150,11 @@ const StudentDashboard: React.FC = () => {
         <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>Weekly Attendance Progress</Text>
           {loadingProgress ? (
-            <ActivityIndicator size="large" color="#064f62" />
-          ) : progressData ? (
+            <ActivityIndicator size="large" color="#4caf50" />
+          ) : (
             <>
               <Text style={styles.cardText}>
-                {progressData.Attended} / {progressData.TotalLessons} lessons attended
+                {progressData?.Attended ?? 0} / {progressData?.TotalLessons ?? 0} lessons attended
               </Text>
               <Progress.Bar
                 progress={progressData.AttendancePercentage / 100}
@@ -165,34 +165,36 @@ const StudentDashboard: React.FC = () => {
                 style={{ marginTop: 10, justifyContent: 'center' }}
               />
               <Text style={[styles.cardText, { marginTop: 5 }]}>
-                {progressData.AttendancePercentage.toFixed(2)}%
+                {(progressData?.AttendancePercentage ?? 0).toFixed(2)}%
               </Text>
             </>
-          ) : (
-            <Text style={styles.cardText}>No progress data available</Text>
           )}
         </View>
 
         {/* Buttons Grid */}
         <View style={styles.buttonGrid}>
           <TouchableOpacity style={styles.gridButton} onPress={handleAttendance}>
-            <Text style={styles.gridEmoji}>⏰</Text>
-            <Text style={styles.gridLabel}>Clock In</Text>
+            <Image source={require('./assets/images/clockin.jpg')} style={styles.gridImage} resizeMode="cover" />
+            <Text style={styles.gridText}>Clock In</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.gridButton} onPress={handleReport}>
-            <Text style={styles.gridEmoji}>📊</Text>
-            <Text style={styles.gridLabel}>Reports</Text>
+            <Image source={require('./assets/images/report.jpg')} style={styles.gridImage} resizeMode="cover" />
+            <Text style={styles.gridText}>Report Overview</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.gridButton} onPress={handleCalendar}>
-            <Text style={styles.gridEmoji}>🗓️</Text>
-            <Text style={styles.gridLabel}>Calendar</Text>
+            <Image source={require('./assets/images/calendar.jpg')} style={styles.gridImage} resizeMode="cover" />
+            <Text style={styles.gridText}>Get Calendar</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.gridButton} onPress={handleModule}>
-            <Text style={styles.gridEmoji}>📘</Text>
-            <Text style={styles.gridLabel}>Your Modules</Text>
+            <Image source={require('./assets/images/modules.jpg')} style={styles.gridImage} resizeMode="cover" />
+            <Text style={styles.gridText}>Your Modules</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
+            <Text>Open QR Camera</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>

@@ -6,7 +6,9 @@ import { RNCamera } from "react-native-camera";
 const API_BASE_URL =
   "https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api";
 
-const StudentQrCamera = ({ studentNumber }: { studentNumber: string }) => {
+const StudentQrCamera: React.FC = () => {
+  const scannerRef = useRef<QRCodeScanner>(null);
+  const [scanned, setScanned] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const onSuccess = async (e: any) => {
@@ -47,14 +49,26 @@ const StudentQrCamera = ({ studentNumber }: { studentNumber: string }) => {
     } finally {
       setLoading(false);
     }
-  };
+  } catch (error: any) {
+    console.error('QR Scan Error:', error);
+    Alert.alert(
+      'Scan Error',
+      `An error occurred while processing the QR code: ${error.message || 'Unknown error'}`
+    );
+  } finally {
+    setLoading(false);
+    // Reactivate scanner after delay
+    setTimeout(() => setScanned(false), 2000);
+    scannerRef.current?.reactivate();
+  }
+};
 
   return (
     <View style={styles.container}>
       {loading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#0066cc" />
-          <Text style={styles.loadingText}>Clocking you in...</Text>
+          <ActivityIndicator size="large" color="#3B82F6" />
+          <Text style={styles.loadingText}>Processing...</Text>
         </View>
       ) : (
         <QRCodeScanner
@@ -62,8 +76,13 @@ const StudentQrCamera = ({ studentNumber }: { studentNumber: string }) => {
           reactivate={true} // allow reuse
           reactivateTimeout={2000}
           flashMode={RNCamera.Constants.FlashMode.auto}
-          topContent={<Text style={styles.centerText}>Scan the QR code for your lesson</Text>}
-          bottomContent={<Text style={styles.bottomText}>Make sure the code fits in the box</Text>}
+          topContent={<Text style={styles.instructionText}>Align the QR code within the frame</Text>}
+          bottomContent={
+            <TouchableOpacity style={styles.button} onPress={() => scannerRef.current?.reactivate()}>
+              <Text style={styles.buttonText}>Tap to Scan Again</Text>
+            </TouchableOpacity>
+          }
+          ref={scannerRef}
         />
       )}
     </View>
@@ -71,29 +90,38 @@ const StudentQrCamera = ({ studentNumber }: { studentNumber: string }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  centerText: {
+  container: {
     flex: 1,
-    fontSize: 18,
-    padding: 32,
-    color: "#333",
-    textAlign: "center",
+    backgroundColor: '#000',
   },
-  bottomText: {
+  instructionText: {
+    color: '#fff',
     fontSize: 16,
-    color: "#666",
-    marginBottom: 40,
-    textAlign: "center",
+    textAlign: 'center',
+    padding: 16,
+  },
+  button: {
+    backgroundColor: '#3B82F6',
+    padding: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
   loadingContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
   },
   loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: "#333",
+    color: '#fff',
+    fontSize: 18,
+    marginTop: 12,
   },
 });
 
