@@ -11,9 +11,14 @@ import QRCodeScanner from "react-native-qrcode-scanner";
 import { RNCamera } from "react-native-camera";
 
 const API_BASE_URL =
-  "https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api";
+  "https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net";
 
-const StudentQrCamera: React.FC<{ studentNumber: string }> = ({ studentNumber }) => {
+interface Props {
+  studentNumber: string;
+  lessonID: string;
+}
+
+const StudentQrCamera: React.FC<Props> = ({ studentNumber, lessonID }) => {
   const scannerRef = useRef<QRCodeScanner>(null);
   const [loading, setLoading] = useState(false);
   const [scanned, setScanned] = useState(false);
@@ -33,23 +38,24 @@ const StudentQrCamera: React.FC<{ studentNumber: string }> = ({ studentNumber })
 
     try {
       setLoading(true);
-      const url = `${API_BASE_URL}/scanQRCode`;
+
+      // ✅ Correct API URL (matches your backend [HttpPost("clockin/{studentNumber}/{lessonID}")])
+      const url = `${API_BASE_URL}/Lesson/clockin/${studentNumber}/${lessonID}`;
 
       const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          QRText: qrText,
-          StudentID: studentNumber, // match backend expectation
-        }),
       });
 
       const text = await response.text();
       console.log("API response:", text);
 
-      if (!response.ok) throw new Error(text || "Clock-in failed");
+      if (!response.ok) {
+        throw new Error(JSON.parse(text)?.message || "Clock-in failed");
+      }
 
-      Alert.alert("Clock-in Successful", "You have been clocked in successfully!");
+      const data = JSON.parse(text);
+      Alert.alert("Clock-in Successful", data.message || "You have been clocked in successfully!");
     } catch (error: any) {
       console.error("Clock-in error:", error);
       Alert.alert(
@@ -77,7 +83,7 @@ const StudentQrCamera: React.FC<{ studentNumber: string }> = ({ studentNumber })
         <QRCodeScanner
           ref={scannerRef}
           onRead={onSuccess}
-          reactivate={false} // we manually control reactivation
+          reactivate={false} // manually controlled
           flashMode={RNCamera.Constants.FlashMode.auto}
           topContent={
             <Text style={styles.instructionText}>
