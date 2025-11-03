@@ -106,6 +106,7 @@ const StudentDashboard: React.FC = () => {
     fetchStudentDetails();
   }, []);
 
+  // Navigation Handlers
   const handleReport = () => navigation.navigate('Report', { role });
   const handleCalendar = () => navigation.navigate('Calendar', { role });
   const handleAttendance = () => navigation.navigate('StudentAttendance', { role });
@@ -125,9 +126,9 @@ const StudentDashboard: React.FC = () => {
       >
         <Text style={styles.header}>{studentName || 'Student'}'s Dashboard</Text>
 
-        {/* Today's Modules */}
-        <Text style={styles.sectionTitle}>Today’s Modules</Text>
-        <View style={styles.card}>
+        {/* Today’s Modules */}
+        <View style={styles.sectionCard}>
+          <Text style={styles.sectionTitle}>Today’s Modules</Text>
           {loadingModules ? (
             <ActivityIndicator size="large" color="#4caf50" />
           ) : todaysModules.length === 0 ? (
@@ -136,15 +137,18 @@ const StudentDashboard: React.FC = () => {
             todaysModules.map((lesson, index) => (
               <Text key={index} style={styles.cardText}>
                 {lesson.moduleCode} —{' '}
-                {new Date(lesson.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                {new Date(lesson.date).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
               </Text>
             ))
           )}
         </View>
 
-        {/* Weekly Progress */}
-        <Text style={styles.sectionTitle}>Weekly attendance progress</Text>
-        <View style={styles.card}>
+        {/* Weekly Attendance Progress */}
+        <View style={styles.sectionCard}>
+          <Text style={styles.sectionTitle}>Weekly Attendance Progress</Text>
           {loadingProgress ? (
             <ActivityIndicator size="large" color="#4caf50" />
           ) : (
@@ -153,12 +157,12 @@ const StudentDashboard: React.FC = () => {
                 {progressData?.Attended ?? 0} / {progressData?.TotalLessons ?? 0} lessons attended
               </Text>
               <Progress.Bar
-                progress={(progressData?.AttendancePercentage ?? 0) / 100}
-                width={350}
-                height={20}
-                color="#4caf50"
-                borderRadius={10}
-                style={{ marginTop: 10 }}
+                progress={progressData.AttendancePercentage / 100}
+                width={290}
+                height={18}
+                color="#064f62"
+                borderRadius={8}
+                style={{ marginTop: 10, justifyContent: 'center' }}
               />
               <Text style={[styles.cardText, { marginTop: 5 }]}>
                 {(progressData?.AttendancePercentage ?? 0).toFixed(2)}%
@@ -167,7 +171,7 @@ const StudentDashboard: React.FC = () => {
           )}
         </View>
 
-        {/* Button Grid */}
+        {/* Buttons Grid */}
         <View style={styles.buttonGrid}>
           <TouchableOpacity style={styles.gridButton} onPress={handleAttendance}>
             <Image source={require('./assets/images/clockin.jpg')} style={styles.gridImage} resizeMode="cover" />
@@ -192,10 +196,18 @@ const StudentDashboard: React.FC = () => {
           <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
             <Text>Open QR Camera</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
+            <Text style={styles.qrText}>Open QR Camera</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
 
-      <StudentBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
+      {/* Bottom Navigation */}
+      <StudentBottomNav
+        navigation={navigation}
+        role={role as 'student' | 'lecturer' | 'admin'}
+      />
     </ImageBackground>
   );
 };
@@ -213,6 +225,17 @@ const styles = StyleSheet.create({
     marginTop: 60,
     marginBottom: 30,
   },
+  sectionCard: {
+    backgroundColor: '#A4C984',
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 18,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 4,
+  },
   sectionTitle: {
     fontSize: 22,
     fontWeight: '600',
@@ -220,18 +243,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
   },
-  card: {
-    backgroundColor: '#E6F4EA',
-    borderRadius: 12,
-    padding: 16,
-    marginVertical: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.15,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 3,
+  cardText: {
+    color: '#000',
+    fontSize: 17,
+    fontWeight: '500',
+    textAlign: 'center',
   },
-  cardText: { color: '#000', fontSize: 17, fontWeight: '500', textAlign: 'center' },
   buttonGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -253,23 +270,15 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
   },
-  gridImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 12,
-    marginBottom: 6,
-  },
-  gridText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
-  },
+  gridEmoji: { fontSize: 30, color: '#fff', marginBottom: 8 },
+  gridLabel: { fontSize: 18, fontWeight: 'bold', color: '#fff' },
   smallButton: {
+    width: '100%',
     backgroundColor: '#A4C984',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    alignSelf: 'center',
-    marginTop: 20,
+    borderRadius: 12,
+    padding: 14,
+    alignItems: 'center',
+    marginTop: 10,
   },
+  qrText: { color: '#064f62', fontSize: 16, fontWeight: '600' },
 });

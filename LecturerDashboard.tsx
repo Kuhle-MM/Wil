@@ -67,39 +67,39 @@ const LecturerDashboard: React.FC = () => {
   const handleQrCamera = () => navigation.navigate('QrCamera', { role });
 
   return (
-    <View style={{ flex: 1 }}>
-      <ImageBackground
-        source={require('./assets/images/BackgroundImage.jpg')}
-        style={styles.backgroundImage}
-        resizeMode="cover"
-      >
-        <ScrollView style={styles.scrollContainer}>
-          <Text style={styles.header}>📙Dashboard</Text>
+    <ImageBackground
+      source={require('./assets/images/BackgroundImage.jpg')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+        <Text style={styles.header}>📙 {lecturerName}'s Dashboard</Text>
 
-          <Text style={styles.sectionTitle}>Today’s Lessons</Text>
-          <View style={styles.card}>
-            {loadingLessons ? (
-              <ActivityIndicator size="large" color="#6B9B89" />
-            ) : todaysLessons.length === 0 ? (
-              <Text style={styles.cardText}>No lessons scheduled for today 🎉</Text>
-            ) : (
-              todaysLessons.map((lesson, index) => {
-                const lessonUTC = new Date(lesson.date);
-                const lessonSA = new Date(lessonUTC.getTime() - 2 * 60 * 60 * 1000);
-                const lessonTime = lessonSA.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        <Text style={styles.sectionTitle}>Today’s Lessons</Text>
+        <View style={styles.card}>
+          {loadingLessons ? (
+            <ActivityIndicator size="large" color="#6B9B89" />
+          ) : todaysLessons.length === 0 ? (
+            <Text style={styles.cardText}>No lessons scheduled for today 🎉</Text>
+          ) : (
+            todaysLessons.map((lesson, index) => {
+              const lessonUTC = new Date(lesson.date);
+              const lessonSA = new Date(lessonUTC.getTime() - 2 * 60 * 60 * 1000);
+              const lessonTime = lessonSA.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-                return (
-                  <Text key={index} style={styles.cardText}>
-                    {lesson.moduleCode} — {lessonTime}
-                  </Text>
-                );
-              })
-            )}
-          </View>
+              return (
+                <Text key={index} style={styles.cardText}>
+                  {lesson.moduleCode} — {lessonTime}
+                </Text>
+              );
+            })
+          )}
+        </View>
 
-          {/* Action Buttons */}
-          <TouchableOpacity style={styles.smallButton} onPress={handleReport}>
-            <Text>Report Overview</Text>
+        <View style={styles.buttonGrid}>
+          <TouchableOpacity style={styles.gridButton} onPress={handleReport}>
+            <Text style={styles.gridTextEmoji}>📊</Text>
+            <Text style={styles.gridText}>Report Overview</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.smallButton} onPress={handleCalendar}>
             <Text>Timetable</Text>
@@ -117,43 +117,15 @@ const LecturerDashboard: React.FC = () => {
             <Text>Open Qr Camera</Text>
           </TouchableOpacity>
 
-          {/* Button Grid */}
-          <View style={styles.buttonGrid}>
-            <TouchableOpacity style={styles.gridButton} onPress={handleReport}>
-              <Text style={styles.gridTextEmoji}>📊</Text>
-              <Text style={styles.gridText}>Report Overview</Text>
-            </TouchableOpacity>
+          <TouchableOpacity style={[styles.gridButton, styles.fullWidthButton]} onPress={handleQrCamera}>
+            <Text style={styles.gridTextEmoji}>📷</Text>
+            <Text style={styles.gridText}>Open QR Camera</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
 
-            <TouchableOpacity style={styles.gridButton} onPress={handleCalendar}>
-              <Text style={styles.gridTextEmoji}>🗓️</Text>
-              <Text style={styles.gridText}>Timetable</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.gridButton} onPress={handleAttendance}>
-              <Text style={styles.gridTextEmoji}>⏰</Text>
-              <Text style={styles.gridText}>Clock In</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.gridButton} onPress={handleModule}>
-              <Text style={styles.gridTextEmoji}>📘</Text>
-              <Text style={styles.gridText}>Your Modules</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.gridButton, styles.fullWidthButton]}
-              onPress={handleLesson}
-            >
-              <Text style={styles.gridTextEmoji}>📖</Text>
-              <Text style={styles.gridText}>Your Lessons</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-        <LecturerBottomNav
-          navigation={navigation}
-          role={role as 'student' | 'lecturer' | 'admin'}
-        />
-      </ImageBackground>
-    </View>
+      <LecturerBottomNav navigation={navigation} role={role as 'lecturer'} />
+    </ImageBackground>
   );
 };
 
@@ -228,15 +200,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     paddingVertical: 6,
-    paddingHorizontal: 4,
   },
   gridTextEmoji: {
     color: '#FFFFFF',
     fontSize: 28,
-    fontWeight: 'bold',
     textAlign: 'center',
-    paddingVertical: 6,
-    paddingHorizontal: 4,
   },
   fullWidthButton: {
     width: '100%',
