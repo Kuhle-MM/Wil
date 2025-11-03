@@ -504,8 +504,8 @@ namespace VarsityTrackerApi.Controllers
                 break;
             }
 
-            if (lesson == null)
-                return NotFound("Lesson not found.");
+            if (lesson == null || lesson.finished == true)
+                return NotFound("Lesson not found or has already ended.");
 
             // Process only students in this lesson
             var lessonStudents = new List<LessonList>();
@@ -547,10 +547,9 @@ namespace VarsityTrackerApi.Controllers
                     await _lessonListTable.DeleteEntityAsync(student.PartitionKey, student.RowKey);
                 }
             }
-
             // Mark lesson as finished (use Upsert to avoid ETag mismatch)
             lesson.finished = true;
-            await _lessonTable.UpsertEntityAsync(lesson, TableUpdateMode.Replace);
+            await _lessonTable.UpdateEntityAsync(lesson, lesson.ETag);
 
             return Ok(new { success = true, message = "Lesson has ended and student statuses recorded." });
         }
