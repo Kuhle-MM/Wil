@@ -45,11 +45,13 @@ const SimpleNotifyReceiver = () => {
     };
   }, [bleManager]);
 
+
   const addLog = (message: string) => {
     console.log(message);
     const timestamp = new Date().toLocaleTimeString();
     setLogs(prev => [`[${timestamp}] ${message}`, ...prev].slice(0, 200));
   };
+
 
   const requestPermissionsIfNeeded = async () => {
     if (Platform.OS !== 'android') {
@@ -131,6 +133,7 @@ const SimpleNotifyReceiver = () => {
       addLog(`Found device: ${device.name ?? 'Unknown'} (${device.id})`);
       let connectedDevice: Device | null = null;
 
+
       try {
         setAppState('CONNECTING');
         connectedDevice = await device.connect();
@@ -185,6 +188,7 @@ const SimpleNotifyReceiver = () => {
     scheduleRef.current = timers;
   };
 
+
   const resetApp = () => {
     scheduleRef.current.forEach(clearTimeout);
     try { bleManager.stopDeviceScan(); } catch (_) {}
@@ -194,6 +198,7 @@ const SimpleNotifyReceiver = () => {
     setPingCount(0);
     addLog('Reset complete.');
   };
+
 
   const renderContent = () => {
     switch (appState) {
@@ -240,6 +245,7 @@ const SimpleNotifyReceiver = () => {
     }
   };
 
+
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.header}>
@@ -253,6 +259,7 @@ const SimpleNotifyReceiver = () => {
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: '#F1F5F9' },
