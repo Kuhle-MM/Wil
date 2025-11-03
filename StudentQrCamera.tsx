@@ -1,22 +1,33 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, Alert } from "react-native";
+import React, { useRef, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import QRCodeScanner from "react-native-qrcode-scanner";
 import { RNCamera } from "react-native-camera";
 
 const API_BASE_URL =
   "https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api";
 
-const StudentQrCamera: React.FC = () => {
+const StudentQrCamera: React.FC<{ studentNumber: string }> = ({ studentNumber }) => {
   const scannerRef = useRef<QRCodeScanner>(null);
-  const [scanned, setScanned] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [scanned, setScanned] = useState(false);
 
   const onSuccess = async (e: any) => {
-    const qrText = e.data?.trim();
+    if (scanned) return; // Prevent duplicate scans
+    setScanned(true);
+
+    const qrText = e?.data?.trim();
     console.log("Scanned QR:", qrText);
 
     if (!qrText) {
       Alert.alert("Invalid QR Code", "No data found in QR code.");
+      setScanned(false);
       return;
     }
 
@@ -26,42 +37,34 @@ const StudentQrCamera: React.FC = () => {
 
       const response = await fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          QRText: qrText, // must match backend request
-          StudentID: studentNumber, // backend expects this field
+          QRText: qrText,
+          StudentID: studentNumber, // match backend expectation
         }),
       });
 
       const text = await response.text();
       console.log("API response:", text);
 
-      if (!response.ok) {
-        throw new Error(text || "Clock-in failed");
-      }
+      if (!response.ok) throw new Error(text || "Clock-in failed");
 
       Alert.alert("Clock-in Successful", "You have been clocked in successfully!");
     } catch (error: any) {
       console.error("Clock-in error:", error);
-      Alert.alert("Error", error.message || "Could not clock in. Please try again.");
+      Alert.alert(
+        "Error",
+        error.message || "Could not clock in. Please try again."
+      );
     } finally {
       setLoading(false);
+      // Reactivate scanner after short delay
+      setTimeout(() => {
+        setScanned(false);
+        scannerRef.current?.reactivate();
+      }, 2000);
     }
-  } catch (error: any) {
-    console.error('QR Scan Error:', error);
-    Alert.alert(
-      'Scan Error',
-      `An error occurred while processing the QR code: ${error.message || 'Unknown error'}`
-    );
-  } finally {
-    setLoading(false);
-    // Reactivate scanner after delay
-    setTimeout(() => setScanned(false), 2000);
-    scannerRef.current?.reactivate();
-  }
-};
+  };
 
   return (
     <View style={styles.container}>
@@ -72,17 +75,23 @@ const StudentQrCamera: React.FC = () => {
         </View>
       ) : (
         <QRCodeScanner
+          ref={scannerRef}
           onRead={onSuccess}
-          reactivate={true} // allow reuse
-          reactivateTimeout={2000}
+          reactivate={false} // we manually control reactivation
           flashMode={RNCamera.Constants.FlashMode.auto}
-          topContent={<Text style={styles.instructionText}>Align the QR code within the frame</Text>}
+          topContent={
+            <Text style={styles.instructionText}>
+              Align the QR code within the frame
+            </Text>
+          }
           bottomContent={
-            <TouchableOpacity style={styles.button} onPress={() => scannerRef.current?.reactivate()}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => scannerRef.current?.reactivate()}
+            >
               <Text style={styles.buttonText}>Tap to Scan Again</Text>
             </TouchableOpacity>
           }
-          ref={scannerRef}
         />
       )}
     </View>
@@ -92,34 +101,34 @@ const StudentQrCamera: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: "#000",
   },
   instructionText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
     padding: 16,
   },
   button: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: "#3B82F6",
     padding: 14,
     borderRadius: 12,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 20,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#000",
   },
   loadingText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 18,
     marginTop: 12,
   },

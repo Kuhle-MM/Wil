@@ -529,7 +529,7 @@ namespace VarsityTrackerApi.Controllers
 
                 var report = new Reports
                 {
-                    PartitionKey = "LessonList",
+                    PartitionKey = "Reports",
                     RowKey = Guid.NewGuid().ToString(),
                     reportID = $"{lesson.lessonID}-Report",
                     lessonID = lesson.lessonID,
