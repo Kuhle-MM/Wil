@@ -8,12 +8,17 @@ import {
   ActivityIndicator,
   SectionList,
   ImageBackground,
+  TouchableOpacity,
+  PermissionsAndroid,
+  Platform,
 } from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
 import StudentBottomNav from './BottomNav.tsx';
 import Icon from 'react-native-vector-icons/Ionicons';
+import RNFS from 'react-native-fs';
+import Share from 'react-native-share';
 
 type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
@@ -79,7 +84,6 @@ const StudentsReports: React.FC = () => {
     fetchReport();
   }, []);
 
-  // Function to group records by Today, Yesterday, Earlier
   const groupByDate = (records: AttendanceRecord[]): SectionData[] => {
     const today = new Date();
     const yesterday = new Date();
@@ -152,6 +156,59 @@ const StudentsReports: React.FC = () => {
     <Text style={styles.sectionHeader}>{title}</Text>
   );
 
+  // method to export this reports screen into a CSV
+  const exportToCSV = async () => {
+    try {
+      if (sections.length === 0) return Alert.alert('No Attendances', 'No attendance records to export.');
+
+      // Android permission for storage
+      if (Platform.OS === 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Storage Permission',
+            message: 'App needs access to your storage to save the report.',
+            buttonPositive: 'OK',
+          }
+        );
+        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+          return Alert.alert('Permission Denied', 'Storage permission is required.');
+        }
+      }
+
+      // Flatten sections into one array
+      const allRecords = sections.flatMap((sec) =>
+        sec.data.map((item) => ({
+          Date: formatDateTime(item.clockInTime),
+          StudentNumber: item.studentNumber,
+          Status: item.status,
+          Group: sec.title,
+        }))
+      );
+
+      // Converting to CSV string
+      const header = 'Date,Student Number,Status,Group\n';
+      const csv = header + allRecords.map(r => `${r.Date},${r.StudentNumber},${r.Status},${r.Group}`).join('\n');
+
+      // Defining the file path
+      const path = `${RNFS.DownloadDirectoryPath}/attendance_report.csv`;
+
+      // Writing file
+      await RNFS.writeFile(path, csv, 'utf8');
+      Alert.alert('Success', `Report saved to ${path}`);
+
+      // Optional for user to share the file
+      await Share.open({
+        url: 'file://' + path,
+        type: 'text/csv',
+        showAppsToView: true,
+      });
+    } catch (err) {
+      console.error('CSV Export Error:', err);
+      Alert.alert('Error', 'Failed to export the report.');
+    }
+  };
+
   return (
     <ImageBackground
       source={require('./assets/images/BackgroundImage.jpg')}
@@ -160,6 +217,11 @@ const StudentsReports: React.FC = () => {
       <View style={styles.mainContainer}>
         <View style={styles.contentWrapper}>
           <Text style={styles.header}>Attendance Report</Text>
+
+          <TouchableOpacity style={styles.downloadButton} onPress={exportToCSV}>
+            <Icon name="download-outline" size={22} color="#fff" style={{ marginRight: 8 }} />
+            <Text style={styles.downloadText}>Download Spreadsheet</Text>
+          </TouchableOpacity>
 
           {loading ? (
             <ActivityIndicator size="large" color="#064f62" style={{ marginTop: 40 }} />
@@ -226,4 +288,18 @@ const styles = StyleSheet.create({
   statusContainer: { flexDirection: 'row', alignItems: 'center' },
   statusText: { fontSize: 16, fontWeight: 'bold' },
   noData: { fontSize: 16, color: '#aaa', textAlign: 'center', marginTop: 20 },
+  downloadButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#064f62',
+    padding: 12,
+    borderRadius: 8,
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  downloadText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });

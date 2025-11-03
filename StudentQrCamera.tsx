@@ -1,67 +1,121 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, Alert } from "react-native";
-import QRCodeScanner from "react-native-qrcode-scanner";
-import { RNCamera } from "react-native-camera";
+import React, { useRef, useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, PermissionsAndroid, Platform, Vibration } from 'react-native';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import { RNCamera } from 'react-native-camera';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE_URL =
-  "https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api";
+// Extend the type definition to include ref
+declare module 'react-native-qrcode-scanner' {
+  interface RNQRCodeScannerProps {
+    ref?: any;
+  }
+}
 
 const StudentQrCamera: React.FC = () => {
   const scannerRef = useRef<QRCodeScanner>(null);
   const [scanned, setScanned] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [studentNumber, setStudentNumber] = useState<string | null>(null);
+
+  // Load student number from AsyncStorage
+  useEffect(() => {
+    const loadStudentNumber = async () => {
+      try {
+        const session = await AsyncStorage.getItem('userSession');
+        if (session) {
+          const { studentNumber } = JSON.parse(session);
+          setStudentNumber(studentNumber);
+        } else {
+          Alert.alert('Error', 'No active session found. Please log in again.');
+        }
+      } catch (err) {
+        console.error('Error loading student session:', err);
+        Alert.alert('Error', 'Failed to load student information.');
+      }
+    };
+    loadStudentNumber();
+  }, []);
+
+  // Ask only for CAMERA permission — no VIBRATE needed
+  useEffect(() => {
+    const requestCameraPermission = async () => {
+      if (Platform.OS === 'android') {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+            {
+              title: 'Camera Permission',
+              message: 'This app requires camera access to scan QR codes.',
+              buttonNeutral: 'Ask Me Later',
+              buttonNegative: 'Cancel',
+              buttonPositive: 'OK',
+            }
+          );
+          if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+            Alert.alert('Permission Denied', 'Camera permission is required to scan QR codes.');
+          }
+        } catch (err) {
+          console.warn(err);
+        }
+      }
+    };
+
+    requestCameraPermission();
+  }, []);
 
   const onSuccess = async (e: any) => {
-    const qrText = e.data?.trim();
-    console.log("Scanned QR:", qrText);
+    if (scanned) return; // prevent multiple scans
 
-    if (!qrText) {
-      Alert.alert("Invalid QR Code", "No data found in QR code.");
-      return;
-    }
+    setScanned(true);
+    setLoading(true);
+    Vibration.vibrate(100); // Vibrate on scan
 
     try {
-      setLoading(true);
-      const url = `${API_BASE_URL}/scanQRCode`;
+      const lessonId = e.data?.trim();
 
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          QRText: qrText, // must match backend request
-          StudentID: studentNumber, // backend expects this field
-        }),
-      });
-
-      const text = await response.text();
-      console.log("API response:", text);
-
-      if (!response.ok) {
-        throw new Error(text || "Clock-in failed");
+      if (!lessonId) {
+        Alert.alert(
+          'Invalid QR Code',
+          'The scanned QR code is not recognized as a valid lesson.\nPlease scan a valid QR code.'
+        );
+        return;
       }
 
-      Alert.alert("Clock-in Successful", "You have been clocked in successfully!");
+      if (!studentNumber) {
+        Alert.alert('Error', 'Student number not found. Please log in again.');
+        return;
+      }
+
+      console.log('Scanned QR Code:', lessonId);
+      console.log('Using Student Number:', studentNumber);
+
+      // Calling clock-in endpoint dynamically
+      const response = await fetch(
+        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/clockin/${studentNumber}/${lessonId}`,
+        { method: 'POST' }
+      );
+
+      if (response.ok) {
+        Alert.alert('Success!', `Clock-in successful for lesson ID: ${lessonId}`);
+      } else if (response.status === 404) {
+        Alert.alert('Lesson Not Found', `No lesson found with ID: ${lessonId}. Please check the QR code.`);
+      } else if (response.status === 409) {
+        Alert.alert('Already Clocked In', `You have already clocked in for lesson ID: ${lessonId}.`);
+      } else {
+        Alert.alert('Clock-in Failed', 'Server could not process the request. Please try again.');
+      }
     } catch (error: any) {
-      console.error("Clock-in error:", error);
-      Alert.alert("Error", error.message || "Could not clock in. Please try again.");
+      console.error('QR Scan Error:', error);
+      Alert.alert(
+        'Scan Error',
+        `An error occurred while processing the QR code: ${error.message || 'Unknown error'}`
+      );
     } finally {
       setLoading(false);
+      setTimeout(() => setScanned(false), 2000);
+      scannerRef.current?.reactivate();
     }
-  } catch (error: any) {
-    console.error('QR Scan Error:', error);
-    Alert.alert(
-      'Scan Error',
-      `An error occurred while processing the QR code: ${error.message || 'Unknown error'}`
-    );
-  } finally {
-    setLoading(false);
-    // Reactivate scanner after delay
-    setTimeout(() => setScanned(false), 2000);
-    scannerRef.current?.reactivate();
-  }
-};
+  };
 
   return (
     <View style={styles.container}>
@@ -73,8 +127,9 @@ const StudentQrCamera: React.FC = () => {
       ) : (
         <QRCodeScanner
           onRead={onSuccess}
-          reactivate={true} // allow reuse
-          reactivateTimeout={2000}
+          reactivate={false}
+          fadeIn={true}
+          showMarker={true}
           flashMode={RNCamera.Constants.FlashMode.auto}
           topContent={<Text style={styles.instructionText}>Align the QR code within the frame</Text>}
           bottomContent={
