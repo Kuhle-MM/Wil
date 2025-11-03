@@ -64,6 +64,7 @@ const LecturerDashboard: React.FC = () => {
   const handleAttendance = () => navigation.navigate('LecturerAttendance');
   const handleModule = () => navigation.navigate('LecturerModules', { role });
   const handleLesson = () => navigation.navigate('LecturerLessons', { role });
+  const handleQrCamera = () => navigation.navigate('QrCamera', { role });
 
   return (
     <ImageBackground
@@ -71,8 +72,8 @@ const LecturerDashboard: React.FC = () => {
       style={styles.backgroundImage}
       resizeMode="cover"
     >
-      <ScrollView style={styles.scrollContainer}>
-        <Text style={styles.header}>📙Dashboard</Text>
+      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+        <Text style={styles.header}>📙 {lecturerName}'s Dashboard</Text>
 
         <Text style={styles.sectionTitle}>Today’s Lessons</Text>
         <View style={styles.card}>
@@ -100,31 +101,31 @@ const LecturerDashboard: React.FC = () => {
             <Text style={styles.gridTextEmoji}>📊</Text>
             <Text style={styles.gridText}>Report Overview</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.gridButton} onPress={handleCalendar}>
-            <Text style={styles.gridTextEmoji}>🗓️</Text>
-            <Text style={styles.gridText}>Timetable</Text>
+          <TouchableOpacity style={styles.smallButton} onPress={handleCalendar}>
+            <Text>Timetable</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleAttendance}>
+            <Text>Clock In</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleModule}>
+            <Text>Your Modules</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleLesson}>
+            <Text>Your Lessons</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
+            <Text>Open Qr Camera</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.gridButton} onPress={handleAttendance}>
-            <Text style={styles.gridTextEmoji}>⏰</Text>
-            <Text style={styles.gridText}>Clock In</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.gridButton} onPress={handleModule}>
-            <Text style={styles.gridTextEmoji}>📘</Text>
-            <Text style={styles.gridText}>Your Modules</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={[styles.gridButton, styles.fullWidthButton]} onPress={handleLesson}>
-            <Text style={styles.gridTextEmoji}>📖</Text>
-            <Text style={styles.gridText}>Your Lessons</Text>
+          <TouchableOpacity style={[styles.gridButton, styles.fullWidthButton]} onPress={handleQrCamera}>
+            <Text style={styles.gridTextEmoji}>📷</Text>
+            <Text style={styles.gridText}>Open QR Camera</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <LecturerBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
-    </ImageBackground>
 
+      <LecturerBottomNav navigation={navigation} role={role as 'lecturer'} />
+    </ImageBackground>
   );
 };
 
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     fontWeight: '600',
     color: '#838282ff',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   card: {
     width: '100%',
@@ -165,6 +166,13 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  smallButton: {
+    backgroundColor: '#6B9B89',
+    padding: 10,
+    marginVertical: 6,
+    borderRadius: 8,
+    alignItems: 'center',
   },
   buttonGrid: {
     flexDirection: 'row',
@@ -192,15 +200,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     paddingVertical: 6,
-    paddingHorizontal: 4,
   },
   gridTextEmoji: {
     color: '#FFFFFF',
     fontSize: 28,
-    fontWeight: 'bold',
     textAlign: 'center',
-    paddingVertical: 6,
-    paddingHorizontal: 4,
   },
   fullWidthButton: {
     width: '100%',

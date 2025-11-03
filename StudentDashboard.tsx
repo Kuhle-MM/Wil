@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
+  ScrollView,
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Image,
   ImageBackground,
   ActivityIndicator,
-  ScrollView,
 } from 'react-native';
-import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import { useRoute, useNavigation, RouteProp, CommonActions } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -25,7 +26,11 @@ const StudentDashboard: React.FC = () => {
   const { role } = route.params;
 
   const [studentName, setStudentName] = useState<string>('');
-  const [progressData, setProgressData] = useState<{ Attended: number; TotalLessons: number; AttendancePercentage: number } | null>(null);
+  const [progressData, setProgressData] = useState<{
+    Attended: number;
+    TotalLessons: number;
+    AttendancePercentage: number;
+  } | null>(null);
   const [loadingProgress, setLoadingProgress] = useState(true);
   const [todaysModules, setTodaysModules] = useState<any[]>([]);
   const [loadingModules, setLoadingModules] = useState(true);
@@ -101,10 +106,12 @@ const StudentDashboard: React.FC = () => {
     fetchStudentDetails();
   }, []);
 
+  // Navigation Handlers
   const handleReport = () => navigation.navigate('Report', { role });
   const handleCalendar = () => navigation.navigate('Calendar', { role });
   const handleAttendance = () => navigation.navigate('StudentAttendance', { role });
   const handleModule = () => navigation.navigate('StudentModules', { role });
+  const handleQrCamera = () => navigation.navigate('QrCamera', { role });
 
   return (
     <ImageBackground
@@ -112,79 +119,95 @@ const StudentDashboard: React.FC = () => {
       style={styles.backgroundImage}
       resizeMode="cover"
     >
-      <ScrollView style={styles.scrollContainer}>
-        <Text style={styles.header}>📙 Your Dashboard</Text>
+      <ScrollView
+        style={styles.scrollContainer}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.header}>{studentName || 'Student'}'s Dashboard</Text>
 
+        {/* Today’s Modules */}
         <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>Today’s Modules</Text>
           {loadingModules ? (
-            <ActivityIndicator size="large" color="#064f62" />
+            <ActivityIndicator size="large" color="#4caf50" />
           ) : todaysModules.length === 0 ? (
             <Text style={styles.cardText}>No modules scheduled for today 🎉</Text>
           ) : (
-            todaysModules.map((lesson, index) => {
-              const lessonUTC = new Date(lesson.date);
-              const lessonSA = new Date(lessonUTC.getTime() - 2 * 60 * 60 * 1000);
-              const lessonTime = lessonSA.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-              return (
-                <Text key={index} style={styles.cardText}>
-                  {lesson.moduleCode} — {lessonTime}
-                </Text>
-              );
-            })
+            todaysModules.map((lesson, index) => (
+              <Text key={index} style={styles.cardText}>
+                {lesson.moduleCode} —{' '}
+                {new Date(lesson.date).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </Text>
+            ))
           )}
         </View>
 
+        {/* Weekly Attendance Progress */}
         <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>Weekly Attendance Progress</Text>
           {loadingProgress ? (
-            <ActivityIndicator size="large" color="#064f62" />
-          ) : progressData ? (
+            <ActivityIndicator size="large" color="#4caf50" />
+          ) : (
             <>
               <Text style={styles.cardText}>
-                {progressData.Attended} / {progressData.TotalLessons} lessons attended
+                {progressData?.Attended ?? 0} / {progressData?.TotalLessons ?? 0} lessons attended
               </Text>
               <Progress.Bar
                 progress={progressData.AttendancePercentage / 100}
-                width={330}
+                width={290}
                 height={18}
                 color="#064f62"
                 borderRadius={8}
-                style={{ marginTop: 10 }}
+                style={{ marginTop: 10, justifyContent: 'center' }}
               />
               <Text style={[styles.cardText, { marginTop: 5 }]}>
-                {progressData.AttendancePercentage.toFixed(2)}%
+                {(progressData?.AttendancePercentage ?? 0).toFixed(2)}%
               </Text>
             </>
-          ) : (
-            <Text style={styles.cardText}>No progress data available</Text>
           )}
         </View>
 
+        {/* Buttons Grid */}
         <View style={styles.buttonGrid}>
           <TouchableOpacity style={styles.gridButton} onPress={handleAttendance}>
-            <Text style={styles.gridEmoji}>⏰</Text>
-            <Text style={styles.gridLabel}>Clock In</Text>
+            <Image source={require('./assets/images/clockin.jpg')} style={styles.gridImage} resizeMode="cover" />
+            <Text style={styles.gridText}>Clock In</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.gridButton} onPress={handleReport}>
-            <Text style={styles.gridEmoji}>📊</Text>
-            <Text style={styles.gridLabel}>Reports</Text>
+            <Image source={require('./assets/images/report.jpg')} style={styles.gridImage} resizeMode="cover" />
+            <Text style={styles.gridText}>Report Overview</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.gridButton} onPress={handleCalendar}>
-            <Text style={styles.gridEmoji}>🗓️</Text>
-            <Text style={styles.gridLabel}>Calendar</Text>
+            <Image source={require('./assets/images/calendar.jpg')} style={styles.gridImage} resizeMode="cover" />
+            <Text style={styles.gridText}>Get Calendar</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.gridButton} onPress={handleModule}>
-            <Text style={styles.gridEmoji}>📘</Text>
-            <Text style={styles.gridLabel}>Your Modules</Text>
+            <Image source={require('./assets/images/modules.jpg')} style={styles.gridImage} resizeMode="cover" />
+            <Text style={styles.gridText}>Your Modules</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
+            <Text>Open QR Camera</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
+            <Text style={styles.qrText}>Open QR Camera</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
 
-      <StudentBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
+      {/* Bottom Navigation */}
+      <StudentBottomNav
+        navigation={navigation}
+        role={role as 'student' | 'lecturer' | 'admin'}
+      />
     </ImageBackground>
   );
 };
@@ -202,20 +225,6 @@ const styles = StyleSheet.create({
     marginTop: 60,
     marginBottom: 30,
   },
-  headerCard: {
-    backgroundColor: '#064f62',
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 20,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 6,
-    elevation: 5,
-  },
-  headerTitle: { color: '#fff', fontSize: 28, fontWeight: 'bold', marginBottom: 5 },
-  subHeader: { color: '#d8f3dc', fontSize: 18 },
   sectionCard: {
     backgroundColor: '#A4C984',
     borderRadius: 14,
@@ -234,7 +243,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
   },
-  cardText: { color: '#000', fontSize: 17, fontWeight: '500', textAlign: 'center' },
+  cardText: {
+    color: '#000',
+    fontSize: 17,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
   buttonGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -258,4 +272,13 @@ const styles = StyleSheet.create({
   },
   gridEmoji: { fontSize: 30, color: '#fff', marginBottom: 8 },
   gridLabel: { fontSize: 18, fontWeight: 'bold', color: '#fff' },
+  smallButton: {
+    width: '100%',
+    backgroundColor: '#A4C984',
+    borderRadius: 12,
+    padding: 14,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  qrText: { color: '#064f62', fontSize: 16, fontWeight: '600' },
 });
