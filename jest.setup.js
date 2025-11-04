@@ -145,3 +145,4 @@ jest.mock('@react-navigation/native', () => {
       params: {}, // Provide default empty params
     }),
   };
+});
