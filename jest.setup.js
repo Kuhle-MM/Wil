@@ -73,3 +73,14 @@ jest.mock('react-native-vector-icons/Ionicons', () => {
   // Mock it as a simple string or a "component"
   return 'Icon';
 });
+
+// 9. Mock react-native-progress
+// This is the file that's crashing: StudentDashboard.tsx imports it
+jest.mock('react-native-progress', () => {
+  const View = require('react-native/Libraries/Components/View/View');
+  return {
+    Bar: View,
+    Circle: View,
+    Pie: View,
+  };
+});

@@ -1,11 +1,11 @@
 module.exports = {
   preset: 'react-native',
 
-  // Fix 1: Add 'react-native-vector-icons' to this list
+  // Fix 1: Add 'react-native-progress' to this list
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|@react-navigation|react-native-ble-plx|react-native-vector-icons)/)',
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|@react-navigation|react-native-ble-plx|react-native-vector-icons|react-native-progress)/)',
   ],
 
-  // Fix 2 (from last time): Use our new mock file before tests
+  // Fix 2: Use our mock file
   setupFilesAfterEnv: ['./jest.setup.js'],
 };
