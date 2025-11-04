@@ -43,6 +43,7 @@ jobs:
           name: Build Android App
           command: |
             cd android
+            chmod +x ./gradlew
             ./gradlew assembleRelease
 
       - store_artifacts:
