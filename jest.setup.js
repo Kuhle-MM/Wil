@@ -66,3 +66,10 @@ jest.mock('react-native-reanimated', () => ({
   withTiming: jest.fn,
   withSpring: jest.fn,
 }));
+
+// 8. Mock react-native-vector-icons
+// This is the file that's crashing: AuthScreen.tsx imports Ionicons
+jest.mock('react-native-vector-icons/Ionicons', () => {
+  // Mock it as a simple string or a "component"
+  return 'Icon';
+});
