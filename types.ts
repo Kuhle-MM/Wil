@@ -24,4 +24,5 @@ export type RootTabParamList = {
   Settings: { role: 'student' | 'lecturer' | 'admin'};
   BottomNav: { role: 'student' | 'lecturer' | 'admin'};
   BLEReceiver: { role?: string }; 
+  QrCamera: { role: 'student' | 'lecturer' | 'admin'};
 };

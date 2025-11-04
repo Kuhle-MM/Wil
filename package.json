@@ -1,5 +1,5 @@
 {
-  "name": "rnTapify",
+  "name": "AttndEase",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native-community/cli": "latest",
     "@react-native-community/datetimepicker": "^8.4.2",
     "@react-native-picker/picker": "^2.11.1",
     "@react-native/new-app-screen": "0.80.0",
@@ -23,14 +24,19 @@
     "react-native-ble-plx": "^3.5.0",
     "react-native-gesture-handler": "^2.26.0",
     "react-native-get-random-values": "^1.11.0",
+    "react-native-camera": "^4.2.1",
+    "react-native-gesture-handler": "^2.26.0",
+    "react-native-permissions": "^5.4.2",
     "react-native-progress": "^5.0.1",
-    "react-native-reanimated": "^3.18.0",
+    "react-native-qrcode-scanner": "^1.5.5",
+    "react-native-reanimated": "^3.19.3",
     "react-native-safe-area-context": "^5.4.1",
-    "react-native-screens": "^4.11.1",
+    "react-native-screens": "^4.18.0",
     "react-native-svg": "^15.12.0",
     "react-native-svg-transformer": "^1.5.1",
     "react-native-vector-icons": "^10.3.0",
     "text-encoding": "^0.7.0"
+    "react-native-vision-camera": "^4.7.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

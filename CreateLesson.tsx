@@ -23,7 +23,6 @@ type Module = {
   courseCode: string;
 };
 
-
 const CreateLesson: React.FC = () => {
   const [studentNumber, setStudentNumber] = useState<string>('');
   const [moduleCode, setModuleCode] = useState('');
@@ -32,11 +31,17 @@ const CreateLesson: React.FC = () => {
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [modules, setModules] = useState<Module[]>([]);
+  const [classroom, setClassroom] = useState<string>('')
 
-    const navigation = useNavigation<AuthNavProp>();
+
+  const navigation = useNavigation<AuthNavProp>();
   const route = useRoute<AuthRouteProp>();
   const { role } = route.params ?? { role: "lecturer" }; // fallback
-  const lessonTimes = ['08:20', '09:20', '10:20', '12:00', '13:00', '14:00', '15:00', '15:40'];
+
+  const lessonTimes = [
+    '08:20', '09:20', '10:20', '11:20', '12:00',
+    '13:00', '14:00', '15:00', '15:40'
+  ];
 
   const handleCreateLesson = async () => {
     if (!studentNumber || !moduleCode || !courseCode || !selectedDate || !selectedTime) {
@@ -50,6 +55,10 @@ const CreateLesson: React.FC = () => {
     combinedDate.setMinutes(minutes);
     combinedDate.setSeconds(0);
 
+    // ✅ Fix timezone offset so the stored time matches your selected time
+    const localOffset = combinedDate.getTimezoneOffset() * 60000; // offset in ms
+    const correctedDate = new Date(combinedDate.getTime() - localOffset);
+
     try {
       const response = await fetch(
         'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/create_lesson',
@@ -60,7 +69,8 @@ const CreateLesson: React.FC = () => {
             lecturerID: studentNumber,
             moduleCode,
             courseCode,
-            date: combinedDate.toISOString(),
+            date: correctedDate.toISOString(), // ✅ Send corrected UTC time
+            classroom,
           }),
         }
       );
@@ -73,6 +83,7 @@ const CreateLesson: React.FC = () => {
         setCourseCode('');
         setSelectedDate(null);
         setSelectedTime('');
+        setClassroom('');
       } else {
         Alert.alert('Error', result);
       }
@@ -119,8 +130,6 @@ const CreateLesson: React.FC = () => {
     fetchModules();
   }, [studentNumber]);
 
-
-
   return (
     <ImageBackground
       source={require('./assets/images/background_2.jpg')}
@@ -138,7 +147,11 @@ const CreateLesson: React.FC = () => {
           >
             <Picker.Item label="Select a Module" value="" />
             {modules.map((mod) => (
-              <Picker.Item key={mod.moduleCode} label={mod.moduleCode} value={mod.moduleCode} />
+              <Picker.Item
+                key={mod.moduleCode}
+                label={mod.moduleCode}
+                value={mod.moduleCode}
+              />
             ))}
           </Picker>
 
@@ -149,6 +162,17 @@ const CreateLesson: React.FC = () => {
           >
             <Picker.Item label="Select Course Code" value="" />
             <Picker.Item label="BCAD0701" value="BCAD0701" />
+          </Picker>
+
+          <Picker
+            selectedValue={courseCode}
+            onValueChange={(value) => setCourseCode(value)}
+            style={styles.input}
+          >
+            <Picker.Item label="Select Classroom" value="" />
+            <Picker.Item label="CR1" value="CR1" />
+            <Picker.Item label="CR2" value="CR2" />
+            <Picker.Item label="CR3" value="CR3" />
           </Picker>
 
           <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.input}>
@@ -182,6 +206,7 @@ const CreateLesson: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
+
       <LecturerBottomNav
         navigation={navigation}
         role={role as "student" | "lecturer" | "admin"}
@@ -205,7 +230,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   card: {
-    backgroundColor: 'white', // snow
+    backgroundColor: 'white',
     borderRadius: 16,
     padding: 20,
     width: 320,
@@ -223,7 +248,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    backgroundColor: '#a4c984ff', // pistachio
+    backgroundColor: '#a4c984ff',
     borderRadius: 10,
     marginBottom: 15,
     paddingHorizontal: 10,
@@ -235,7 +260,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    backgroundColor: '#6bbfe4ff', // sky blue
+    backgroundColor: '#6bbfe4ff',
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',

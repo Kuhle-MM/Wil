@@ -165,8 +165,7 @@ const LecturerReports: React.FC = () => {
             />
           )}
         </View>
-
-        {/* ✅ Fixed Nav Bar at Bottom */}
+        
         <View style={styles.navContainer}>
           <LecturerBottomNav
             navigation={navigation}
