@@ -15,6 +15,8 @@ namespace VarsityTrackerApi.Models.Lesson
         public bool started { get; set; } = false;
         public DateTime? startedTime { get; set; }
         public bool finished { get; set; } = false;
+        public string? qrUrl { get; set; }
+        public string? classroom { get; set; } 
         //ITableEntity implementation
         public string? PartitionKey
         { get; set; }

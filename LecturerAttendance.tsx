@@ -1,10 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, ImageBackground } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootTabParamList } from './types';
+import LecturerBottomNav from './BottomNav.tsx';
 
+type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
+type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
 const LecturerAttendance: React.FC = () => {
   const [isClockedIn, setIsClockedIn] = useState(false);
+  const navigation = useNavigation<AuthNavProp>();
+    const route = useRoute<AuthRouteProp>();
+    const { role } = route.params ?? { role: "lecturer" };
 
   useEffect(() => {
     const loadClockStatus = async () => {
@@ -26,13 +36,13 @@ const LecturerAttendance: React.FC = () => {
         return;
       }
 
-      const { lecturerID } = JSON.parse(session);
-      const endpoint = `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/lecturer/clockin/${lecturerID}`;
+      const { studentNumber } = JSON.parse(session);
+      const endpoint = `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/lecturer/clockin/${studentNumber}`;
 
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lecturerID }),
+        body: JSON.stringify({ studentNumber }),
       });
 
       const text = await response.text();
@@ -57,13 +67,13 @@ const LecturerAttendance: React.FC = () => {
         return;
       }
 
-      const { lecturerID } = JSON.parse(session);
-      const endpoint = `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/lecturer/clockout/${lecturerID}`;
+      const { studentNumber } = JSON.parse(session);
+      const endpoint = `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/lecturer/clockout/${studentNumber}`;
 
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lecturerID }),
+        body: JSON.stringify({ studentNumber }),
       });
 
       const text = await response.text();
@@ -80,107 +90,99 @@ const LecturerAttendance: React.FC = () => {
     }
   };
 
-  
   return (
-    <View style={styles.centeredContainer}>
-        <Text style={styles.header}>Lecturer Clock In</Text>
-        <TouchableOpacity style={styles.smallButton} onPress={isClockedIn ? handleClockOut : handleClockIn}><Text>{isClockedIn ? 'Clock Out' : 'Clock In'}</Text></TouchableOpacity>
-    </View>
+    <ImageBackground
+      source={require('./assets/images/login.jpg')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <Text style={styles.header}>Lecturer Attendance</Text>
+
+        <View style={styles.statusContainer}>
+          <Icon
+            name={isClockedIn ? 'checkmark-circle' : 'close-circle'}
+            size={70}
+            color={isClockedIn ? '#4CAF50' : '#E53935'}
+          />
+          <Text style={styles.statusText}>
+            {isClockedIn ? 'You are Clocked In' : 'You are Clocked Out'}
+          </Text>
+        </View>
+
+        <TouchableOpacity
+          style={[styles.button, isClockedIn ? styles.clockOutButton : styles.clockInButton]}
+          onPress={isClockedIn ? handleClockOut : handleClockIn}
+        >
+          <Icon
+            name={isClockedIn ? 'log-out-outline' : 'log-in-outline'}
+            size={26}
+            color="#fff"
+            style={{ marginRight: 8 }}
+          />
+          <Text style={styles.buttonText}>
+            {isClockedIn ? 'Clock Out' : 'Clock In'}
+          </Text>
+        </TouchableOpacity>
+        <LecturerBottomNav navigation={navigation} role={role as 'student' | 'lecturer' | 'admin'} />
+      </View>
+    </ImageBackground>
   );
 };
 
 export default LecturerAttendance;
 
-
 const styles = StyleSheet.create({
-  centeredContainer: {
+  backgroundImage: {
     flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  scrollContainer: {
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  logo: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    marginBottom: 40,
+    padding: 20,
   },
   header: {
-    fontSize: 24,
+    fontSize: 38,
     fontWeight: 'bold',
-    marginBottom: 16,
+    color: '#064f62',
+    marginBottom: 40,
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 4,
   },
-  subHeader: {
-    fontSize: 18,
-    marginVertical: 8,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    marginVertical: 8,
-    fontWeight: '500',
-  },
-  card: {
-    width: '100%',
-    padding: 20,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 12,
-    marginBottom: 16,
+  statusContainer: {
     alignItems: 'center',
+    marginBottom: 30,
   },
-  cardText: {
-    fontSize: 16,
+  statusText: {
+    fontSize: 20,
+    color: '#fff',
+    marginTop: 12,
+    fontWeight: '600',
   },
   button: {
-    backgroundColor: '#ccc',
-    padding: 12,
-    width: 200,
-    borderRadius: 8,
-    marginVertical: 8,
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.4,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
   },
-  smallButton: {
-    backgroundColor: '#ddd',
-    padding: 10,
-    borderRadius: 6,
-    marginVertical: 6,
-    alignItems: 'center',
+  clockInButton: {
+    backgroundColor: '#4CAF50',
+  },
+  clockOutButton: {
+    backgroundColor: '#E53935',
   },
   buttonText: {
-    fontSize: 16,
-  },
-  reportRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
-  },
-  roleSelector: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 12,
-  },
-  roleButton: {
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 8,
-    width: '48%',
-    alignItems: 'center',
-  },
-  roleSelected: {
-    backgroundColor: '#cce5ff',
-    borderColor: '#007bff',
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });

@@ -14,14 +14,13 @@ const Tab = createBottomTabNavigator();
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from './types';
 import AuthScreen from './AuthScreen';
-import AuthScreenLec from './AuthScreenLect.tsx';
+//import AuthScreenLec from './AuthScreenLect.tsx';
+import BLEReceiver from './BLEReceiver.tsx';
 import LecturersDashboard from './LecturerDashboard.tsx';
 import StudentsDashboard from './StudentDashboard';
 import StudentsCalandar from './StudentsCalendar';
 import StudentsReports from './StudentsReports'
-import AuthScreenLect from './AuthScreenLect.tsx';
 import LecturersReports from './LecturerReports.tsx';
-import AuthScreenAdm from './AuthScreenAdm.tsx';
 import CreateUser from './CreateUser.tsx';
 import AdminsDashboard from './AdminDashboard.tsx';
 import StudentAttendances from './StudentAttendance.tsx';
@@ -30,6 +29,14 @@ import CreateModule from './CreateModule.tsx';
 import StudentModules from './StudentModules.tsx';
 import LecturerModules from './LecturerModules.tsx';
 import CreateLesson from './CreateLesson.tsx';
+import LecturerLessons from './LecturerLessons.tsx';
+import LessonActivity from './LessonActivity.tsx';
+import Modules from './Modules.tsx';
+import StudentBottomNav from './BottomNav.tsx';
+import LecturersCalendar from './LecturersCalendar.tsx';
+import LecturerQrCamera from './LecturerQrCamera.tsx';
+import StudentQrCamera from './StudentQrCamera.tsx';
+import Settings from './Settings.tsx';
 
 const Stack = createNativeStackNavigator<RootTabParamList>();
 
@@ -44,12 +51,6 @@ const LoginScreen: React.FC = () => {
       <Text style={styles.logo}>Tapify</Text>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Auth', { role: 'student' })}>
         <Text style={styles.buttonText}>Login as Student</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AuthLecturer', { role: 'lecturer' })}>
-        <Text style={styles.buttonText}>Login as Lecturer</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AuthAdmin', { role: 'admin' })}>
-        <Text style={styles.buttonText}>Login as Admin</Text>
       </TouchableOpacity>
     </View>
   );
@@ -125,19 +126,36 @@ const MainTabs: React.FC = () => {
     </Tab.Navigator>
   );
 };
+// Main role-based screen
+const Main: React.FC<{ route: { params: { role: 'Student' | 'Lecturer' | 'Admin' } } }> = ({ route }) => {
+  const { role } = route.params;
+
+  if (role === 'Student') return <StudentsDashboard />;
+  if (role === 'Lecturer') return <LecturerDashboard />;
+  if (role === 'Admin') return <AdminsDashboard />;
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>No role specified</Text>
+    </View>
+  );
+};
 
 export default function App() {
   return (
     <NavigationContainer>
-      <StackNav.Navigator screenOptions={{ headerShown: false }}>
+      <StackNav.Navigator screenOptions={{ headerShown: false }} initialRouteName="Auth">
         <StackNav.Screen name="Login" component={LoginScreen} />
         <StackNav.Screen name="CreateUser" component={CreateUser} />
         <StackNav.Screen name="CreateModule" component={CreateModule} />
         <StackNav.Screen name="Auth" component={AuthScreen} /> 
-        <StackNav.Screen name="AuthLecturer" component={AuthScreenLect} />
-        <StackNav.Screen name="AuthAdmin" component={AuthScreenAdm} />
-        <StackNav.Screen name="Main" component={StudentsDashboard} />
-        <StackNav.Screen name="Calendar" component={StudentsCalandar} />
+        <StackNav.Screen name="Main" component={Main} />
+        <StackNav.Screen name="Calendar">
+        {({ route }: any) => {
+          const role = route.params?.role;
+          return role === 'Lecturer' ? <LecturersCalendar /> : <StudentsCalandar />;
+        }}
+        </StackNav.Screen>
         <StackNav.Screen name="Report" component={StudentsReports} />        
         <StackNav.Screen name="MainLecturer" component={LecturersDashboard} />
         <StackNav.Screen name="MainAdmin" component={AdminsDashboard} />
@@ -146,7 +164,17 @@ export default function App() {
         <StackNav.Screen name="LecturerAttendance" component={LecturerAttendance} />
         <StackNav.Screen name="StudentModules" component={StudentModules} />
         <StackNav.Screen name="LecturerModules" component={LecturerModules} />
+        <StackNav.Screen name="LecturerLessons" component={LecturerLessons} />
         <StackNav.Screen name="CreateLesson" component={CreateLesson} />
+        <StackNav.Screen name="LessonActivity" component={LessonActivity} />
+        <StackNav.Screen name="Modules" component={Modules} />
+        <StackNav.Screen name="QrCamera">
+        {({ route }: any) => {
+          const role = route.params?.role;
+          return role === 'Lecturer' ? <LecturerQrCamera /> : <StudentQrCamera />;
+        }}
+        </StackNav.Screen>
+        <StackNav.Screen name="Settings" component={Settings} /> 
       </StackNav.Navigator>
     </NavigationContainer>
   );

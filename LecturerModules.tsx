@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity, TextInput, ActivityIndicator, FlatList, ScrollView } from 'react-native';
-import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootTabParamList } from './types';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  ActivityIndicator,
+  FlatList,
+  ScrollView,
+  ImageBackground,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useRoute, RouteProp } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootTabParamList } from './types';
+import LecturerBottomNav from "./BottomNav.tsx";
 
-type AuthRouteProp = RouteProp<RootTabParamList, 'LecturerModules'>;
+type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
 type Module = {
@@ -16,24 +28,25 @@ type Module = {
 };
 
 const LecturerModules: React.FC = () => {
-    const navigation = useNavigation<AuthNavProp>();
-
-  const [lecturerID, setLecturerID] = useState<string>('');
+  const navigation = useNavigation<AuthNavProp>();
+  const [studentNumber, setStudentNumber] = useState<string>('');
   const [allModules, setAllModules] = useState<Module[]>([]);
   const [assignedModules, setAssignedModules] = useState<Module[]>([]);
   const [selectedModule, setSelectedModule] = useState<string>('');
   const [loadingModules, setLoadingModules] = useState(true);
   const [loadingAssigned, setLoadingAssigned] = useState(true);
 
-  // Load lecturer ID from AsyncStorage
+  const route = useRoute<AuthRouteProp>();
+  const { role } = route.params ?? { role: "lecturer" }; // fallback
+
   useEffect(() => {
     const loadLecturerID = async () => {
       try {
         const session = await AsyncStorage.getItem('userSession');
         if (!session) throw new Error('No user session found');
         const parsed = JSON.parse(session);
-        if (!parsed.lecturerID) throw new Error('Lecturer ID not found');
-        setLecturerID(parsed.lecturerID);
+        if (!parsed.studentNumber) throw new Error('Lecturer ID not found');
+        setStudentNumber(parsed.studentNumber);
       } catch (error) {
         Alert.alert('Error', (error as Error).message);
         setLoadingModules(false);
@@ -43,7 +56,6 @@ const LecturerModules: React.FC = () => {
     loadLecturerID();
   }, []);
 
-  // Fetch all modules (to match moduleCode with moduleName)
   useEffect(() => {
     const fetchAllModules = async () => {
       try {
@@ -55,7 +67,6 @@ const LecturerModules: React.FC = () => {
         setAllModules(data);
       } catch (error) {
         Alert.alert('Error', 'Could not load all modules.');
-        console.error(error);
       } finally {
         setLoadingModules(false);
       }
@@ -63,19 +74,15 @@ const LecturerModules: React.FC = () => {
     fetchAllModules();
   }, []);
 
-  // Fetch assigned modules when lecturerID is ready
   useEffect(() => {
-    if (!lecturerID) return;
-
+    if (!studentNumber) return;
     const fetchAssignedModules = async () => {
       try {
         const response = await fetch(
-          `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_lecturer_modules?lecturerID=${lecturerID}`
+          `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_lecturer_modules?lecturerID=${studentNumber}`
         );
         if (!response.ok) throw new Error('Failed to fetch assigned modules');
         const data = await response.json();
-
-        // Transform to match the UI model
         const transformedModules: Module[] = data.map((item: any) => ({
           RowKey: item.rowKey,
           code: item.moduleCode,
@@ -83,27 +90,23 @@ const LecturerModules: React.FC = () => {
             allModules.find((m) => m.code === item.moduleCode)?.moduleName ||
             'N/A',
         }));
-
         setAssignedModules(transformedModules);
       } catch (error) {
-        Alert.alert('Error', 'Could not load your assigned modules.');
-        console.error(error);
+        Alert.alert('Error', 'Could not load assigned modules.');
       } finally {
         setLoadingAssigned(false);
       }
     };
-
     fetchAssignedModules();
-  }, [lecturerID, allModules]);
+  }, [studentNumber, allModules]);
 
   const AddModule = async () => {
     if (!selectedModule) {
       Alert.alert('Please select a module to add');
       return;
     }
-
     try {
-      const payload = { lecturerID, moduleCode: selectedModule };
+      const payload = { lecturerID: studentNumber, moduleCode: selectedModule };
       const response = await fetch(
         'https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/lecturer_add_module',
         {
@@ -118,23 +121,7 @@ const LecturerModules: React.FC = () => {
         return;
       }
       Alert.alert('Success', resultText);
-
-      // Refresh list
-      setLoadingAssigned(true);
-      const updatedResponse = await fetch(
-        `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Module/all_lecturer_modules?lecturerID=${lecturerID}`
-      );
-      const updatedData = await updatedResponse.json();
-      const transformed = updatedData.map((item: any) => ({
-        RowKey: item.rowKey,
-        code: item.moduleCode,
-        moduleName:
-          allModules.find((m) => m.code === item.moduleCode)?.moduleName ||
-          'N/A',
-      }));
-      setAssignedModules(transformed);
     } catch (error) {
-      console.error(error);
       Alert.alert('Error', 'Could not connect to the server.');
     } finally {
       setLoadingAssigned(false);
@@ -142,90 +129,176 @@ const LecturerModules: React.FC = () => {
   };
 
   const renderModule = ({ item }: { item: Module }) => (
-    <View style={styles.reportRow}>
-      <Text style={styles.cell}>{item.code}</Text>
-      <Text style={styles.cell}>{item.moduleName}</Text>
+    <View style={styles.card}>
+      <Text style={styles.moduleCode}>{item.code}</Text>
+      <Text style={styles.moduleName}>{item.moduleName}</Text>
     </View>
   );
 
   if (loadingModules || loadingAssigned) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#000" />
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#064f62ff" />
       </View>
     );
   }
 
+  const availableModules = allModules.filter(
+    (mod) => !assignedModules.some((assigned) => assigned.code === mod.code)
+  );
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Assigned Modules</Text>
-      {assignedModules.length === 0 ? (
-        <Text>No modules assigned to you yet.</Text>
-      ) : (
-        <>
-          <View style={styles.tableHeader}>
-            <Text style={[styles.cell, styles.headerCell]}>Module Code</Text>
-            <Text style={[styles.cell, styles.headerCell]}>Module Name</Text>
+    <ImageBackground
+      source={require('./assets/images/BackgroundImage.jpg')} 
+      style={styles.background}
+    >
+      <View style={styles.mainContainer}>
+        <ScrollView
+          contentContainerStyle={styles.container}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.header}>Assigned Modules</Text>
+
+          {assignedModules.length === 0 ? (
+            <Text style={styles.noModules}>No modules assigned yet.</Text>
+          ) : (
+            <FlatList
+              data={assignedModules}
+              keyExtractor={(item) => item.RowKey}
+              renderItem={renderModule}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.cardList}
+            />
+          )}
+
+          <Text style={[styles.header, { marginTop: 25 }]}>Add Module</Text>
+
+          <View style={styles.form}>
+            <Picker
+              selectedValue={selectedModule}
+              onValueChange={(itemValue) => setSelectedModule(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label="Select a Module" value="" />
+              {availableModules.map((mod) => (
+                <Picker.Item
+                  label={`${mod.code} - ${mod.moduleName}`}
+                  value={mod.code}
+                  key={mod.RowKey}
+                />
+              ))}
+            </Picker>
+
+            <TouchableOpacity
+              style={[
+                styles.button,
+                { opacity: !selectedModule ? 0.6 : 1 },
+              ]}
+              onPress={AddModule}
+              disabled={!selectedModule}
+            >
+              <Text style={styles.buttonText}>Add Module</Text>
+            </TouchableOpacity>
           </View>
-          <FlatList
-            data={assignedModules}
-            keyExtractor={(item) => item.RowKey}
-            renderItem={renderModule}
-          />
-        </>
-      )}
+        </ScrollView>
 
-      <Text style={[styles.header, { marginTop: 20 }]}>Add Module</Text>
-      <Picker
-        selectedValue={selectedModule}
-        onValueChange={(itemValue) => setSelectedModule(itemValue)}
-        style={styles.picker}
-      >
-        <Picker.Item label="Select a Module" value="" />
-        {allModules.map((mod) => (
-          <Picker.Item
-            label={`${mod.code} - ${mod.moduleName}`}
-            value={mod.code}
-            key={mod.RowKey}
+        {/* Bottom Nav pinned */}
+        <View style={styles.navContainer}>
+          <LecturerBottomNav
+            navigation={navigation}
+            role={role as "student" | "lecturer" | "admin"}
           />
-        ))}
-      </Picker>
-
-      <TouchableOpacity style={styles.button} onPress={AddModule}>
-        <Text style={styles.buttonText}>Add Module</Text>
-      </TouchableOpacity>
-    </View>
+        </View>
+      </View>
+    </ImageBackground>
   );
 };
 
 export default LecturerModules;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#fff' },
-  header: { fontSize: 24, fontWeight: 'bold', marginBottom: 12 },
-  tableHeader: {
-    flexDirection: 'row',
-    borderBottomWidth: 2,
-    borderBottomColor: '#000',
-    paddingBottom: 8,
-    marginBottom: 8,
+  background: {
+    flex: 1,
+    backgroundColor: '#f9f0f0ff', // snow
   },
-  reportRow: {
-    flexDirection: 'row',
+  mainContainer: {
+    flex: 1,
     justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
   },
-  cell: { flex: 1, fontSize: 16 },
-  headerCell: { fontWeight: 'bold' },
-  picker: { height: 50, width: '100%' },
-  button: {
-    backgroundColor: '#4287f5',
-    padding: 14,
-    borderRadius: 8,
+  container: {
+    paddingVertical: 20,
     alignItems: 'center',
-    marginTop: 12,
   },
-  buttonText: { color: '#fff', fontWeight: 'bold' },
+  header: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#064f62ff',
+    marginBottom: 10,
+  },
+  cardList: {
+    paddingHorizontal: 10,
+  },
+  card: {
+    backgroundColor: '#a4c984ff',
+    width: 220,
+    height: 120,
+    borderRadius: 16,
+    marginRight: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 4,
+  },
+  moduleCode: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#064f62ff',
+  },
+  moduleName: {
+    fontSize: 15,
+    color: '#064f62ff',
+    textAlign: 'center',
+    marginTop: 6,
+    paddingHorizontal: 10,
+  },
+  picker: {
+    backgroundColor: '#064f62ff',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#6bbfe4ff',
+    width: 260,
+    marginVertical: 10,
+  },
+  button: {
+    backgroundColor: '#6bbfe4ff',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  noModules: {
+    color: '#aeacabff',
+    fontSize: 16,
+    marginVertical: 10,
+  },
+  form: {
+    alignItems: 'center',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  navContainer: {
+    backgroundColor: '#f9f0f0ff',
+  },
 });

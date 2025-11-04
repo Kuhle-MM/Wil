@@ -1,137 +1,213 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+  ScrollView,
+  ImageBackground,
+} from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootTabParamList } from './types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LecturerBottomNav from './BottomNav.tsx';
 
-
-type AuthRouteProp = RouteProp<RootTabParamList, 'AuthLecturer'>;
+type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
 const LecturerDashboard: React.FC = () => {
   const navigation = useNavigation<AuthNavProp>();
-    const route = useRoute<AuthRouteProp>();
-    const { role } = route.params;
-    const handleReport = async () => {
-    navigation.navigate('ReportLecturer');  
+  const route = useRoute<AuthRouteProp>();
+  const { role } = route.params;
+
+  const [lecturerName, setLecturerName] = useState<string>('Lecturer');
+  const [todaysLessons, setTodaysLessons] = useState<any[]>([]);
+  const [loadingLessons, setLoadingLessons] = useState(true);
+
+  useEffect(() => {
+    const fetchTodaysLessons = async () => {
+      try {
+        const session = await AsyncStorage.getItem('userSession');
+        if (!session) return;
+
+        const user = JSON.parse(session);
+        const lecturerID = user.studentNumber;
+        setLecturerName(user.name || 'Lecturer');
+
+        const response = await fetch(
+          `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/lecturer_timetable/${lecturerID}`
+        );
+        if (!response.ok) throw new Error('Failed to fetch timetable');
+
+        const data = await response.json();
+        const today = new Date();
+        const todays = data.filter((lesson: any) => {
+          const lessonDate = new Date(lesson.date);
+          return lessonDate.toDateString() === today.toDateString();
+        });
+        setTodaysLessons(todays);
+      } catch (error: any) {
+        Alert.alert('Error', error.message);
+      } finally {
+        setLoadingLessons(false);
+      }
     };
-    const handleCalandar = async () => {
-    navigation.navigate('Calendar');  
-    };
-    const handleAttendance = async () => {
-    navigation.navigate('LecturerAttendance');  
-    };
-    const handleModule = async () => {
-    navigation.navigate('LecturerModules', { role });  
-    };
-    const handleLesson = async () => {
-    navigation.navigate('CreateLesson', { role });  
-    };
-    
+
+    fetchTodaysLessons();
+  }, []);
+
+  const handleReport = () => navigation.navigate('ReportLecturer');
+  const handleCalendar = () => navigation.navigate('Calendar', { role });
+  const handleAttendance = () => navigation.navigate('LecturerAttendance');
+  const handleModule = () => navigation.navigate('LecturerModules', { role });
+  const handleLesson = () => navigation.navigate('LecturerLessons', { role });
+  const handleQrCamera = () => navigation.navigate('QrCamera', { role });
+
   return (
-    <View style={styles.scrollContainer}>
-        <Text style={styles.header}>Dashboard</Text>
-        <Text style={styles.sectionTitle}>Set Today’s Modules</Text>
-        <TouchableOpacity style={styles.card}><Text style={styles.cardText}>tap to generate</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.smallButton} onPress={handleReport}><Text>report overview</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.smallButton} onPress={handleAttendance}><Text>Clock In</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.smallButton} onPress={handleModule}><Text>Your Modules</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.smallButton} onPress={handleLesson}><Text>Create Lesson</Text></TouchableOpacity>
-      </View>
+    <ImageBackground
+      source={require('./assets/images/BackgroundImage.jpg')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+        <Text style={styles.header}>📙 {lecturerName}'s Dashboard</Text>
+
+        <Text style={styles.sectionTitle}>Today’s Lessons</Text>
+        <View style={styles.card}>
+          {loadingLessons ? (
+            <ActivityIndicator size="large" color="#6B9B89" />
+          ) : todaysLessons.length === 0 ? (
+            <Text style={styles.cardText}>No lessons scheduled for today 🎉</Text>
+          ) : (
+            todaysLessons.map((lesson, index) => {
+              const lessonUTC = new Date(lesson.date);
+              const lessonSA = new Date(lessonUTC.getTime() - 2 * 60 * 60 * 1000);
+              const lessonTime = lessonSA.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+              return (
+                <Text key={index} style={styles.cardText}>
+                  {lesson.moduleCode} — {lessonTime}
+                </Text>
+              );
+            })
+          )}
+        </View>
+
+        <View style={styles.buttonGrid}>
+          <TouchableOpacity style={styles.gridButton} onPress={handleReport}>
+            <Text style={styles.gridTextEmoji}>📊</Text>
+            <Text style={styles.gridText}>Report Overview</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleCalendar}>
+            <Text>Timetable</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleAttendance}>
+            <Text>Clock In</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleModule}>
+            <Text>Your Modules</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleLesson}>
+            <Text>Your Lessons</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={handleQrCamera}>
+            <Text>Open Qr Camera</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.gridButton, styles.fullWidthButton]} onPress={handleQrCamera}>
+            <Text style={styles.gridTextEmoji}>📷</Text>
+            <Text style={styles.gridText}>Open QR Camera</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+
+      <LecturerBottomNav navigation={navigation} role={role as 'lecturer'} />
+    </ImageBackground>
   );
 };
 
 export default LecturerDashboard;
 
 const styles = StyleSheet.create({
-  centeredContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  scrollContainer: {
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  logo: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    marginBottom: 40,
-  },
+  backgroundImage: { flex: 1, width: '100%', height: '100%', backgroundColor: '#FFFFFF' },
+  scrollContainer: { flex: 1, padding: 16 },
   header: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  subHeader: {
-    fontSize: 18,
-    marginVertical: 8,
+    textAlign: 'center',
+    color: '#2E2E2E',
+    marginTop: 60,
+    marginBottom: 30,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 25,
     marginVertical: 8,
-    fontWeight: '500',
+    fontWeight: '600',
+    color: '#838282ff',
+    textAlign: 'center',
   },
   card: {
     width: '100%',
-    padding: 20,
-    backgroundColor: '#e0e0e0',
+    padding: 16,
+    backgroundColor: '#A4C984',
     borderRadius: 12,
     marginBottom: 16,
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
   },
   cardText: {
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#ccc',
-    padding: 12,
-    width: 200,
-    borderRadius: 8,
-    marginVertical: 8,
-    alignItems: 'center',
+    color: '#000000',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   smallButton: {
-    backgroundColor: '#ddd',
+    backgroundColor: '#6B9B89',
     padding: 10,
-    borderRadius: 6,
     marginVertical: 6,
+    borderRadius: 8,
     alignItems: 'center',
   },
-  buttonText: {
-    fontSize: 16,
-  },
-  reportRow: {
+  buttonGrid: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    marginVertical: 10,
   },
-  
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
-  },
-  roleSelector: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 12,
-  },
-  roleButton: {
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 8,
+  gridButton: {
     width: '48%',
+    borderRadius: 12,
+    marginVertical: 10,
     alignItems: 'center',
+    justifyContent: 'center',
+    height: 120,
+    backgroundColor: '#064f62',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 4,
   },
-  roleSelected: {
-    backgroundColor: '#cce5ff',
-    borderColor: '#007bff',
+  gridText: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingVertical: 6,
+  },
+  gridTextEmoji: {
+    color: '#FFFFFF',
+    fontSize: 28,
+    textAlign: 'center',
+  },
+  fullWidthButton: {
+    width: '100%',
+    height: 120,
   },
 });
