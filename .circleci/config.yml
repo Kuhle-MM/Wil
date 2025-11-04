@@ -1,95 +1,54 @@
 version: 2.1
 
 jobs:
-  # -------------------------------
   # Job 1: Build and Test JavaScript
-  # -------------------------------
   build_and_test_js:
     docker:
       - image: cimg/node:18.17.0
     working_directory: ~/repo
-
     steps:
       - checkout
-
-      # Cache dependencies using the package-lock.json checksum
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package-lock.json" }}
             - v1-dependencies-
-
-      # Install dependencies (npm ci if lockfile exists, otherwise npm install)
       - run:
           name: Install Dependencies
-          command: |
-            if [ -f package-lock.json ]; then
-              echo "Found package-lock.json — using npm ci"
-              npm ci
-            else
-              echo "No package-lock.json found — using npm install"
-              npm install
-            fi
-
-      # Save node_modules to cache for faster future builds
+          command: npm ci
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package-lock.json" }}
-
-      # Run tests (adjust or remove if you don’t use Jest)
       - run:
           name: Run Tests
-          command: npm test || echo "Tests failed or not configured, continuing..."
+          command: npm test
 
-  # -------------------------------
-  # Job 2: Build Android APK
-  # -------------------------------
+  # Job 2: Build Android .apk file
   build_android:
+    # Use the -node variant image
     docker:
-      - image: cimg/android:2024.06
+      - image: cimg/android:2025.10-node
     working_directory: ~/repo
-
     steps:
       - checkout
-
-      # Restore cached JS dependencies
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package-lock.json" }}
             - v1-dependencies-
-
-      # Install dependencies (same fallback logic)
       - run:
           name: Install Dependencies
-          command: |
-            if [ -f package-lock.json ]; then
-              echo "Found package-lock.json — using npm ci"
-              npm ci
-            else
-              echo "No package-lock.json found — using npm install"
-              npm install
-            fi
+          command: npm ci
 
-      # Grant Gradle execution permissions
       - run:
-          name: Set Gradlew Permissions
-          command: chmod +x android/gradlew
-
-      # Build Android release APK
-      - run:
-          name: Build Android Release
+          name: Build Android App
           command: |
             cd android
             ./gradlew assembleRelease
 
-      # Store built APK artifact for download
       - store_artifacts:
           path: android/app/build/outputs/apk/release/app-release.apk
           destination: AttndEase.apk
 
-# -------------------------------
-# Workflow definition
-# -------------------------------
 workflows:
   build_test_and_deploy:
     jobs:
