@@ -1,19 +1,21 @@
 // jest.setup.js
 
-// 1. Mock AsyncStorage (the one that's crashing now)
+// --- We're mocking every native module from your package.json ---
+
+// 1. AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );
 
-// 2. Mock BLE-PLX (this would have been your next crash)
+// 2. BLE-PLX
 jest.mock('react-native-ble-plx', () => ({
   BleManager: jest.fn(() => ({
     createClient: jest.fn(),
-    // Add other methods you use here
+    // ... add any other methods your app uses
   })),
 }));
 
-// 3. Mock react-native-camera
+// 3. react-native-camera
 jest.mock('react-native-camera', () => ({
   RNCamera: {
     Constants: {
@@ -24,19 +26,19 @@ jest.mock('react-native-camera', () => ({
   },
 }));
 
-// 4. Mock react-native-permissions
+// 4. react-native-permissions
 jest.mock('react-native-permissions', () =>
   require('react-native-permissions/mock'),
 );
 
-// 5. Mock vision-camera
+// 5. vision-camera
 jest.mock('react-native-vision-camera', () => ({
   useCameraDevice: jest.fn(),
   useFrameProcessor: jest.fn(),
   Camera: jest.fn(),
 }));
 
-// 6. Mock react-native-gesture-handler (often needed)
+// 6. react-native-gesture-handler
 jest.mock('react-native-gesture-handler', () => {
   const View = require('react-native/Libraries/Components/View/View');
   return {
@@ -58,7 +60,7 @@ jest.mock('react-native-gesture-handler', () => {
   };
 });
 
-// 7. Mock reanimated
+// 7. reanimated
 jest.mock('react-native-reanimated', () => ({
   ...require('react-native-reanimated/mock'),
   useSharedValue: jest.fn,
@@ -67,20 +69,61 @@ jest.mock('react-native-reanimated', () => ({
   withSpring: jest.fn,
 }));
 
-// 8. Mock react-native-vector-icons
-// This is the file that's crashing: AuthScreen.tsx imports Ionicons
-jest.mock('react-native-vector-icons/Ionicons', () => {
-  // Mock it as a simple string or a "component"
-  return 'Icon';
-});
+// 8. react-native-vector-icons
+jest.mock('react-native-vector-icons/Ionicons', () => 'Icon');
+jest.mock('react-native-vector-icons/AntDesign', () => 'Icon');
+// Add any other icon sets you use here
 
-// 9. Mock react-native-progress
-// This is the file that's crashing: StudentDashboard.tsx imports it
+// 9. react-native-progress
 jest.mock('react-native-progress', () => {
   const View = require('react-native/Libraries/Components/View/View');
+  return { Bar: View, Circle: View, Pie: View };
+});
+
+// 10. react-native-qrcode-scanner
+jest.mock('react-native-qrcode-scanner', () => {
+  const View = require('react-native/Libraries/Components/View/View');
+  return View;
+});
+
+// --- New mocks for packages that would have crashed next ---
+
+// 11. react-native-get-random-values
+jest.mock('react-native-get-random-values', () => ({
+  getRandomBase64: jest.fn(),
+}));
+
+// 12. @react-native-community/datetimepicker
+jest.mock('@react-native-community/datetimepicker', () => {
+  const View = require('react-native/Libraries/Components/View/View');
+  return View;
+});
+
+// 13. @react-native-picker/picker
+jest.mock('@react-native-picker/picker', () => {
+  const View = require('react-native/Libraries/Components/View/View');
+  return View;
+});
+
+// 14. react-native-safe-area-context
+jest.mock('react-native-safe-area-context', () =>
+  require('react-native-safe-area-context/jest/mock'),
+);
+
+// 15. react-native-screens
+jest.mock('react-native-screens', () => ({
+  ...jest.requireActual('react-native-screens'),
+  enableScreens: jest.fn(),
+}));
+
+// 16. react-native-svg
+jest.mock('react-native-svg', () => {
+  const View = require('react-native/Libraries/Components/View/View');
   return {
-    Bar: View,
+    ...jest.requireActual('react-native-svg'),
+    Svg: View,
+    Path: View, // Mock specific SVG components you use
     Circle: View,
-    Pie: View,
+    Rect: View,
   };
 });
