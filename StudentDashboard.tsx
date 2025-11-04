@@ -175,11 +175,6 @@ const StudentDashboard: React.FC = () => {
             <Text style={styles.gridLabel}>Reports</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.gridButton} onPress={handleBLE}>{/* //////////////////////////////////////// */}
-           
-            <Text style={styles.gridText}>Open BLE Scanner</Text>
-          </TouchableOpacity>{/* //////////////////////////////////////// */}
-
           <TouchableOpacity style={styles.gridButton} onPress={handleCalendar}>
             <Text style={styles.gridEmoji}>🗓️</Text>
             <Text style={styles.gridLabel}>Calendar</Text>
@@ -267,13 +262,5 @@ const styles = StyleSheet.create({
   gridEmoji: { fontSize: 30, color: '#fff', marginBottom: 8 },
   gridLabel: { fontSize: 18, fontWeight: 'bold', color: '#fff' },
 
-  gridText: {
-  color: '#fff',
-  fontSize: 16,
-  fontWeight: 'bold',
-  textAlign: 'center',
-  backgroundColor: 'rgba(0,0,0,0.5)',
-  width: '100%',
-  paddingVertical: 4,
-},
+  
 });

@@ -28,7 +28,7 @@ interface ReadInfo {
   pingNumber: number;
 }
 
-const SimpleNotifyReceiver = () => {
+const NotifyReceiver = () => {
   const [logs, setLogs] = useState<string[]>([]);
   const [appState, setAppState] = useState<AppState>('IDLE');
   const [readInfo, setReadInfo] = useState<ReadInfo | null>(null);
@@ -279,4 +279,4 @@ const styles = StyleSheet.create({
   logText: { fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace', fontSize: 12, color: '#C9D1D9', padding: 12 }
 });
 
-export default SimpleNotifyReceiver;
+export default NotifyReceiver;

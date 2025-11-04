@@ -166,7 +166,6 @@ export default function App() {
         <StackNav.Screen name="CreateLesson" component={CreateLesson} />
         <StackNav.Screen name="LessonActivity" component={LessonActivity} />
         <StackNav.Screen name="Modules" component={Modules} />
-        <StackNav.Screen name="BLEReceiver" component={BLEReceiver} />{/* //////////////////////////////////////// */}
         <StackNav.Screen name="Settings" component={Settings} /> 
       </StackNav.Navigator>
     </NavigationContainer>
