@@ -128,21 +128,44 @@ jest.mock('react-native-svg', () => {
   };
 });
 
-// 17. Mock Navigation
-// This is the big one. It stops the '$$typeof' error and
-// provides default mocks for the hooks used in all your screens.
-jest.mock('@react-navigation/native', () => {
-  const React = require('react'); // Need React to render children
-  return {
-    ...jest.requireActual('@react-navigation/native'),
-    NavigationContainer: ({ children }) => <>{children}</>, // Just render the children
-    useNavigation: () => ({
-      navigate: jest.fn(),
-      goBack: jest.fn(),
-      dispatch: jest.fn(),
-    }),
-    useRoute: () => ({
-      params: {}, // Provide default empty params
-    }),
-  };
-});
+// 17. Mock Navigation Hooks (MODIFIED)
+// We are now using the REAL NavigationContainer,
+// but we still mock the hooks it provides.
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'), // <-- Use the REAL one
+  useNavigation: () => ({
+    navigate: jest.fn(),
+    goBack: jest.fn(),
+    dispatch: jest.fn(),
+  }),
+  useRoute: () => ({
+    params: {},
+  }),
+}));
+
+// 18. Mock Native Stack Navigator (NEW)
+// This is the component that's actually crashing.
+// We mock its implementation.
+jest.mock('@react-navigation/native-stack', () => ({
+  createNativeStackNavigator: () => ({
+    Navigator: ({ children }) => {
+      const React = require('react');
+      return <>{children}</>; // Just render the children (the screens)
+    },
+    // Mock the Screen component to render nothing
+    Screen: () => null,
+  }),
+}));
+
+// 19. Mock Bottom Tab Navigator (NEW)
+// Your App.tsx also uses this, so it would be the next crash.
+jest.mock('@react-navigation/bottom-tabs', () => ({
+  createBottomTabNavigator: () => ({
+    Navigator: ({ children }) => {
+      const React = require('react');
+      return <>{children}</>; // Just render the children
+    },
+    // Mock the Screen component to render nothing
+    Screen: () => null,
+  }),
+}));
