@@ -127,3 +127,21 @@ jest.mock('react-native-svg', () => {
     Rect: View,
   };
 });
+
+// 17. Mock Navigation
+// This is the big one. It stops the '$$typeof' error and
+// provides default mocks for the hooks used in all your screens.
+jest.mock('@react-navigation/native', () => {
+  const React = require('react'); // Need React to render children
+  return {
+    ...jest.requireActual('@react-navigation/native'),
+    NavigationContainer: ({ children }) => <>{children}</>, // Just render the children
+    useNavigation: () => ({
+      navigate: jest.fn(),
+      goBack: jest.fn(),
+      dispatch: jest.fn(),
+    }),
+    useRoute: () => ({
+      params: {}, // Provide default empty params
+    }),
+  };
