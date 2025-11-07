@@ -126,6 +126,7 @@ const StudentDashboard: React.FC = () => {
   const handleModule = () => navigation.navigate('StudentModules', { role });
  const handleQrCamera = () => navigation.navigate('QrCamera', { role });
 
+
   return (
     <ImageBackground
       source={require('./assets/images/BackgroundImage.jpg')}
