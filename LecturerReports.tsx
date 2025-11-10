@@ -10,8 +10,11 @@ import {
   FlatList,
   ActivityIndicator,
   ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import RNFS from 'react-native-fs';
+import XLSX from 'xlsx';
 import LecturerBottomNav from "./BottomNav.tsx";
 
 type Report = {
@@ -77,6 +80,35 @@ const LecturerReports: React.FC = () => {
     }
   };
 
+  const exportToExcel = async () => {
+    if (reportData.length === 0) {
+      Alert.alert('No Data', 'There is no report data to export.');
+      return;
+    }
+
+    try {
+      const formattedData = reportData.map((item) => ({
+        LessonID: item.lessonID,
+        Module: item.moduleCode,
+        Student: item.studentNumber,
+        Status: item.status,
+        Timestamp: item.timestamp,
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(formattedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Report');
+
+      const wbout = XLSX.write(workbook, { type: 'base64', bookType: 'xlsx' });
+      const filePath = `${RNFS.DownloadDirectoryPath}/LecturerReport_${selectedReportID || 'All'}.xlsx`;
+
+      await RNFS.writeFile(filePath, wbout, 'base64');
+      Alert.alert('Success', `Spreadsheet saved to: ${filePath}`);
+    } catch (error: any) {
+      Alert.alert('Error', 'Failed to export spreadsheet: ' + error.message);
+    }
+  };
+
   useEffect(() => {
     const fetchAllReports = async () => {
       setLoading(true);
@@ -104,7 +136,6 @@ const LecturerReports: React.FC = () => {
       resizeMode="cover"
     >
       <View style={styles.mainContainer}>
-        {/* Content Section */}
         <View style={styles.content}>
           <Text style={styles.header}>📘 View Lesson Report</Text>
 
@@ -127,6 +158,10 @@ const LecturerReports: React.FC = () => {
               ))}
             </Picker>
           </View>
+
+          <TouchableOpacity style={styles.downloadButton} onPress={exportToExcel}>
+            <Text style={styles.downloadButtonText}>Download Report</Text>
+          </TouchableOpacity>
 
           {loading ? (
             <ActivityIndicator size="large" color="#A4C984" style={{ marginTop: 20 }} />
@@ -165,7 +200,7 @@ const LecturerReports: React.FC = () => {
             />
           )}
         </View>
-        
+
         <View style={styles.navContainer}>
           <LecturerBottomNav
             navigation={navigation}
@@ -200,13 +235,21 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 8,
     marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 3,
     elevation: 3,
   },
   picker: { height: 50, width: '100%', color: '#333', fontWeight: 'bold', fontSize: 18 },
+  downloadButton: {
+    backgroundColor: '#064f62',
+    borderRadius: 10,
+    paddingVertical: 12,
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  downloadButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
   card: {
     backgroundColor: '#e4e4e1',
     padding: 16,
@@ -214,10 +257,6 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     alignSelf: 'center',
     width: 320,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
     elevation: 4,
   },
   cardTitle: { fontSize: 18, fontWeight: '600', marginBottom: 4, color: '#333' },
