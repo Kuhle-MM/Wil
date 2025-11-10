@@ -13,48 +13,59 @@ import { RNCamera } from "react-native-camera";
 const API_BASE_URL =
   "https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net";
 
+// <-- 2. ADDED PROPS
 interface Props {
   studentNumber: string;
-  lessonID: string;
 }
 
-const StudentQrCamera: React.FC<Props> = ({ studentNumber, lessonID }) => {
+const StudentQrCamera: React.FC<Props> = ({ studentNumber }) => { // <-- 2. USING PROPS
   const scannerRef = useRef<QRCodeScanner>(null);
+  // This state isn't needed if you use reactivateTimeout
+  // const [scanned, setScanned] = useState(false); 
   const [loading, setLoading] = useState(false);
   const [scanned, setScanned] = useState(false);
 
+  // <-- 3. FIXED THE TRY/CATCH STRUCTURE
   const onSuccess = async (e: any) => {
-    if (scanned) return; // Prevent duplicate scans
-    setScanned(true);
-
-    const qrText = e?.data?.trim();
-    console.log("Scanned QR:", qrText);
-
-    if (!qrText) {
-      Alert.alert("Invalid QR Code", "No data found in QR code.");
-      setScanned(false);
-      return;
-    }
-
     try {
       setLoading(true);
+      const qrText = e.data?.trim();
+      console.log("Scanned QR:", qrText);
 
-      const url = `${API_BASE_URL}/Lesson/clockin/${studentNumber}/${lessonID}`;
+      if (!qrText) {
+        Alert.alert("Invalid QR Code", "No data found in QR code.");
+        return; // Exit early
+      }
+
+      const url = `${API_BASE_URL}/scanQRCode`;
 
       const response = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          QRText: qrText,
+          StudentID: studentNumber, // <-- 2. This variable now exists
+        }),
       });
 
       const text = await response.text();
       console.log("API response:", text);
 
       if (!response.ok) {
-        throw new Error(JSON.parse(text)?.message || "Clock-in failed");
+        // Try to parse a meaningful error from the response
+        let errorMessage = text;
+        try {
+          errorMessage = JSON.parse(text)?.message || text;
+        } catch {
+          // Not JSON, just use the raw text
+        }
+        throw new Error(errorMessage);
       }
 
-      const data = JSON.parse(text);
-      Alert.alert("Clock-in Successful", data.message || "You have been clocked in successfully!");
+      Alert.alert("Clock-in Successful", "You have been clocked in successfully!");
+
     } catch (error: any) {
       console.error("Clock-in error:", error);
       Alert.alert(
@@ -63,11 +74,8 @@ const StudentQrCamera: React.FC<Props> = ({ studentNumber, lessonID }) => {
       );
     } finally {
       setLoading(false);
-      // Reactivate scanner after short delay
-      setTimeout(() => {
-        setScanned(false);
-        scannerRef.current?.reactivate();
-      }, 2000);
+      // You don't need manual reactivation here
+      // The `reactivateTimeout` prop on the scanner handles this
     }
   };
 
@@ -82,7 +90,8 @@ const StudentQrCamera: React.FC<Props> = ({ studentNumber, lessonID }) => {
         <QRCodeScanner
           ref={scannerRef}
           onRead={onSuccess}
-          reactivate={false} // manually controlled
+          reactivate={true} // Use the built-in reactivation
+          reactivateTimeout={2500} // Wait 2.5 seconds before scanning again
           flashMode={RNCamera.Constants.FlashMode.auto}
           topContent={
             <Text style={styles.instructionText}>
