@@ -1,282 +1,246 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
-  SafeAreaView, View, Text, TouchableOpacity,
-  StyleSheet, ScrollView, PermissionsAndroid, Platform, ActivityIndicator
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  Platform,
+  AppState,
+  ActivityIndicator,
+  PermissionsAndroid, 
 } from 'react-native';
-import { BleManager, State as BleState, Device } from 'react-native-ble-plx';
-import { Buffer } from 'buffer';
-import 'react-native-get-random-values';
+import { useRoute, RouteProp } from '@react-navigation/native';
+import { BleManager, Device, State } from 'react-native-ble-plx';
+import { RootTabParamList } from './types'; 
 
-global.Buffer = Buffer;
+// --- Configuration ---
+const API_BASE_URL = "https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net";
+const PING_TARGET = 3; 
+const PING_COOLDOWN_MS = 30000; 
 
-// ================== CONFIG ==================
-const SERVICE_UUID = "12345678-1234-1234-1234-1234567890ab";
-const CHARACTERISTIC_UUID = "abcd1234-5678-90ab-cdef-1234567890ab";
+type BLEReceiverRouteProp = RouteProp<RootTabParamList, 'BLEReceiver'>;
+const bleManager = new BleManager();
 
-// Ping schedule (in milliseconds)
-const FIRST_PING_DELAY = 0;              // Start immediately
-const FIRST_PING_DURATION = 10 * 60 * 1000; // 10 minutes
-const SECOND_PING_DELAY = FIRST_PING_DURATION + (5 * 60 * 1000); // 5 mins after first
-const THIRD_PING_DELAY = SECOND_PING_DELAY + (5 * 60 * 1000);    // another 5 mins
-// =====================================================
+const BLEReceiver: React.FC = () => {
+  const route = useRoute<BLEReceiverRouteProp>();
+  const { lessonID, studentNumber } = route.params || {};
 
-type AppState = 'IDLE' | 'WAITING' | 'SCANNING' | 'CONNECTING' | 'READING' | 'READ_SUCCESS' | 'ERROR' | 'COMPLETE';
-interface ReadInfo {
-  deviceId: string;
-  deviceName: string;
-  message: string;
-  pingNumber: number;
-}
+  const [status, setStatus] = useState('Initializing BLE...');
+  const [pingCount, setPingCount] = useState(0); // This is now our source of truth
+  const lastPingTimeRef = useRef<number>(0);
+  const appState = useRef(AppState.currentState);
 
-const NotifyReceiver = () => {
-  const [logs, setLogs] = useState<string[]>([]);
-  const [appState, setAppState] = useState<AppState>('IDLE');
-  const [readInfo, setReadInfo] = useState<ReadInfo | null>(null);
-  const [pingCount, setPingCount] = useState(0);
-
-  const bleManager = useMemo(() => new BleManager(), []);
-  const scheduleRef = useRef<NodeJS.Timeout[]>([]);
-
+  // ... (useEffect, requestPermissions, startScan are unchanged) ...
+  
   useEffect(() => {
-    return () => {
-      bleManager.destroy();
-      // Clear all timers on unmount
-      scheduleRef.current.forEach(clearTimeout);
-    };
-  }, [bleManager]);
-
-
-  const addLog = (message: string) => {
-    console.log(message);
-    const timestamp = new Date().toLocaleTimeString();
-    setLogs(prev => [`[${timestamp}] ${message}`, ...prev].slice(0, 200));
-  };
-
-
-  const requestPermissionsIfNeeded = async () => {
-    if (Platform.OS !== 'android') {
-      return true; // iOS permissions are handled differently (Info.plist)
-    }
-    
-    // Check Android version
-    const androidVersion = Platform.Version;
-
-    if (androidVersion >= 31) {
-      // Android 12+ (API 31+)
-      const permissions = [
-        PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
-        PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, // Still needed for some cases
-      ];
-
-      const granted = await PermissionsAndroid.requestMultiple(permissions);
-
-      const isScanGranted = granted[PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN] === PermissionsAndroid.RESULTS.GRANTED;
-      const isConnectGranted = granted[PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT] === PermissionsAndroid.RESULTS.GRANTED;
-      const isLocationGranted = granted[PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION] === PermissionsAndroid.RESULTS.GRANTED;
-
-      if (!isScanGranted) {
-        addLog('BLUETOOTH_SCAN permission denied');
-      }
-      if (!isConnectGranted) {
-        addLog('BLUETOOTH_CONNECT permission denied');
-      }
-      if (!isLocationGranted) {
-        addLog('ACCESS_FINE_LOCATION permission denied');
-      }
-
-      return isScanGranted && isConnectGranted && isLocationGranted;
-
-    } else {
-      // Android 11 (API 30) and below
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'Location Permission',
-          message: 'BLE needs location access',
-          buttonPositive: 'OK',
-          buttonNegative: 'Cancel',
-        }
-      );
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
-    }
-  };
-
-  const scanForPing = async (pingNumber: number) => {
-    setAppState('SCANNING');
-    addLog(`Scanning for Ping #${pingNumber}...`);
-
-    const okPerm = await requestPermissionsIfNeeded();
-    if (!okPerm) {
-      addLog('Permission denied');
-      setAppState('ERROR');
+    if (!lessonID || !studentNumber) {
+      setStatus('Error: Missing Lesson or Student ID.');
+      Alert.alert('Navigation Error', 'Missing data. Please go back and try again.');
       return;
     }
-
-    const bleState = await bleManager.state();
-    if (bleState !== BleState.PoweredOn) {
-      addLog(`Bluetooth not enabled. State: ${bleState}`);
-      setAppState('ERROR');
-      return;
-    }
-
-    bleManager.startDeviceScan([SERVICE_UUID], null, async (error, device) => {
-      if (error) {
-        addLog(`Scan error: ${error.message}`);
+    const appStateSubscription = AppState.addEventListener('change', nextAppState => {
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        startScan(); 
+      }
+      appState.current = nextAppState;
+    });
+    const bleStateSubscription = bleManager.onStateChange(state => {
+      if (state === 'PoweredOn') {
+        startScan();
+      } else {
+        setStatus('Bluetooth is not powered on.');
         bleManager.stopDeviceScan();
-        setAppState('ERROR');
+      }
+    }, true); 
+    return () => {
+      appStateSubscription.remove();
+      bleStateSubscription.remove();
+      bleManager.stopDeviceScan();
+    };
+  }, [lessonID, studentNumber]); 
+
+  const requestPermissions = async (): Promise<boolean> => {
+    if (Platform.OS === 'ios') { return true; }
+    if (Platform.OS === 'android') {
+      const apiLevel = Platform.Version;
+      if (apiLevel < 31) {
+        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } else {
+        const result = await PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
+          PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
+        ]);
+        return (
+          result[PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN] === PermissionsAndroid.RESULTS.GRANTED &&
+          result[PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT] === PermissionsAndroid.RESULTS.GRANTED
+        );
+      }
+    }
+    return false;
+  };
+
+  const startScan = async () => {
+    const permissionsGranted = await requestPermissions();
+    if (!permissionsGranted) {
+      Alert.alert('Permissions required', 'Bluetooth permissions are required to verify attendance.');
+      setStatus('Bluetooth permissions denied.');
+      return;
+    }
+    const bleState = await bleManager.state();
+    if (bleState !== State.PoweredOn) {
+      setStatus('Please turn on Bluetooth.');
+      return;
+    }
+    scanForDevice();
+  };
+  
+  const scanForDevice = () => {
+    if (pingCount >= PING_TARGET) {
+      setStatus(`Attendance confirmed. (${PING_TARGET}/${PING_TARGET} pings)`);
+      bleManager.stopDeviceScan();
+      return;
+    }
+
+    setStatus(`Scanning for lesson ${lessonID}... (${pingCount}/${PING_TARGET})`);
+    
+    bleManager.startDeviceScan(null, { allowDuplicates: true }, (error, device) => {
+      if (error) {
+        console.error('Scan error:', error);
+        setStatus(`Error: ${error.message}`);
+        bleManager.stopDeviceScan();
         return;
       }
-      if (!device) return;
 
-      bleManager.stopDeviceScan();
-      addLog(`Found device: ${device.name ?? 'Unknown'} (${device.id})`);
-      let connectedDevice: Device | null = null;
-
-
-      try {
-        setAppState('CONNECTING');
-        connectedDevice = await device.connect();
-        addLog('Connected. Discovering services...');
-        await connectedDevice.discoverAllServicesAndCharacteristics();
-
-        setAppState('READING');
-        const characteristic = await connectedDevice.readCharacteristicForService(SERVICE_UUID, CHARACTERISTIC_UUID);
-        if (!characteristic?.value) throw new Error("Characteristic value is null.");
-        const message = Buffer.from(characteristic.value, 'base64').toString('utf-8');
-
-        addLog(`Ping #${pingNumber} received: "${message}"`);
-
-        setReadInfo({
-          deviceId: device.id,
-          deviceName: device.name ?? 'NotifyBeacon',
-          message: message,
-          pingNumber
-        });
-        setPingCount(prev => prev + 1);
-        setAppState('READ_SUCCESS');
-      } catch (e: any) {
-        addLog(`Error reading: ${e?.message ?? e}`);
-        setAppState('ERROR');
-      } finally {
-        if (connectedDevice) {
-          try { await connectedDevice.cancelConnection(); } catch (_) {}
-          addLog('Disconnected.');
-        }
+      if (device && device.name === lessonID) {
+        console.log(`Found device: ${device.name}`);
+        handleDeviceFound();
       }
     });
   };
 
-  const startScheduledPings = () => {
-    setLogs([]);
-    setPingCount(0);
-    setReadInfo(null);
-    setAppState('WAITING');
-    addLog('Ping schedule started.');
-
-    // Schedule all ping scan events
-    const timers = [
-      setTimeout(() => scanForPing(1), FIRST_PING_DELAY),
-      setTimeout(() => scanForPing(2), SECOND_PING_DELAY),
-      setTimeout(() => scanForPing(3), THIRD_PING_DELAY),
-      setTimeout(() => {
-        addLog('All pings complete.');
-        setAppState('COMPLETE');
-      }, THIRD_PING_DELAY + 2000)
-    ];
-
-    scheduleRef.current = timers;
+  const handleDeviceFound = async () => {
+    const now = Date.now();
+    if (now - lastPingTimeRef.current < PING_COOLDOWN_MS) {
+      console.log('Device found, but in cooldown period.');
+      return;
+    }
+    lastPingTimeRef.current = now; 
+    bleManager.stopDeviceScan(); 
+    
+    // Pass the *current* pingCount (which is 0 on the first run)
+    await sendApiRequest(pingCount);
   };
 
+  // --- MODIFIED API LOGIC ---
+  const sendApiRequest = async (currentPingCount: number) => {
+    let url = "";
+    let options: RequestInit = {};
 
-  const resetApp = () => {
-    scheduleRef.current.forEach(clearTimeout);
-    try { bleManager.stopDeviceScan(); } catch (_) {}
-    setLogs([]);
-    setReadInfo(null);
-    setAppState('IDLE');
-    setPingCount(0);
-    addLog('Reset complete.');
-  };
+    try {
+      if (currentPingCount === 0) {
+        // --- 1. FIRST PING: Clock the user in ---
+        console.log(`Sending FIRST ping (Clock-in) for ${studentNumber}`);
+        setStatus('Device found. Clocking in...');
+        
+        url = `${API_BASE_URL}/Lesson/clockin/${studentNumber}/${lessonID}`;
+        options = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        };
 
+      } else {
+        // --- 2. SUBSEQUENT PINGS: Update report status ---
+        console.log(`Sending ping ${currentPingCount + 1} for ${studentNumber}`);
+        setStatus(`Device found. Sending ping ${currentPingCount + 1}/${PING_TARGET}...`);
+        
+        // --- THIS IS THE 404 FIX ---
+        // PingingController has [Route("api/[controller]")]
+        url = `${API_BASE_URL}/api/Pinging/ReceiveReactPing`; 
+        options = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            LessonId: lessonID,
+            StudentNumber: studentNumber,
+          }),
+        };
+      }
 
-  const renderContent = () => {
-    switch (appState) {
-      case 'WAITING':
-        return (<><Text style={styles.statusText}>Waiting for next ping window...</Text></>);
-      case 'SCANNING':
-      case 'CONNECTING':
-      case 'READING':
-        return (<><ActivityIndicator size="large" /><Text style={styles.statusText}>{appState}...</Text></>);
-      case 'READ_SUCCESS':
-        return readInfo && (
-          <>
-            <Text style={styles.titleSuccess}>Ping #{readInfo.pingNumber} Received</Text>
-            <View style={styles.infoBox}>
-              <Text style={styles.infoText}><Text style={styles.infoLabel}>Device:</Text> {readInfo.deviceName}</Text>
-              <Text style={styles.infoText}><Text style={styles.infoLabel}>Message:</Text> "{readInfo.message}"</Text>
-            </View>
-          </>
-        );
-      case 'COMPLETE':
-        return (
-          <>
-            <Text style={styles.titleSuccess}>All pings received</Text>
-            <TouchableOpacity style={styles.button} onPress={resetApp}>
-              <Text style={styles.buttonText}>Restart</Text>
-            </TouchableOpacity>
-          </>
-        );
-      case 'ERROR':
-        return (
-          <>
-            <Text style={styles.titleError}>Failed</Text>
-            <TouchableOpacity style={styles.button} onPress={resetApp}>
-              <Text style={styles.buttonText}>Try Again</Text>
-            </TouchableOpacity>
-          </>
-        );
-      default:
-        return (
-          <TouchableOpacity style={styles.button} onPress={startScheduledPings}>
-            <Text style={styles.buttonText}>Start Ping Schedule</Text>
-          </TouchableOpacity>
-        );
+      const response = await fetch(url, options);
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`API error: ${response.status} - ${text}`);
+      }
+
+      const newPingCount = currentPingCount + 1;
+      setPingCount(newPingCount); // Increment count *after* successful API call
+
+      // Check if we are done
+      if (newPingCount >= PING_TARGET) {
+        setStatus(`Attendance confirmed. (${PING_TARGET}/${PING_TARGET} pings)`);
+      } else {
+        // Not done, restart scan
+        setStatus(`Ping ${newPingCount}/${PING_TARGET} sent. Rescanning...`);
+        setTimeout(scanForDevice, 1000);
+      }
+
+    } catch (error) {
+      console.error('API Ping failed:', error);
+      setStatus('Ping failed. Retrying scan...');
+      // Restart scan even on failure
+      setTimeout(scanForDevice, 5000); 
     }
   };
 
 
   return (
-    <SafeAreaView style={styles.screen}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>BLE Ping Receiver</Text>
-        <Text style={styles.headerStatus}>Status: {appState}</Text>
-      </View>
-      <View style={styles.mainContent}>{renderContent()}</View>
-      <ScrollView style={styles.logContainer} contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}>
-        <Text style={styles.logText}>{logs.join('\n')}</Text>
-      </ScrollView>
-    </SafeAreaView>
+    <View style={styles.container}>
+      {pingCount < PING_TARGET ? (
+         <ActivityIndicator size="large" color="#007AFF" />
+      ) : (
+        <Text style={{fontSize: 72}}>✅</Text> 
+      )}
+      <Text style={styles.statusText}>{status}</Text>
+      <Text style={styles.infoText}>
+        Verifying attendance for Lesson {lessonID}...
+      </Text>
+      <Text style={styles.subText}>
+        This process is automatic. Please keep the app open.
+      </Text>
+    </View>
   );
 };
 
-
+// Styles (unchanged)
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#F1F5F9' },
-  header: { backgroundColor: 'white', padding: 16, borderBottomWidth: 1, borderBottomColor: '#E2E8F0' },
-  headerTitle: { fontSize: 22, fontWeight: 'bold', textAlign: 'center', color: '#1E293B' },
-  headerStatus: { textAlign: 'center', color: '#64748B', marginTop: 4 },
-  mainContent: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 },
-  statusText: { fontSize: 18, color: '#475569', marginTop: 16, textAlign: 'center' },
-  button: { backgroundColor: '#3B82F6', paddingVertical: 12, paddingHorizontal: 32, borderRadius: 8, marginTop: 24, minWidth: 150, alignItems: 'center' },
-  buttonText: { color: 'white', fontSize: 16, fontWeight: 'bold' },
-  titleSuccess: { fontSize: 24, fontWeight: 'bold', color: '#16A34A', marginBottom: 16 },
-  titleError: { fontSize: 24, fontWeight: 'bold', color: '#DC2626', marginBottom: 16 },
-  infoBox: { backgroundColor: '#F0FDF4', borderColor: '#BBF7D0', borderWidth: 1, borderRadius: 8, padding: 16, width: '100%' },
-  infoText: { fontSize: 16, color: '#166534', marginBottom: 4 },
-  infoLabel: { fontWeight: '600' },
-  logContainer: { flex: 1, backgroundColor: '#0D1117', margin: 16, borderRadius: 8 },
-  logText: { fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace', fontSize: 12, color: '#C9D1D9', padding: 12 }
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1C1C1E', 
+    padding: 20,
+  },
+  statusText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  infoText: {
+    fontSize: 16,
+    color: '#8E8E93',
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  subText: {
+    fontSize: 14,
+    color: '#4A4A4A',
+    textAlign: 'center',
+    marginTop: 40,
+  },
 });
 
-export default NotifyReceiver;
+export default BLEReceiver;

@@ -64,16 +64,34 @@ namespace VarsityTrackerApi.Controllers
 
             Console.WriteLine($"[PING] Lesson: {request.LessonId}, Student: {request.StudentNumber}, Count: {currentCount}, Status: {status}");
 
-            // Step 2: Update report status automatically in Lesson API
-            var client = _httpClientFactory.CreateClient();
-            var updateUrl = $"https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/Lesson/update_report_status" +
-                            $"?lessonId={request.LessonId}&studentNumber={request.StudentNumber}&newStatus={status}";
+            // =============================================================
+            // == FIX: Construct the correct reportID and URL
+            // =============================================================
 
+            // Your LessonController creates reportID like this: "{lessonID}-Report"
+            string reportID = $"{request.LessonId}-Report";
+
+            var client = _httpClientFactory.CreateClient();
+
+            // Note: Your controller route in LessonController might be `[Route("[controller]")]`
+            // If this fails, try removing the "/api/" prefix.
+            var updateUrl = $"https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/update_report_status" +
+                            $"?reportID={Uri.EscapeDataString(reportID)}" +
+                            $"&studentNumber={Uri.EscapeDataString(request.StudentNumber)}" +
+                            $"&newStatus={Uri.EscapeDataString(status)}";
+
+            // Use PUT, not POST, as your LessonController is [HttpPut]
             var response = await client.PutAsync(updateUrl, null);
+            // =============================================================
+            // == END OF FIX
+            // =============================================================
 
             if (!response.IsSuccessStatusCode)
             {
+                string errorResponse = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"[ERROR] Could not update status for {request.StudentNumber}: {response.StatusCode}");
+                Console.WriteLine($"[ERROR] URL: {updateUrl}");
+                Console.WriteLine($"[ERROR] Response: {errorResponse}");
             }
 
             // Return status summary

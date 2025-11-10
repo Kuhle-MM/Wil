@@ -23,12 +23,17 @@ import Share from 'react-native-share';
 type AuthRouteProp = RouteProp<RootTabParamList, 'Auth'>;
 type AuthNavProp = NativeStackNavigationProp<RootTabParamList>;
 
+// --- 1. UPDATED DATA MODEL ---
+// This now matches your 'Reports' table in the API
 type AttendanceRecord = {
   rowKey: string;
-  clockInTime: string;
+  lessonID: string;
+  moduleCode: string;
+  lessonDate: string; // The date we added in Step 1
   studentNumber: string;
   status: 'Present' | 'Absent' | string;
 };
+// ------------------------------
 
 type SectionData = {
   title: string;
@@ -62,7 +67,11 @@ const StudentsReports: React.FC = () => {
         const studentNumber = await getStudentId();
         if (!studentNumber) throw new Error('Student ID not found. Please log in again.');
 
-        const url = `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/api/StudentClocking/report/${studentNumber}`;
+        // --- 2. UPDATED API URL ---
+        // This now calls your new LessonController endpoint
+        const url = `https://varsitytrackerapi20250619102431-b3b3efgeh0haf4ge.uksouth-01.azurewebsites.net/Lesson/student_reports/${studentNumber}`;
+        // --------------------------
+        
         const response = await fetch(url);
 
         if (!response.ok) {
@@ -99,7 +108,9 @@ const StudentsReports: React.FC = () => {
     };
 
     records.forEach((rec) => {
-      const recDate = new Date(rec.clockInTime);
+      // --- 3. USE 'lessonDate' ---
+      const recDate = new Date(rec.lessonDate); 
+      // -------------------------
       const recDateStr = recDate.toDateString();
 
       if (recDateStr === todayStr) groups.Today.push(rec);
@@ -113,7 +124,7 @@ const StudentsReports: React.FC = () => {
         title,
         data: data.sort(
           (a, b) =>
-            new Date(b.clockInTime).getTime() - new Date(a.clockInTime).getTime()
+            new Date(b.lessonDate).getTime() - new Date(a.lessonDate).getTime()
         ),
       }));
   };
@@ -128,10 +139,17 @@ const StudentsReports: React.FC = () => {
     return `${day} ${month} ${year} - ${hours}:${minutes}`;
   };
 
+  // --- 4. UPDATED RENDERED ITEM ---
   const renderItem = ({ item }: { item: AttendanceRecord }) => (
     <View style={styles.card}>
       <View style={styles.cardRow}>
-        <Text style={styles.clockTime}>{formatDateTime(item.clockInTime)}</Text>
+        {/* Show Module Code and Lesson ID */}
+        <View>
+          <Text style={styles.moduleCode}>{item.moduleCode}</Text>
+          <Text style={styles.lessonID}>{item.lessonID}</Text>
+          <Text style={styles.clockTime}>{formatDateTime(item.lessonDate)}</Text>
+        </View>
+        {/* Status (Present/Absent) */}
         <View style={styles.statusContainer}>
           <Icon
             name={item.status === 'Present' ? 'checkmark-circle' : 'close-circle'}
@@ -151,53 +169,49 @@ const StudentsReports: React.FC = () => {
       </View>
     </View>
   );
+  // --------------------------------
 
   const renderSectionHeader = ({ section: { title } }: { section: SectionData }) => (
     <Text style={styles.sectionHeader}>{title}</Text>
   );
 
-  // method to export this reports screen into a CSV
+  // --- 5. UPDATED CSV EXPORT ---
   const exportToCSV = async () => {
     try {
       if (sections.length === 0) return Alert.alert('No Attendances', 'No attendance records to export.');
 
-      // Android permission for storage
+      // ... (Android permission logic is unchanged) ...
       if (Platform.OS === 'android') {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'Storage Permission',
-            message: 'App needs access to your storage to save the report.',
-            buttonPositive: 'OK',
-          }
+          // ... (permission details) ...
         );
         if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
           return Alert.alert('Permission Denied', 'Storage permission is required.');
         }
       }
 
-      // Flatten sections into one array
+      // Flatten sections into one array with new fields
       const allRecords = sections.flatMap((sec) =>
         sec.data.map((item) => ({
-          Date: formatDateTime(item.clockInTime),
+          Date: formatDateTime(item.lessonDate),
           StudentNumber: item.studentNumber,
+          Module: item.moduleCode,
+          Lesson: item.lessonID,
           Status: item.status,
           Group: sec.title,
         }))
       );
 
-      // Converting to CSV string
-      const header = 'Date,Student Number,Status,Group\n';
-      const csv = header + allRecords.map(r => `${r.Date},${r.StudentNumber},${r.Status},${r.Group}`).join('\n');
+      // Converting to CSV string with new headers
+      const header = 'Date,Student Number,Module,Lesson,Status,Group\n';
+      const csv = header + allRecords.map(r => `${r.Date},${r.StudentNumber},${r.Module},${r.Lesson},${r.Status},${r.Group}`).join('\n');
+      // -----------------------------------
 
-      // Defining the file path
       const path = `${RNFS.DownloadDirectoryPath}/attendance_report.csv`;
-
-      // Writing file
       await RNFS.writeFile(path, csv, 'utf8');
       Alert.alert('Success', `Report saved to ${path}`);
 
-      // Optional for user to share the file
       await Share.open({
         url: 'file://' + path,
         type: 'text/csv',
@@ -208,6 +222,7 @@ const StudentsReports: React.FC = () => {
       Alert.alert('Error', 'Failed to export the report.');
     }
   };
+  // ---------------------------------
 
   return (
     <ImageBackground
@@ -251,6 +266,7 @@ const StudentsReports: React.FC = () => {
 
 export default StudentsReports;
 
+// --- 6. UPDATED STYLES ---
 const styles = StyleSheet.create({
   background: { flex: 1 },
   mainContainer: { flex: 1, paddingTop: 60 },
@@ -284,7 +300,11 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   cardRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  clockTime: { fontSize: 16, fontWeight: '600', color: '#064f62' },
+  // New styles for Module/Lesson
+  moduleCode: { fontSize: 16, fontWeight: 'bold', color: '#064f62' },
+  lessonID: { fontSize: 14, color: '#555' },
+  clockTime: { fontSize: 14, color: '#555', paddingTop: 5, fontStyle: 'italic' },
+  // ---
   statusContainer: { flexDirection: 'row', alignItems: 'center' },
   statusText: { fontSize: 16, fontWeight: 'bold' },
   noData: { fontSize: 16, color: '#aaa', textAlign: 'center', marginTop: 20 },

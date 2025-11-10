@@ -19,5 +19,6 @@ namespace VarsityTrackerApi.Models.Report
         public string? RowKey { get; set; }
         public ETag ETag { get; set; }
         public DateTimeOffset? Timestamp { get; set; }
+        public DateTime lessonDate { get; set; }
     }
 }
