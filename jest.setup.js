@@ -31,12 +31,7 @@ jest.mock('react-native-permissions', () =>
   require('react-native-permissions/mock'),
 );
 
-// 5. vision-camera
-jest.mock('react-native-vision-camera', () => ({
-  useCameraDevice: jest.fn(),
-  useFrameProcessor: jest.fn(),
-  Camera: jest.fn(),
-}));
+// 5. REMOVED react-native-vision-camera mock because it was uninstalled
 
 // 6. react-native-gesture-handler
 jest.mock('react-native-gesture-handler', () => {
@@ -86,8 +81,6 @@ jest.mock('react-native-qrcode-scanner', () => {
   return View;
 });
 
-// --- New mocks for packages that would have crashed next ---
-
 // 11. react-native-get-random-values
 jest.mock('react-native-get-random-values', () => ({
   getRandomBase64: jest.fn(),
@@ -128,11 +121,9 @@ jest.mock('react-native-svg', () => {
   };
 });
 
-// 17. Mock Navigation Hooks (MODIFIED)
-// We are now using the REAL NavigationContainer,
-// but we still mock the hooks it provides.
+// 17. Mock Navigation Hooks
 jest.mock('@react-navigation/native', () => ({
-  ...jest.requireActual('@react-navigation/native'), // <-- Use the REAL one
+  ...jest.requireActual('@react-navigation/native'),
   useNavigation: () => ({
     navigate: jest.fn(),
     goBack: jest.fn(),
@@ -143,29 +134,84 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }));
 
-// 18. Mock Native Stack Navigator (NEW)
-// This is the component that's actually crashing.
-// We mock its implementation.
+// 18. Mock Native Stack Navigator
 jest.mock('@react-navigation/native-stack', () => ({
   createNativeStackNavigator: () => ({
     Navigator: ({ children }) => {
       const React = require('react');
       return <>{children}</>; // Just render the children (the screens)
     },
-    // Mock the Screen component to render nothing
     Screen: () => null,
   }),
 }));
 
-// 19. Mock Bottom Tab Navigator (NEW)
-// Your App.tsx also uses this, so it would be the next crash.
+// 19. Mock Bottom Tab Navigator
 jest.mock('@react-navigation/bottom-tabs', () => ({
   createBottomTabNavigator: () => ({
     Navigator: ({ children }) => {
       const React = require('react');
       return <>{children}</>; // Just render the children
     },
-    // Mock the Screen component to render nothing
     Screen: () => null,
   }),
+}));
+
+// --- ADDED MOCKS TO FIX YOUR CRASH ---
+
+// 20. Mock react-native-fs (Fixes the NativeEventEmitter crash)
+jest.mock('react-native-fs', () => ({
+  mkdir: jest.fn(),
+  moveFile: jest.fn(),
+  copyFile: jest.fn(),
+  pathForBundle: jest.fn(),
+  pathForGroup: jest.fn(),
+  getFSInfo: jest.fn(),
+  getAllExternalFilesDirs: jest.fn(),
+  unlink: jest.fn(),
+  exists: jest.fn(),
+  stopDownload: jest.fn(),
+  resumeDownload: jest.fn(),
+  isResumable: jest.fn(),
+  stopUpload: jest.fn(),
+  completeHandlerIOS: jest.fn(),
+  readDir: jest.fn(),
+  read: jest.fn(),
+  readFile: jest.fn(),
+  readFileAssets: jest.fn(),
+  hash: jest.fn(),
+  copyFileAssets: jest.fn(),
+  copyFileAssetsIOS: jest.fn(),
+  copyAssetsVideoIOS: jest.fn(),
+  writeFile: jest.fn(),
+  appendFile: jest.fn(),
+  write: jest.fn(),
+  downloadFile: jest.fn(),
+  uploadFiles: jest.fn(),
+  touch: jest.fn(),
+  MainBundlePath: '',
+  CachesDirectoryPath: '',
+  DocumentDirectoryPath: '',
+  ExternalDirectoryPath: '',
+  ExternalStorageDirectoryPath: '',
+  TemporaryDirectoryPath: '',
+  LibraryDirectoryPath: '',
+  PicturesDirectoryPath: '',
+}));
+
+// 21. Mock react-native-share (This would crash next)
+jest.mock('react-native-share', () => ({
+  default: jest.fn(),
+}));
+
+// 22. Mock xlsx (Fixes the "Cannot find module 'xlsx'" crash)
+jest.mock('xlsx', () => ({
+  utils: {
+    book_new: jest.fn(() => ({
+      SheetNames: [],
+      Sheets: {},
+    })),
+    book_append_sheet: jest.fn(),
+    json_to_sheet: jest.fn(),
+  },
+  writeFile: jest.fn(),
 }));
