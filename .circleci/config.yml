@@ -4,7 +4,7 @@ jobs:
   # Job 1: Build and Test JavaScript
   build_and_test_js:
     docker:
-      - image: cimg/node:18.17.0
+      - image: cimg/node:20.0.0
     working_directory: ~/repo
     steps:
       - checkout
